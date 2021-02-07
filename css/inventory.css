@@ -1,0 +1,36 @@
+#ui_inventory_items {
+    width: 95%;
+    min-height: 300px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 5px;
+    cursor:default;
+    justify-content: center;
+}
+.inventory_item {
+    width: 128px;
+    height: 128px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10pt;
+    border: solid 1pt gray;
+    padding: 5px;
+    margin: 5px;
+}
+.inventory_item:hover {
+    background-color: #333;
+}
+.inventory_item img {
+    width: 64px;
+    height: 64px;
+}
+@media screen and (min-width:768px) {
+    .inventory_item {margin: 10px}
+}
+@media screen and (min-width:1920px) {
+    .inventory_item {width:256px;height:256px;font-size:26px}
+    .inventory_item img {width:128px;height:128px;}
+}

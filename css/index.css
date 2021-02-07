@@ -1,0 +1,361 @@
+#welcome {
+    width: 100%;
+    height: fit-content;
+    font-family: Calibri;
+    text-align: center;
+}
+#welcome h1 {
+    animation-fill-mode: forwards;
+    opacity: 0;
+    animation-name: title_fadein;
+    animation-duration: 1.5s;
+    animation-delay: 1.2s;
+    font-size: 36pt;
+}
+@keyframes title_fadein {
+    0% {opacity: 0; color: #FFA700;}
+    100% {opacity: 1; letter-spacing: 2px; color: #FF00FF;}
+}
+#welcome p {
+    animation-fill-mode: forwards;
+    animation-name: subtitle_fadein;
+    animation-duration: 2s;
+    animation-delay: 2.3s;
+    margin-top: 10px;
+    color: darkgoldenrod;
+    font-size: 16pt;
+    font-style:italic;
+    font-family: Calibri;
+    opacity: 0;
+}
+@keyframes subtitle_fadein {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+#button_start {
+    width: 200px;
+    height:50px;
+    background-color: transparent;
+    border: solid 1pt gray;
+    margin-top: 50px;
+    font-family: Calibri;
+    font-size: 20pt;
+    color: white;
+    cursor:pointer;
+    border-radius: 10px;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+    animation-name: button_fadein;
+    animation-duration: 2s;
+    animation-delay: 3s;
+    opacity: 0;
+}
+@keyframes button_fadein {
+    0% {opacity: 0; margin-top:50%;}
+    100% {opacity: 1; margin-top: 50px;}
+}
+@keyframes button_fadeout {
+    0% {opacity: 1;}
+    100% {opacity: 0; cursor: default;}
+}
+#button_start:hover {
+    background-color: #333;
+}
+#name {
+    opacity: 0;
+    margin-top: 50px;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    display: flex;
+    flex-wrap:wrap;
+}
+@keyframes name_fadein {
+    0% {opacity: 0}
+    100% {opacity: 1}
+}
+#name p {
+    font-size: 14pt;
+    color: gray;
+    font-style: italic;
+    margin: 5px;
+    font-family: Calibri;
+    cursor: default;
+    pointer-events: none;
+}
+#name_input {
+    background-color: transparent;
+    height: 30px;
+    border: dashed 1px gray;
+    color: white;
+    font-size: 14pt;
+    font-family: Cailbri;
+    width: 200px;
+    margin-right: 5px;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+#name_input:hover {
+    background-color: #333;
+}
+#name_submit {
+    font-family: Calibri;
+    border: solid 1px gray;
+    border-radius: 5px;
+    color: white;
+    font-size: 14pt;
+    background-color: transparent;
+}
+#name_submit:hover {
+    cursor: pointer;
+    background-color: #333;
+}
+#name_input:invalid + #name_submit{
+    cursor: not-allowed;
+    color: red;
+}
+#welcome, #input {
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    flex-flow: column nowrap;
+}
+#input {
+    justify-content: center;
+    align-content: center;
+}
+#name_input {
+    align-self: center;
+}
+@keyframes welcome_fadeout {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+#location {
+    opacity: 0;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    animation-delay: 1s;
+    pointer-events: none;
+}
+#location_prologue {
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    margin-bottom: 10px;
+    font-size: 36pt;
+    color: gray;
+    font-family: Calibri;
+    font-style: italic;
+    text-align: center;
+}
+@keyframes location_fadein {
+    0% {opacity: 0}
+    100% {opacity: 1;}
+}
+@keyframes image_fadein {
+    0% {filter:grayscale()}
+    100% {filter:none}
+}
+@keyframes image_fadeout {
+    0% {filter:none; opacity:1}
+    100% {filter:grayscale();opacity:0}
+}
+#location_map {
+    border-radius: 50px;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+}
+
+@media screen and (min-width: 768px) {
+    #location {width: 80%}
+}
+#location_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    justify-content:center;
+}
+.location_option {
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 0;
+    margin: 10px;
+    font-family: Calibri;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items:flex-start;
+    justify-content: flex-start;
+    padding: 5px;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+.location_option button {
+    justify-self: flex-end;
+}
+.location_option h1 {
+    color: gold;
+    padding-left: 5px;
+}
+.location_option p:not(.biome) {
+    color: white;
+}
+.location_option:hover {
+    background-color: #333;
+}
+.location_field {
+    display: flex;
+    flex-direction: row;
+    margin: 3px 0;
+    flex-wrap: wrap;
+}
+.location_field p {
+    margin: 0 3px;
+}
+.location_option p {
+    margin: 3px;
+}
+.location_submit {
+    align-self: flex-end;
+    background-color: #333;
+    color: white;
+    font-style: italic;
+    font-size: 14pt;
+    border: outset 1pt gray;
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px 10px;
+    text-align: center;
+    cursor: pointer;
+}
+.location_submit:hover {
+    background-color: #272727;
+}
+#location_0 {
+    color: aquamarine;
+}
+#location_1 {
+    color: yellowgreen;
+}
+#location_2 {
+    color: palevioletred;
+}
+#location_3 {
+    color: orangered;
+}
+#location_4 {
+    color: cyan;
+}
+#location_5 {
+    color: brown;
+}
+#location_6 {
+    color: blueviolet;
+}
+@keyframes locations_fadeout {
+    0% {opacity: 1}
+    100% {opacity: 0}
+}
+#backstory {
+    opacity: 0;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    display: flex;
+    flex-direction: column;
+    pointer-events: all;
+    width: 95%;
+}
+#backstory h1:not(.bst) {
+    color: gray;
+    font-family: Calibri;
+    font-style: italic;
+    font-size:36pt;
+    text-align: center;
+    margin-bottom: 20px;
+}
+#backstory_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: fit-content;
+    justify-content: center;
+}
+.backstory_option {
+    border: solid 1pt gray;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+.backstory_option:hover {
+    background-color: #333;
+}
+.bst {
+    font-style: normal;
+    font-size: 14pt;
+    font-family: Calibri;
+}
+.backstory_option p {
+    color: white;
+    font-family: Calibri;
+    margin-top: 3px;
+}
+#text, .button_desc {
+    color: white;
+    font-family: Calibri;
+    font-size: 16pt;
+}
+#option-buttons {
+    display: flex;
+    align-items:flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.btn {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 16pt;
+    font-family: Calibri;
+    padding: 0;
+
+}
+.btn:not(.btn_flavor) {
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.btn:hover:not(.btn_flavor) {
+    background-color: #333;
+}
+.button_div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+#text, #option-buttons {
+    padding-left: 5%;
+    padding-right: 5%;
+    align-self: flex-start;
+}
+@media screen and (min-width: 1440px) {
+    #text {font-size:24pt}
+    .btn {font-size: 24pt}
+    .button_desc {font-size:24pt}
+    #ui_menu_buttons {font-size:24pt}
+    #welcome p {font-size:24pt}
+    #welcome h1 {font-size:56pt}
+    #name p, #name_input, #name_submit{font-size:24pt}
+    .location_option {font-size:20pt}
+    .bst {font-size:36pt}
+    .backstory_option {font-size:28pt}
+}

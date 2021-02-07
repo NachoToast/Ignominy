@@ -1,0 +1,109 @@
+#trade_menu {
+    width: 91%;
+    height:fit-content;
+    min-height: 180%;
+    position:absolute;
+    top: 50px;
+    align-self: center;
+    border: solid 1pt gray;
+    border-top: 0pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #272727;
+    z-index:10;
+    border-radius:10px;
+    font-family: Calibri;
+}
+#trade_menu_meta {
+    width: 100%;
+    background-color: #333;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: solid 1pt gray;
+    align-items: center;
+    position: sticky;
+    border-top: solid 1pt gray;
+    top: 0px;
+}
+#trade_menu_h2 {
+    color:gold;
+    padding: 2px 20px;
+    border-right: solid 1pt gray;
+    pointer-events: none;
+}
+#trade_menu_h3 {
+    color:red;
+    padding:2px 20px;
+    border-left: solid 1pt gray;
+    cursor:pointer;
+    border-top-right-radius: 10px;
+}
+#trade_menu_h3:hover {
+    background-color: #272727;
+}
+#trade_menu_card_container {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+}
+.trade_menu_card {
+    background-color:#333;
+    border: solid 1pt gray;
+    width: fit-content;
+    height: fit-content;
+    margin: 10px 5px;
+    padding: 10px;
+    display: flex;
+    cursor:pointer;
+}
+.trade_menu_card:hover {
+    background-color: #272727;
+}
+#trade_menu_card_container div:first-child {
+    margin-left: 10px;
+}
+#trade_menu_card_container div:last-child {
+    margin-right: 10px;
+}
+.trade_menu_card h1 {
+    color:white;
+    margin-left: 10px;
+    font-size:24px;
+}
+.trade_menu_card p:not(#trade_menu_card_price) {
+    color:lightgray;
+    margin-left: 10px;
+    font-style: italic;
+}
+#trade_menu_card_price {
+    margin-top: 5px;
+    color:gold;
+    margin-left:10px;
+    text-align: end;
+    font-size:18px;
+}
+@media screen and (min-width:768px) {
+    .trade_menu_card h1 {font-size:32px}
+    .trade_menu_card p:not(#trade_menu_card_price) {font-size:16px}
+    #trade_menu_card_price {font-size:18px}
+}
+@media screen and (min-width:1024px) {
+    .trade_menu_card h1 {font-size:32px}
+    .trade_menu_card p:not(#trade_menu_card_price) {font-size:18px}
+    #trade_menu_card_price {font-size:20px}
+}
+@media screen and (min-width:1440px) {
+    .trade_menu_card h1 {font-size:36px}
+    .trade_menu_card p:not(#trade_menu_card_price) {font-size:20px}
+    #trade_menu_card_price {font-size:22px}
+}
+@media screen and (min-width:1920px) {
+    .trade_menu_card h1 {font-size:60px}
+    .trade_menu_card p:not(#trade_menu_card_price) {font-size:40px}
+    #trade_menu_card_price {font-size:40px}
+    #trade_menu_h2 {font-size:48px}
+    #trade_menu_h3 {font-size:48px}
+}
