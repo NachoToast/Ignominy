@@ -1,6 +1,6 @@
-*.docx
-*.pdf
-*.xlsx
+**.docx
+**.pdf
+**.xlsx
 World/
 obs/
 .vscode/
