@@ -85,7 +85,8 @@ var player = {
         6:{}
     },
     inns: [],
-    inventory:[]
+    inventory:[],
+    random:0
 }
 var kingdoms = [
     {
@@ -492,7 +493,8 @@ function showTextNode(textNodeIndex) {
     const textElement = document.getElementById('text')
     const optionButtonsElement = document.getElementById('option-buttons')
     const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
-    textElement.innerText = textNode.text
+    if(!textNode.text)textElement.innerText = 'No text found!';
+    else textElement.innerText = textNode.text
     while (optionButtonsElement.firstChild) {
       optionButtonsElement.removeChild(optionButtonsElement.firstChild)
     }
@@ -583,10 +585,11 @@ function showOption2(option) {
 }
 function selectOption(option) {
     if(!option.nextText)nextTextNodeId = -1;
+    else if(option.nextText == -2)nextTextNodeId = player.scene;
     else nextTextNodeId = option.nextText;
-    if (nextTextNodeId < 0) {
+    /*if (nextTextNodeId < 0) {
       nextTextNodeId = -1
-    }
+    }*/
     if (player.completed.indexOf(nextTextNodeId) == -1) player.completed.push(nextTextNodeId);
     //player = Object.assign(player, option.setState) // Deprecated, setState is now a funtion below.
     if(option.setState)option.setState();
@@ -629,6 +632,11 @@ function increment_time(m,d,h,min) {
         }
     }
     if (h >= 13) h-=12;
+    if (h>=13) {
+        h-=12;
+        if(timehalf=='pm')timehalf='am';
+        else timehalf='pm'
+    }
     if (d > months[(month_number-1)].days) {
         d -= months[(month_number-1)].days;
         m += 1;
@@ -640,4 +648,7 @@ function increment_time(m,d,h,min) {
     //console.log(`Date: ${d} ${months[(m-1)].name} [${months[(m-1)].days} Days]`);
     set_time(h,min,timehalf);
     set_date(d,m)
+}
+function random(max) {
+    return Math.floor(Math.random() * Math.floor(max+1));
 }

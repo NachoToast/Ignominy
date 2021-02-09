@@ -334,6 +334,9 @@
     padding-left: 5px;
     padding-right: 5px;
 }
+.btn, .btn_flavor {
+    text-align: left;
+}
 .btn:hover:not(.btn_flavor) {
     background-color: #333;
 }
@@ -355,7 +358,7 @@
     #welcome p {font-size:24pt}
     #welcome h1 {font-size:56pt}
     #name p, #name_input, #name_submit{font-size:24pt}
-    .location_option {font-size:20pt}
+    .location_option {font-size:16pt}
     .bst {font-size:36pt}
     .backstory_option {font-size:28pt}
 }

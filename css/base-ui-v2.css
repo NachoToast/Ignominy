@@ -143,7 +143,7 @@
 #ui_menu_buttons:hover {
     background-color: #272727;
 }
-#ui_menu_widgets_discord {
+#ui_menu_widgets img {
     width: 15%;
     margin-top: 90px;
     cursor: pointer;
@@ -217,22 +217,6 @@
     flex-wrap: wrap;
     justify-content: center;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #content {
     left: 0%;
     width: 100%;

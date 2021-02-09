@@ -1,3 +1,4 @@
+document.getElementById('game_version').innerHTML = 'Ignominy 0.1.2';
 const ui = document.getElementById('ui'),
 ui_pages = [document.getElementById('ui_menu'),document.getElementById('ui_stats'),document.getElementById('ui_date'),document.getElementById('ui_time'),document.getElementById('ui_inventory')],
 ui_mobile = document.getElementById('ui_mobile'),
@@ -60,6 +61,9 @@ function ui_open_mobile_menu() {
 }
 function ui_discord() {
     window.open('https://discord.gg/PEGUcb4', '_blank');
+}
+function ui_github() {
+    window.open('https://github.com/NachoToast/Ignominy', '_blank');
 }
 function ui_reset() {
     location.reload();
@@ -190,6 +194,7 @@ function ui_load() {
         }
         if(document.getElementById('trade_menu'))close_trade_menu();
         ui_enablegamebuttons();
+        ui_close_map();
         player = data[0];
         set_date(data[1].d,data[1].mn,data[1].y);
         set_time(data[1].h,data[1].m,data[1].t)
@@ -224,4 +229,33 @@ function render_inventory() {
 }
 function close_inventory() {
     if(document.getElementById('ui_inventory_items'))delete_element_by_id('ui_inventory_items');
+}
+function ui_show_map(scene) {
+    // div
+    let map_src, map_name;
+    if(shows_map_option.indexOf(scene) !== -1){map_src='img/map/ignoma.png';map_name='Ignoma'}
+    else return;
+    let map = document.createElement('div');
+    map.id='map';
+    content.appendChild(map)
+    // div (Heading Container)
+    let map_div = document.createElement('div');
+    map.appendChild(map_div);
+    // h1
+    let map_h1 = document.createElement('h1');
+    map_h1.innerHTML = map_name;
+    map_div.appendChild(map_h1);
+    // h1
+    let map_h2 = document.createElement('h1');
+    map_h2.innerHTML = 'Close';
+    map_h2.id = 'map_close'
+    map_h2.addEventListener('click', () => ui_close_map())
+    map_div.appendChild(map_h2);
+    // img
+    let map_img = document.createElement('img');
+    map_img.setAttribute('src',map_src);
+    map.appendChild(map_img);
+}
+function ui_close_map() {
+    if(document.getElementById('map'))delete_element_by_id('map');
 }

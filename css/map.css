@@ -1,0 +1,38 @@
+#map {
+    min-width: 90%;
+    background-color:#272727;
+    border: solid 1px gray;
+    height: fit-content;
+    position: absolute;
+    align-self: center;
+    display:flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    padding-bottom: 30px;
+}
+#map div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+#map h1:not(#map_close) {
+    color:white;
+    font-family: Calibri;
+    margin-bottom: 5px;
+}
+#map_close {
+    cursor: pointer;
+    color:red;
+    font-family: Calibri;
+}
+#map img {
+    max-width: 100%;
+    width: auto;
+    height:auto;
+    border-radius: 5px;
+    pointer-events: none;
+}
+#content {
+    min-height: 120vh;
+}

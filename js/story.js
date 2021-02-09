@@ -2,9 +2,21 @@
 
 var universalOptions = [];
 var textnodes = [];
+var shows_map_option = [1,11,15,20,21];
+var shows_map_ignoma = [1,11,15,20,21]
 function generate_story() {
     generate_trade();
     universalOptions = [
+        {
+            text:'View map.',
+            color:'gray',
+            requiredState: (player) => shows_map_option.indexOf(player.scene) !== -1,
+            nextText:-2,
+            allowRepeats:1,
+            setState: function() {
+                ui_show_map(player.scene);
+            }
+        },
         {
             text:'You are dangerously fatigued, find somewhere to rest.',
             flavor:1,
@@ -104,6 +116,18 @@ function generate_story() {
                     },
                     time:{
                         minute:1
+                    }
+                },
+                {
+                    text:'Head to city outskirts.',
+                    color:'aqua',
+                    nextText:11,
+                    allowRepeats:1,
+                    time:{
+                        minute:3
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.2;
                     }
                 },
                 {
@@ -340,7 +364,7 @@ function generate_story() {
                     }
                 },
                 {
-                    text:'"Nevermind."',
+                    text:'Nevermind',
                     color:'aqua',
                     nextText:9,
                     allowRepeats:1
@@ -378,7 +402,7 @@ function generate_story() {
                     player.inns.indexOf('ebonfront') == -1
                 },
                 {
-                    text:'"Nevermind."',
+                    text:'Nevermind',
                     color:'aqua',
                     nextText:9,
                     allowRepeats:1
@@ -659,13 +683,530 @@ function generate_story() {
             ]
         }, // 10
         {
+            id:11,
+            text:'You arrive at the outskirts of Ebonfront.',
+            options:[
+                {
+                    text:'Go into the city.',
+                    color:'aqua',
+                    nextText:1,
+                    allowRepeats:1,
+                    time: {
+                        minute:3
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.2;
+                        ui_post_stats_fatigue();
+                    }
+                },
+                {
+                    description:'Many travellers are coming in and out of the city. And numerous caravans are preparing to set off.',
+                    text:'Ask to join one.',
+                    color:'aqua',
+                    nextText:12,
+                    allowRepeats:1,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfAB:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:3,
+                        timehalfEF:'pm'
+                    }
+                },
+                {
+                    text:'Many travellers are coming in to the city, but it is too late for any caravans to be leaving.',
+                    flavor:1,
+                    requiredTimes:{
+                        hourA:4,
+                        hourB:11,
+                        timehalfAB:'pm',
+                    }
+                },
+                {
+                    text:'The streets are deserted, and almost nobody is seen arriving at the city.',
+                    flavor:1,
+                    requiredTimes:{
+                        hourA:12,
+                        hourB:12,
+                        timehalfAB:'am',
+                        hourC:1,
+                        hourD:5,
+                        timehalfCD:'am'
+                    }
+                }
+            ]
+        }, // 11
+        {
+            id:12,
+            text:'You approach a group of caravans, all headed to different regions of Ignoma.',
+            options:[
+                {
+                    description:'One of the caravans looks to be going to Freygrave,',
+                    text:'ask to join.',
+                    color:'aqua',
+                    nextText:13,
+                    allowRepeats:1
+                },
+                {
+                    description:'Another is headed for Timberside,',
+                    text:'ask to join.',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:18
+                },
+                {
+                    text:'Back',
+                    color:'gray',
+                    nextText:11,
+                    allowRepeats:1
+                }
+            ]
+        }, // 12
+        {
+            id:13,
+            text:'You ask the head of the caravan if you can tag along.',
+            options:[
+                {
+                    description:'"Sure we got space, ain\'t doing it for free though, its gonna cost ya, what say 20 gold?"',
+                    text:'Agree',
+                    color:'lime',
+                    nextText:14,
+                    allowRepeats:1,
+                    time:{
+                        minute:5,
+                        day:1
+                    },
+                    requiredState: (player) =>
+                    player.gold >= 20
+                    &&
+                    player.backstory.name !== 'Explorer',
+                    setState: function() {
+                        player.gold -= 10;
+                        player.stats.fatigue += 1;
+                        ui_post_stats_gold();
+                        ui_post_stats_fatigue();
+                    }
+                },
+                {
+                    description:'"Sure we got space, ain\'t doing it for free though, normally I\'d charge bout 20 gold, but since yer a pretty popular explorer I\'ll drop it to 10.',
+                    text:'Agree',
+                    color:'lime',
+                    nextText:14,
+                    allowRepeats:1,
+                    time:{
+                        minute:5,
+                        day:1
+                    },
+                    requiredState: (player) =>
+                    player.gold >= 10
+                    &&
+                    player.backstory.name == 'Explorer',
+                    setState: function() {
+                        player.gold -= 10;
+                        ui_post_stats_gold();
+                    }
+                },
+                {
+                    text:'Decline',
+                    color:'red',
+                    nextText:11,
+                    allowRepeats:1
+                }
+            ]
+        }, // 13
+        {
+            id:14,
+            text:'You help organize the caravan and shortly set off for Freygrave. The sound of the ocean fades as you travel further inland, and as the journey nears its end you see the town of Freygrave approaching.',
+            options:[
+                {
+                    text:'-20 Gold',
+                    color:'gray',
+                    flavor:1,
+                    requiredState: (player) => player.backstory.name !== 'Explorer'
+                },
+                {
+                    text:'-10 Gold',
+                    color:'gray',
+                    flavor:1,
+                    requiredState: (player) => player.backstory.name == 'Explorer'
+                },
+                {
+                    text:'As you arrive at Freygrave you disembark from the wagon and thank them as they go on their way.',
+                    flavor:1
+                },
+                {
+                    text:'You\'re now in Freygrave, a small town on the eastern border of Ignoma, there\'s not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:15,
+                    time:{
+                        minute:5
+                    }
+                }
+            ]
+        }, // 14
+        {
+            id:15,
+            text:'You stand on main streets, or rather street, of Freygrave.',
+            options:[
+                {
+                    description:'A few groups of people on horse-drawn wagons are travelling through the street.',
+                    text:'Run up to the one heading towards Ebonfront.',
+                    color:'aqua',
+                    nextText:16,
+                    allowRepeats:1,
+                    requiredTimes: {
+                        hourA:7,
+                        hourB:11,
+                        timehalfAB:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.2;
+                        ui_post_stats_fatigue();
+                    }
+                },
+                {
+                    text:'Wander the street. [15m]',
+                    nextText:15,
+                    color:'gray',
+                    allowRepeats:1,
+                    time: {
+                        minute:15
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    }
+                }
+            ]
+        }, // 15
+        {
+            id:16,
+            text:'You run up to a group of travellers who are headed in the direction of Ebonfront.',
+            options:[
+                {
+                    text:'"We\'ve got plenty of room if you need a lift to Ebonfront, don\'t worry about payment."',
+                    flavor:1
+                },
+                {
+                    text:'Travel to Ebonfront',
+                    nextText:17,
+                    allowRepeats:1,
+                    color:'lime',
+                    time:{
+                        day:1
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                    }
+                },
+                {
+                    text:'Nevermind',
+                    color:'red',
+                    nextText:15,
+                    allowRepeats:1
+                }
+            ]
+        }, // 16
+        {
+            id:17,
+            text:'Thanking the travellers for their kindness, you board their wagon and travel to Ebonfront.',
+            options:[
+                {
+                    text:'The day-long journey seems to fly by in an instant, and before you know it you\'re approaching the outskirts of Ebonfront.',
+                    flavor:1
+                },
+                {
+                    text:'You\'ve arrived at Ebonfront, Ignoma\'s capital city and home to it\'s reputable fishing industry and glamorous ports.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    nextText:11,
+                    allowRepeats:1
+                }
+            ]
+        }, // 17
+        {
+            id:18,
+            text:'You run up to the head of the caravan and ask to join.',
+            options:[
+                {
+                    description:'"Sure that\'s fine, we\'re in a bit of a hurry though so we\'re leaving straight away, still on board?"',
+                    text:'Sure',
+                    color:'lime',
+                    nextText:19,
+                    allowRepeats:1,
+                    setState: function() {
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                    },
+                    time: {
+                        hour:23,
+                        minute:30
+                    }
+                },
+                {
+                    text:'Nevermind',
+                    color:'red',
+                    allowRepeats:1,
+                    nextText:11
+                }
+            ]
+        }, // 18
+        {
+            id:19,
+            text:'You hastily join the caravan and set off towards Timberside. As you head further inland the ocean\'s sound and breeze slowly fades, replaced with the smell of pine.',
+            options:[
+                {
+                    text:'The day-long journey goes by quickly, and due to the caravan\'s haste you arrive 30 minutes earlier than expected.',
+                    flavor:1
+                },
+                {
+                    text:'You thank the travellers for their generosity and quickly disembark the wagon as they make their way further into the residential area of the town.',
+                    flavor:1
+                },
+                {
+                    text:'Welcome to Timberside, a medium-sized town on Ignoma\'s southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:20
+                }
+            ]
+        }, // 19
+        {
+            id:20,
+            text:'You wander through the main streets of Timberside.',
+            options:[
+                {
+                    text:'Various farmers from nearby Ignoman and Light Witesian villages are managing stalls along the main roads, selling fresh produce and various animal products.',
+                    flavor:1,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfAB:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    }
+                },
+                {
+                    description:'A large hub for arriving and departing caravans is situated further up the main road, crowded with the many travelling merchants, villagers, hunters, and more.',
+                    text:'Make your way towards it.',
+                    color:'aqua',
+                    nextText:21,
+                    allowRepeats:1,
+                    setState: function() {
+                        player.random = random(10);
+                    },
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfAB:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    }
+                },
+                {
+                    description:'A large hub for arriving and departing caravans is situated further up the main road, at this time little activity is around it, although it still remains open.',
+                    text:'Make your way towards it.',
+                    color:'aqua',
+                    nextText:21,
+                    allowRepeats:1,
+                    setState: function() {
+                        player.random = random(10);
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    },
+                    time: {
+                        minute:1
+                    },
+                    requiredTimes: {
+                        hourA:1,
+                        hourB:5,
+                        timehalfAB:'am',
+                        hourC:7,
+                        hourD:11,
+                        timehalfCD:'pm',
+                        hourE:12,
+                        hourF:12,
+                        timehalfEF:'am'
+                    }
+                }
+            ]
+        }, // 20
+        {
+            id:21,
+            text:'You enter the Timberside travel hub through it\'s large front-facing gateway. It\'s spacious interior and full of parked wagons and carriages.',
+            options:[
+                {
+                    text:'At this time of day, the building is crowded with carriages, wagons, and carts carrying various goods, standing out amidst a sea of merchants, villagers, hunters, and more.',
+                    flavor:1,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfAB:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    }
+                },
+                {
+                    text:'There are very few people wandering around the building at this time, a few guards here and there, and some merchants selling less common goods.',
+                    flavor:1,
+                    requiredTimes: {
+                        hourA:1,
+                        hourB:5,
+                        timehalfAB:'am',
+                        hourC:7,
+                        hourD:11,
+                        timehalfCD:'pm',
+                        hourE:12,
+                        hourF:12,
+                        timehalfEF:'am'
+                    }
+                },
+                {
+                    description:'A few passenger carriages line up at the far end of the building, likely waiting for customers to transport.',
+                    text:'Go towards them.',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:22
+                },
+                {
+                    text:'Leave the travel hub.',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:20,
+                    time: {
+                        minute:1
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    }
+                }
+            ]
+        }, // 21
+        {
+            id:22,
+            text:'You approach the line of waiting carriages, a staff member nearby walks up to you and asks where you need to go, adding that all rides cost a standard 20 gold coins.',
+            options:[
+                {
+                    text:'Ebonfront',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:23,
+                    setState: function() {
+                        player.gold -= 20;
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                        ui_post_stats_gold();
+                    },
+                    time: {
+                        day:1
+                    }
+                },
+                {
+                    text:'Freygrave',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:24,
+                    setState: function() {
+                        player.gold -= 20;
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                        ui_post_stats_gold();
+                    },
+                    time: {
+                        hour:12
+                    }
+                },
+                {
+                    text:'Nevermind',
+                    color:'gray',
+                    nextText:21,
+                    allowRepeats:1
+                }
+            ]
+        }, // 22
+        {
+            id:23,
+            text:'The staff member quickly hails a carriage and sends you off on your way to Ebonfront once you give them the gold.',
+            options:[
+                {
+                    text:'The journey is plain and uneventful, and after a day the city of Ebonfront visibly draws closer.',
+                    flavor:1
+                },
+                {
+                    text:'You\'ve arrived at Ebonfront, Ignoma\'s capital city and home to it\'s reputable fishing industry and glamorous ports.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:11
+                }
+            ]
+        }, // 23
+        {
+            id:24,
+            text:'The staff member quickly hails a carriage and sends you off on your way to Freygrave when you pay them.',
+            options:[
+                {
+                    text:'The journey passes by uneventfully, and once the half-day is up you reach Freygrave, thanking the driver as you dismount the carriage.',
+                    flavor:1
+                },
+                {
+                    text:'You\'re now in freygrave, a small town on the eastern border of Ignoma, there\'s not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire.',                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:15
+                }
+            ]
+        }, // 24
+        {
             id:100,
             text:'You stand near the center of your home village in Light Witesia. Villagers are starting daily activities; hunters going out into the surrounding forest, travelling merchants setting up stalls, and the delicious smell of fresh bread wavers through the air.',
             options: [
                 {
                     text:'End',
                     nextText:-1,
-                    color:'aqua'
+                    color:'aqua',
                 }
             ]
         }, // 100
