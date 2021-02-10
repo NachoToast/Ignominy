@@ -8,6 +8,7 @@
     <link href="css/index.css" rel="stylesheet">
     <link href="css/menu.css" rel="stylesheet">
     <link href="css/inventory.css" rel="stylesheet">
+    <link href="css/map.css" rel="stylesheet">
     <link href="img/ui/strength.png" rel="icon">
     <script defer src="js/main.js"></script>
     <script defer src="js/story.js"></script>
@@ -57,7 +58,7 @@
     <div id='ui'>
         <h1 id='ui_debug'>Failed to load page, please contact NachoToast.</h1>
         <div id='ui_menu' class='ui_page'>
-            <h1>Main Menu</h1>
+            <h1 id='game_version'>Main Menu</h1>
             <div id='ui_menu_buttons_container'>
                 <button id='ui_menu_buttons' onclick='ui_save()'>Save</button>
                 <button id='ui_menu_buttons' onclick='ui_load()'>Load</button>
@@ -65,6 +66,7 @@
             </div>
             <div id='ui_menu_widgets'>
                 <img src="img/ui/discord.png" id='ui_menu_widgets_discord' onclick="ui_discord()">
+                <img src="img/ui/github.png" id='ui_menu_widgets_github' onclick="ui_github()">
             </div>
         </div>
         <div id='ui_stats' class='ui_page'>
@@ -138,7 +140,7 @@
         </div>
         <h1 id='location_prologue'>Error: Contact NachoToast.</h1>
         <div id='location'>
-            <img id='location_map' src="img/location/worldmap.svg">
+            <img id='location_map' src="img/map/worldmap.svg">
             <div id='location_list'>
                 <div class='location_option'>
                     <h1 id='location_0'>Ignoma</h1>

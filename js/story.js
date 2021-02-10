@@ -880,6 +880,27 @@ function generate_story() {
                     }
                 },
                 {
+                    text:'Run up to the one heading towards Timberside.',
+                    color:'aqua',
+                    nextText:25,
+                    allowRepeats:1,
+                    requiredTimes: {
+                        hourA:7,
+                        hourB:11,
+                        timehalfAB:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.2;
+                        ui_post_stats_fatigue();
+                    }
+                },
+                {
                     text:'Wander the street. [15m]',
                     nextText:15,
                     color:'gray',
@@ -1127,6 +1148,7 @@ function generate_story() {
                     color:'aqua',
                     allowRepeats:1,
                     nextText:23,
+                    requiredState: (player) => player.gold >= 20,
                     setState: function() {
                         player.gold -= 20;
                         player.stats.fatigue += 1;
@@ -1142,6 +1164,7 @@ function generate_story() {
                     color:'aqua',
                     allowRepeats:1,
                     nextText:24,
+                    requiredState: (player) => player.gold >= 20,
                     setState: function() {
                         player.gold -= 20;
                         player.stats.fatigue += 1;
@@ -1165,6 +1188,11 @@ function generate_story() {
             text:'The staff member quickly hails a carriage and sends you off on your way to Ebonfront once you give them the gold.',
             options:[
                 {
+                    text:'-20 Gold',
+                    color:'gray',
+                    flavor:1
+                },
+                {
                     text:'The journey is plain and uneventful, and after a day the city of Ebonfront visibly draws closer.',
                     flavor:1
                 },
@@ -1185,6 +1213,11 @@ function generate_story() {
             text:'The staff member quickly hails a carriage and sends you off on your way to Freygrave when you pay them.',
             options:[
                 {
+                    text:'-20 Gold',
+                    color:'gray',
+                    flavor:1
+                },
+                {
                     text:'The journey passes by uneventfully, and once the half-day is up you reach Freygrave, thanking the driver as you dismount the carriage.',
                     flavor:1
                 },
@@ -1199,6 +1232,63 @@ function generate_story() {
                 }
             ]
         }, // 24
+        {
+            id:25,
+            text:'You run up to a group of travellers who are headed in the direction of Timberside.',
+            options:[
+                {
+                    text:'"15 Gold if you want to tag along, not negotiating."',
+                    flavor:1
+                },
+                {
+                    text:'Travel to Timberside',
+                    nextText:26,
+                    allowRepeats:1,
+                    color:'lime',
+                    time:{
+                        hour:12
+                    },
+                    requiredState: (player) => player.gold >= 15,
+                    setState: function() {
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                        player.gold -= 15;
+                        ui_post_stats_gold();
+                    }
+                },
+                {
+                    text:'Nevermind',
+                    color:'red',
+                    nextText:15,
+                    allowRepeats:1
+                }
+            ]
+        }, // 25
+        {
+            id:26,
+            text:'You give the travellers 15 gold and join their caravan. The weather takes a turn on the way to Timberside but luckily the carriages are enclosed by a layer of tarp.',
+            options:[
+                {
+                    text:'-15 Gold',
+                    color:'gray',
+                    flavor:1
+                },
+                {
+                    text:'As the journey comes to an end and the rain conveniently fades, you begin to see Timberside coming into view.',
+                    flavor:1
+                },
+                {
+                    text:'Welcome to Timberside, a medium-sized own on Ignoma\'s southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    allowRepeats:1,
+                    color:'gray',
+                    nextText:20
+                }
+            ]
+        }, // 26
         {
             id:100,
             text:'You stand near the center of your home village in Light Witesia. Villagers are starting daily activities; hunters going out into the surrounding forest, travelling merchants setting up stalls, and the delicious smell of fresh bread wavers through the air.',

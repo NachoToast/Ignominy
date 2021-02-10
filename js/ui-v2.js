@@ -1,4 +1,4 @@
-document.getElementById('game_version').innerHTML = 'Ignominy 0.1.2';
+document.getElementById('game_version').innerHTML = 'Ignominy 0.1.3';
 const ui = document.getElementById('ui'),
 ui_pages = [document.getElementById('ui_menu'),document.getElementById('ui_stats'),document.getElementById('ui_date'),document.getElementById('ui_time'),document.getElementById('ui_inventory')],
 ui_mobile = document.getElementById('ui_mobile'),

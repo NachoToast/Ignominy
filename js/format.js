@@ -65,10 +65,10 @@ var textNodes = [
             }, // At the end of each option comment the id number.
             {
                 // Option #2...
-            }, // 2 Ignoma Ebonfront Docks
+            }, // 2
             {
                 // Option #3, etc...
-            } // 3 Kingdom of Dalia Oxlight Sewers
+            } // 3
         ]
     },
     {
