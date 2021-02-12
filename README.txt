@@ -17,5 +17,5 @@ If you'd like to help add quests, plotlines, etc. contact me via Discord.
 I'd also recommend reading format.js (located in the 'js' folder) as it gives you all the information you need about adding scenes.
 
 --- Links ---
-Discord https://discord.gg/PEGUcb4)  
+Discord https://discord.gg/PEGUcb4
 Website https://ntgc.ddns.net/Ignominy
