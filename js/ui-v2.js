@@ -1,4 +1,3 @@
-const version = '0.1.3';
 document.getElementById('game_version').innerHTML = `Ignominy ${version}`;
 const ui = document.getElementById('ui'),
 ui_pages = [document.getElementById('ui_menu'),document.getElementById('ui_stats'),document.getElementById('ui_date'),document.getElementById('ui_time'),document.getElementById('ui_inventory')],

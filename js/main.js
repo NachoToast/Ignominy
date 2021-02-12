@@ -1,3 +1,4 @@
+const version = '0.1.4';
 var devmode = 0, ingame = 0;
 const months = [
     {
