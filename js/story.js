@@ -2,8 +2,9 @@
 
 var universalOptions = [];
 var textnodes = [];
-var shows_map_option = [1,11,15,20,21];
-var shows_map_ignoma = [1,11,15,20,21]
+var shows_map_option = [1,11,15,20,21,101];
+var shows_map_ignoma = [1,11,15,20,21];
+var shows_map_light_witesia = [101];
 function generate_story() {
     generate_trade();
     universalOptions = [
@@ -1080,6 +1081,19 @@ function generate_story() {
                         hourF:12,
                         timehalfEF:'am'
                     }
+                },
+                {
+                    text:'Wander the street. [15m]',
+                    nextText:15,
+                    color:'gray',
+                    allowRepeats:1,
+                    time: {
+                        minute:15
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    }
                 }
             ]
         }, // 20
@@ -1176,6 +1190,22 @@ function generate_story() {
                     }
                 },
                 {
+                    text:'Basinfront',
+                    color:'yellow',
+                    allowRepeats:1,
+                    nextText:27,
+                    requiredState: (player) => player.gold >= 20,
+                    setState: function() {
+                        player.gold -= 20;
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                        ui_post_stats_gold();
+                    },
+                    time: {
+                        day:1
+                    }
+                },
+                {
                     text:'Nevermind',
                     color:'gray',
                     nextText:21,
@@ -1222,7 +1252,8 @@ function generate_story() {
                     flavor:1
                 },
                 {
-                    text:'You\'re now in freygrave, a small town on the eastern border of Ignoma, there\'s not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire.',                    flavor:1
+                    text:'You\'re now in freygrave, a small town on the eastern border of Ignoma, there\'s not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire.',
+                    flavor:1
                 },
                 {
                     text:'Continue',
@@ -1290,16 +1321,398 @@ function generate_story() {
             ]
         }, // 26
         {
+            id:27,
+            text:'You give the staff member the gold as they hail a waiting carriage.',
+            options:[
+                {
+                    text:'-20 Gold',
+                    color:'gray',
+                    flavor:1
+                },
+                {
+                    text:'As you journey into Light Witesia the surrounding woods become more dense, and path less built-up. Signs of human civilization become less frequent all the way up until you reach the village of Basinfront.',
+                    flavor:1
+                },
+                {
+                    text:'You\'ve reached Basinfront, a prominent village in the north of Light Witesia. Hunters and explorers frequent this village due to its close proximity to the vast, dense, and unexplored jungles surrounding it.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:101
+                }
+            ]
+        }, // 27
+        {
             id:100,
             text:'You stand near the center of your home village in Light Witesia. Villagers are starting daily activities; hunters going out into the surrounding forest, travelling merchants setting up stalls, and the delicious smell of fresh bread wavers through the air.',
             options: [
                 {
-                    text:'End',
-                    nextText:-1,
+                    text:'Continue',
+                    nextText:101,
                     color:'aqua',
                 }
             ]
         }, // 100
+        {
+            id:101,
+            text:'You wander down the main road of Basinfront.',
+            options:[
+                {
+                    text:'Although the village is small, the street is busy with many villagers, hunters, and explorers are going about their day.',
+                    flavor:1,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfCD:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    }
+                },
+                {
+                    text:'There are many familiar faces among them, and some greet you as you walk by.',
+                    flavor:1,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfCD:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    },
+                    requiredState: (player) => player.hometown.name == 'Light Witesia'
+                },
+                {
+                    description:'A lot of people are entering a building displaying a "Hunters Guild" banner,',
+                    text:'go inside.',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:104,
+                    setState: function() {
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    },
+                    requiredState: (player) => player.completed.indexOf(104) == -1,
+                    time: {
+                        minute:1
+                    },
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:10,
+                        timehalfAB:'am'
+                    }
+                },
+                {
+                    description:'The Hunters Guild building is open,',
+                    text:'go inside.',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:104,
+                    setState: function() {
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    },
+                    requiredState: (player) => player.completed.indexOf(104) !== -1,
+                    time: {
+                        minute:1
+                    },
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:10,
+                        timehalfAB:'am'
+                    }
+                },
+                {
+                    description:'Numerous travellers are coming through the village on their way to Timberside and Oldwatch.',
+                    text:'Hitchike to Timberside.',
+                    color:'aqua',
+                    nextText:102,
+                    allowRepeats:1,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfCD:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                        player.random = random()
+                    },
+                    time: {
+                        minute:5
+                    }
+                },
+                {
+                    text:'Wander through the village. [15m]',
+                    nextText:101,
+                    color:'gray',
+                    allowRepeats:1,
+                    time: {
+                        minute:15
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 0.1;
+                        ui_post_stats_fatigue();
+                    }
+                }
+            ]
+        }, // 101
+        {
+            id:102,
+            text:'You try your luck at hitchiking to Timberside.',
+            options:[
+                {
+                    description:'A passing explorer offers you a lift,',
+                    text:'accept it.',
+                    color:'lime',
+                    allowRepeats:1,
+                    nextText:103,
+                    setState: function() {
+                        player.stats.fatigue +=1;
+                        ui_post_stats_fatigue();
+                    },
+                    time: {
+                        day:1
+                    },
+                    requiredState: (player) => player.random >= 6
+                },
+                {
+                    text:'Decline',
+                    color:'red',
+                    allowRepeats:1,
+                    nextText:101,
+                    requiredState: (player) => player.random >= 6
+                },
+                {
+                    description:'Unfortunately nobody stops to offer you a lift.',
+                    text:'Keep Trying',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:102,
+                    requiredTimes: {
+                        hourA:6,
+                        hourB:11,
+                        timehalfCD:'am',
+                        hourC:12,
+                        hourD:12,
+                        timehalfCD:'pm',
+                        hourE:1,
+                        hourF:6,
+                        timehalfEF:'pm'
+                    },
+                    setState: function() {
+                        player.stats.fatigue += 1;
+                        ui_post_stats_fatigue();
+                        player.random = random()
+                    },
+                    time: {
+                        minute:5
+                    },
+                    requiredState: (player) => player.random <= 5
+
+                },
+                {
+                    text:'Give Up',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:101,
+                    requiredState: (player) => player.random <= 5
+                }
+            ]
+
+        }, // 102
+        {
+            id:103,
+            text:'You jump in the explorer\'s wagon and make your way to Timberside.',
+            options:[
+                {
+                    text:'You make small talk with the generous explorer on the way.',
+                    flavor:1
+                },
+                {
+                    text:'They passionately explain their theories about hidden villages of humanoid people deeper in the jungle.',
+                    flavor:1,
+                    requiredState: (player) => player.random == 10
+                },
+                {
+                    text:'Welcome to Timberside, a medium-sized town on Ignoma\'s southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia.',
+                    flavor:1
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    nextText:20,
+                    allowRepeats:1
+                }
+            ]
+        }, // 103
+        {
+            id:104,
+            text:'You\'re in the Hunters Guild building. The atmosphere is noisy yet pleasant, as you overhear various groups of hunters, explorers, and adventurers planning out their expeditions for the day.',
+            options: [
+                {
+                    description:'A large wooden noticeboard stands near the entrance, filled with details about quests and parties to join for the surrounding area.',
+                    text:'Take a look.',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:105
+                },
+                {
+                    text:'Exit',
+                    color:'gray',
+                    nextText:101,
+                    allowRepeats:1
+                }
+            ]
+        }, // 104
+        {
+            id:105,
+            text:'You stop to look at the noticeboard, it\'s filled with advertisements and recruitment posters for hunters and explorers.',
+            options:[
+                {
+                    text:'View hunter related posters.',
+                    color:'yellow',
+                    allowRepeats:1,
+                    nextText:106
+                },
+                {
+                    text:'View explorer related posters.',
+                    color:'aqua',
+                    allowRepeats:1,
+                    nextText:107
+                },
+                {
+                    text:'View other posters.',
+                    color:'magenta',
+                    allowRepeats:1,
+                    nextText:108
+                },
+                {
+                    text:'Move Away',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:104
+                }
+            ]
+        }, // 105
+        {
+            id:106,
+            text:'You look at the hunter related posters on the board.',
+            options:[
+                {
+                    description:'A small group of local hunter\'s are going on a daily hunting trip, offering 50 gold to anyone who is able to help out.',
+                    text:'Join them.',
+                    color:'lime',
+                    allowRepeats:1,
+                    nextText:109,
+                    time: {
+                        minute:5
+                    }
+                },
+                {
+                    text:'Back',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:105
+                }
+            ]
+        }, // 106
+        {
+            id:107,
+            text:'You look at the explorer related posters on the board.',
+            options:[
+                {
+                    text:'Back',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:105
+                }
+            ]
+        }, // 107
+        {
+            id:108,
+            text:'You look at the other posters on the board.',
+            options:[
+                {
+                    text:'Back',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:105
+                }
+            ]
+        }, // 108
+        {
+            id:109,
+            text:'You read through the details on the notice and find the group of local hunters. After a quick period of preperation you set off to a lesser-known animal hunting ground.',
+            options:[
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:110,
+                    time: {
+                        hour:7
+                    },
+                    setState: function() {
+                        if(player.stats.strength < 5){player.stats.strength += 1;ui_post_stats_strength()};
+                        if(player.stats.agility < 5){player.stats.agility += 1;ui_post_stats_agility};
+                        if(player.backstory.name=='Hunter'){player.stats.fatigue += 40;player.gold+=70}
+                        else {player.stats.fatigue += 50;player.gold+=50};
+                        ui_post_stats_gold();
+                        ui_post_stats_fatigue();
+                    }
+                }
+            ]
+        }, // 109
+        {
+            id:110,
+            text:'The hunt is successful, you and the other hunters were able to get quite a few animal corpses without incident.',
+            options:[
+                {
+                    text:'The hunters happily hand you the promised gold before leaving towards their homes.',
+                    flavor:1,
+                    requiredState: (player) => player.backstory.name !== 'Hunter'
+                },
+                {
+                    text:'The hunters were surprised at your oustanding hunting ability, and give you some extra gold as thanks.',
+                    flavor:1,
+                    requiredState: (player) => player.backstory.name == 'Hunter'
+                },
+                {
+                    text:'+50 Gold',
+                    color:'gray',
+                    flavor:1,
+                    requiredState: (player) => player.backstory.name !== 'Hunter'
+                },
+                {
+                    text:'+70 Gold',
+                    color:'gray',
+                    flavor:1,
+                    requiredState: (player) => player.backstory.name == 'Hunter'
+                },
+                {
+                    text:'Continue',
+                    color:'gray',
+                    allowRepeats:1,
+                    nextText:101
+                }
+            ]
+        }, // 110
         {
             id:200,
             text:'As the hot sun rises in the east you observe the citizens of Wildedenn, the Luma Empire\'s capital city. Many travellers who were using Wildedenn as a stopover point are getting ready to depart, and wandering merchants are setting up their shops for the soon arriving travellers.',

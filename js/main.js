@@ -650,5 +650,6 @@ function increment_time(m,d,h,min) {
     set_date(d,m)
 }
 function random(max) {
-    return Math.floor(Math.random() * Math.floor(max+1));
+    if(!max)max=10;
+    return Math.floor(Math.random() * Math.floor(max)) + 1; // 1-[10 or max] (both inclusive)
 }

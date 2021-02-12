@@ -1,4 +1,5 @@
-document.getElementById('game_version').innerHTML = 'Ignominy 0.1.3';
+const version = '0.1.3';
+document.getElementById('game_version').innerHTML = `Ignominy ${version}`;
 const ui = document.getElementById('ui'),
 ui_pages = [document.getElementById('ui_menu'),document.getElementById('ui_stats'),document.getElementById('ui_date'),document.getElementById('ui_time'),document.getElementById('ui_inventory')],
 ui_mobile = document.getElementById('ui_mobile'),
@@ -174,7 +175,7 @@ function ui_commit_save() {
     }
     data_a = JSON.stringify(player)
     data_b = JSON.stringify(timedata)
-    data_c = `[${data_a},${data_b}]`
+    data_c = `[${data_a},${data_b},{"version":"${version}"}]`
     localStorage.setItem('Ignominy Save', data_c);
     alert('Saved the Game.')
 }
@@ -205,6 +206,7 @@ function ui_load() {
         ui_post_stats_all();
         if(document.getElementById('ui_mobile').style.visibility == 'visible')ui_open_mobile_menu();
         document.getElementById('content').style.alignItems = 'flex-start';
+        //console.log(`Save Version: ${data[2].version}, Current Version: ${version}`);
     }
 }
 function render_inventory() {
@@ -233,7 +235,8 @@ function close_inventory() {
 function ui_show_map(scene) {
     // div
     let map_src, map_name;
-    if(shows_map_option.indexOf(scene) !== -1){map_src='img/map/ignoma.png';map_name='Ignoma'}
+    if(shows_map_ignoma.indexOf(scene) !== -1){map_src='img/map/ignoma.png';map_name='Ignoma'}
+    else if(shows_map_light_witesia.indexOf(scene) !== -1){map_src='img/map/light_witesia.png';map_name='Light Witesia'}
     else return;
     let map = document.createElement('div');
     map.id='map';
