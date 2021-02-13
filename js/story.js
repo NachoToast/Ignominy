@@ -2415,9 +2415,9 @@ function generate_story() {
             text:'As the hot sun rises in the east you absentmindedly walk the streets of Wildedenn, the Luma Empire\'s capital city. For better or for worse you\'ve decided to become an adventurer, and although it won\'t be easy, it\'ll surely be worth it in the long run.',
             options: [
                 {
-                    text:'End',
-                    nextText:200,
-                    color:'aqua',
+                    text:'Continue',
+                    nextText:201,
+                    color:'gray',
                     allowRepeats:1
                 }
             ]
