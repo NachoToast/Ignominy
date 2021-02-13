@@ -59,12 +59,6 @@ function ui_open_mobile_menu() {
         ui_mobile.style.animationName = 'mobile_fadein';
     }
 }
-function ui_discord() {
-    window.open('https://discord.gg/PEGUcb4', '_blank');
-}
-function ui_github() {
-    window.open('https://github.com/NachoToast/Ignominy', '_blank');
-}
 function ui_reset() {
     location.reload();
 }
@@ -236,6 +230,7 @@ function ui_show_map(scene) {
     let map_src, map_name;
     if(shows_map_ignoma.indexOf(scene) !== -1){map_src='img/map/ignoma.png';map_name='Ignoma'}
     else if(shows_map_light_witesia.indexOf(scene) !== -1){map_src='img/map/light_witesia.png';map_name='Light Witesia'}
+    else if(shows_map_luma_empire.indexOf(scene) !== -1){map_src='img/map/luma_empire.png';map_name='The Luma Empire'}
     else return;
     let map = document.createElement('div');
     map.id='map';
@@ -260,4 +255,7 @@ function ui_show_map(scene) {
 }
 function ui_close_map() {
     if(document.getElementById('map'))delete_element_by_id('map');
+}
+function ui_clear_delta() {
+    player.deltas = {}
 }

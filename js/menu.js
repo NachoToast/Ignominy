@@ -22,6 +22,7 @@ function create_trade_menu(trader) {
     trademenu.appendChild(trademenucard_container);
     // Generate Cards
     let specifictrades = trades[trades.map(e => e.name).indexOf(trader)];
+    // Selling
     for (let i=0;i<specifictrades.sell.length; i++) {
         // Index
         let thisitem = items[items.map(e => e.name).indexOf(specifictrades.sell[i])];
@@ -60,6 +61,8 @@ function create_trade_menu(trader) {
         meprice.id = 'trade_menu_card_price'
         me.appendChild(meprice);
     }
+    // Buying
+        // TBC
     //console.log(specifictrades);
 }
 function close_trade_menu() {
@@ -83,7 +86,7 @@ function acquire(item, amount) {
     }
 }
 function sell(item) {
-
+    // TBC
 }
 function trademenu_update() {
     document.getElementById('trade_menu_h2').innerHTML = `Gold: ${player.gold}`;
@@ -93,12 +96,17 @@ var trades = [];
 function generate_trade() {
     trades = [
         {
-            name:'Innkeeper',
+            name:'Ebonfront Innkeeper',
             sell:['Seafood Meal','Beer'],
             buy:[]
         },
         {
-            name:'Other Person'
+            name:'Basinfront Innkeeper',
+            sell:['Beer']
+        },
+        {
+            name:'Wildedenn Innkeeper',
+            sell:['Beer']
         }
     ]
 }

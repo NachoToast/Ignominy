@@ -144,9 +144,11 @@
     background-color: #272727;
 }
 #ui_menu_widgets img {
-    width: 15%;
+    width: 100px;
     margin-top: 90px;
-    cursor: pointer;
+}
+#ui_menu_widgets img:hover {
+    filter:brightness(50%)
 }
 #ui_stats {
     display: flex;

@@ -1,4 +1,3 @@
-const version = '0.1.4';
 var devmode = 0, ingame = 0;
 const months = [
     {
@@ -64,6 +63,9 @@ var player = {
         agility: 0,
         proficiency: 0,
         perception:0,
+    },
+    deltas: {
+
     },
     hometown: {
         name:'Placeholder Kingdom',
@@ -205,6 +207,7 @@ function set_time(h,m,t) { // Usage: set_time(h,m,t); [12-Hour format.]
     hour = h;
     minute = m;
     timehalf = t;
+    m = Math.ceil(m);
     if(m<10)m='0'+m;
     ui_post_time(h,m,t);
 }
@@ -509,10 +512,13 @@ function showTextNode(textNodeIndex) {
             button_div.classList.add('button_div')
             if (option.reverse == 1) button_div.style.flexDirection = 'row-reverse'
             // text
-            const button_desc = document.createElement('button_desc')
-            button_desc.classList.add('button_desc')
-            button_desc.innerText = option.description
-            if (button_desc.innerText == 'undefined') button_desc.innerText = '';
+            if (option.description) {
+                const button_desc = document.createElement('button_desc')
+                button_desc.classList.add('button_desc')
+                button_desc.innerText = option.description
+                button_div.appendChild(button_desc)
+                //if (button_desc.innerText == 'undefined') button_desc.innerText = ''; // Check deprecated.
+            }
             // button
             const button = document.createElement('button')
             button.innerText = option.text
@@ -522,7 +528,6 @@ function showTextNode(textNodeIndex) {
             button.style.color = option.color
             // appending children
             optionButtonsElement.appendChild(button_div)
-            button_div.appendChild(button_desc)
             button_div.appendChild(button)
         }
     })
@@ -594,15 +599,47 @@ function selectOption(option) {
     if (player.completed.indexOf(nextTextNodeId) == -1) player.completed.push(nextTextNodeId);
     //player = Object.assign(player, option.setState) // Deprecated, setState is now a funtion below.
     if(option.setState)option.setState();
-    if(option['time']) {
+    /*if(option['time']) {
         let m=0,d=0,ho=0,min=0;
         if(option['time'].month){ m=option['time'].month}
         if(option['time'].day){ d=option['time'].day}
         if(option['time'].hour){ ho=option['time'].hour}
         if(option['time'].minute){ min=option['time'].minute}
         increment_time(m,d,ho,min)
-    }
+    }*/
     showTextNode(nextTextNodeId)
+    if(!option.fatigue){player.stats.fatigue+=0.1;ui_post_stats_fatigue()}
+    else {
+        if(option.fatigue == 'false' || option.fatigue == 0);
+        else {
+            if(option.fatigue == 'Caravan'){player.stats.fatigue+=1;ui_post_stats_fatigue()}
+            else if(option.fatigue == 'Wander'){player.stats.fatigue+=0.1;ui_post_stats_fatigue()}
+            else {
+                player.stats.fatigue += option.fatigue;
+                ui_post_stats_fatigue();
+            }
+        }
+    }
+    /*
+    if(option.time == false)console.log('time is specified as false');
+    else if(option.time)console.log('time is specified');
+    else console.log('no time specified');
+    */
+    //if(!option.time){increment_time(0,0,0,0.2)}
+        if(option.time == false);
+        else {
+            if(!option.time) {
+                increment_time(0,0,0,0.2);
+            }
+            else {
+                let m=0,d=0,ho=0,min=0;
+                if(option['time'].month){ m=option['time'].month}
+                if(option['time'].day){ d=option['time'].day}
+                if(option['time'].hour){ ho=option['time'].hour}
+                if(option['time'].minute){ min=option['time'].minute}
+                increment_time(m,d,ho,min)
+            }
+        }
     //console.log(option);
 }
 function increment_time(m,d,h,min) {
