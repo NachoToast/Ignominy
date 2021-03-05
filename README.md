@@ -1,4 +1,6 @@
 # Ignominy
+#
+This version of Ignominy is no longer receiving updates in favour of a later version in a different repository.
 #### WIP Notice
 Please be aware that this game is very much a work in progress, frameworks exist but content is nonexistent.  
 As such, if you start anywhere besides Ignoma there is nothing to do.
