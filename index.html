@@ -2,293 +2,155 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingominy</title>
-    <link href="css/base-ui-v2.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
-    <link href="css/menu.css" rel="stylesheet">
-    <link href="css/inventory.css" rel="stylesheet">
-    <link href="css/map.css" rel="stylesheet">
-    <link href="img/ui/strength.png" rel="icon">
+    <title>Ignominy</title>
+    <link href="img/logo.png" rel="icon" type="image/png">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
     <script defer src="js/main.js"></script>
-    <script defer src="js/story.js"></script>
-    <script defer src="js/ui-v2.js"></script>
-    <script defer src="js/menu.js"></script>
-    <script defer src="js/items.js"></script>
+    <script defer src="js/ui.js"></script>
+    <script defer src="js/start.js"></script>
 </head>
 <body>
-    <div id='top_bar'>
-        <div class='top_bar_alternate_button' onclick='ui_open_mobile_menu();'>
-            <h1>Ignominy</h1>
-        </div>
-        <div class='top_bar_button' id='ui_tb1' onclick='ui_pagetoggle(0)'>
-            <h1>Menu</h1>
-        </div>
-        <div class='top_bar_button' id='ui_tb2' onclick='ui_pagetoggle(1)'>
-            <h1>Stats</h1>
-        </div>
-        <div class='top_bar_button' id='ui_tb3' onclick='ui_pagetoggle(2)'>
-            <h1>30/01/3051</h1>
-        </div>
-        <div class='top_bar_button' id='ui_tb4' onclick='ui_pagetoggle(3)'>
-            <h1>7:49pm</h1>
-        </div>
-        <div class='top_bar_button' id='ui_tb5' onclick='ui_pagetoggle(4)'>
-            <h1>Inventory</h1>
-        </div>
-        <div id='top_bar_end'></div>
+    <div id="header">
+        <div class="header_options" onclick="show_header(0)">Menu</div>
+        <div class="header_options hidden" onclick="show_header(1)">Stats</div>
+        <div class="header_options hidden" onclick="show_header(2)">Map</div>
+        <div class="header_options hidden" onclick="show_header(3)">Date Time</div>
+        <div class="header_options hidden" onclick="show_header(4)">Inventory</div>
     </div>
-    <div id='ui_mobile'>
-        <div class='top_bar_mobile_button' id='ui_tb1a' onclick='ui_pagetoggle(0)'>
-            <h1>Menu</h1>
-        </div>
-        <div class='top_bar_mobile_button' id='ui_tb2a' onclick='ui_pagetoggle(1)'>
-            <h1>Stats</h1>
-        </div>
-        <div class='top_bar_mobile_button' id='ui_tb3a' onclick='ui_pagetoggle(2)'>
-            <h1>01/01/3051</h1>
-        </div>
-        <div class='top_bar_mobile_button' id='ui_tb4a' onclick='ui_pagetoggle(3)'>
-            <h1>6:59am</h1>
-        </div>
-        <div class='top_bar_mobile_button' id='ui_tb5a' onclick='ui_pagetoggle(4)'>
-            <h1>Inventory</h1>
-        </div>
-    </div>
-    <div id='ui'>
-        <h1 id='ui_debug'>Failed to load page, please contact NachoToast.</h1>
-        <div id='ui_menu' class='ui_page'>
-            <h1 id='game_version'>Main Menu</h1>
-            <div id='ui_menu_buttons_container'>
-                <button id='ui_menu_buttons' onclick='ui_save()'>Save</button>
-                <button id='ui_menu_buttons' onclick='ui_load()'>Load</button>
-                <button id='ui_menu_buttons' onclick='ui_reset()'>Reset</button>
-            </div>
-            <div id='ui_menu_widgets'>
-                <a href='https://discord.gg/PEGUcb4' target='_blank'><img src="img/ui/discord.png"></a>
-                <a href='https://github.com/NachoToast/Ignominy' target='_blank'><img src="img/ui/github.png"></a>
-                <a href='https:/ntgc.ddns.net' target='_blank'><img src="img/ui/website.png"></a>
-            </div>
-        </div>
-        <div id='ui_stats' class='ui_page'>
-            <h1 id='ui_stats_header'>Stats</h1>
-            <div class="ui_statscard" id="ui_health_mana">
-                <div class="ui_statscard2" id="ui_health_card">
-                    <img src="img/ui/health.png">
-                    <h1 id='ui_health'>Health: 100/100 [100%]</h1>
+    <div id="game">
+        <div class="lore std_window">
+            <h1>Welcome to the world of Ignominy!</h1>
+            <p>The year is <span class="number_a" title='Know as the "Glowing Era"'>3051</span>, but human civilization hasn't reached the technological epoch it once dreamed of.</p>
+            <p>Quite the contrary actually.</p>
+            <p>Humanity has regressed.</p>
+            <p>The global population is around <span class="number_a" title='From a peak of 9 billion in 2050'>500 million</span>, a mere fraction of what it used to be.</p>
+            <p>Technology, despite the many centuries that have elapsed since <span class="number_a" title='monke' id="calculate_year"></span>, is medieval at best,<br> and humanity's spot at the top of the food pyramid is no longer unchallenged.</p>
+            <p>Magical beasts from land, sea, and air are a never-ending threat to the safety of civilization.</p>
+            <p>Not everything is bad however.</p>
+            <p>Wild beasts aren't the only ones with magical powers.</p>
+            <p>Humans have also coevolved magical abilities of their own.</p>
+            <p>Although the term "humans" isn't really the same anymore.</p>
+            <div id="location_meta">
+                <h1> World Map</h1>
+                <div>
+                    <p>Kingdom Labels</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(0)">
+                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(0)">
+                    </div>
                 </div>
-                <div class="ui_statscard3"></div>
-                <div class="ui_statscard2" id="ui_mana_card">
-                    <img src="img/ui/mana.png">
-                    <h1 id='ui_mana'>Mana: 100/100 [100%]</h1>
+                <div>
+                    <p>Intrakingdom Routes</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="80" oninput="slider_modify_map(1)">
+                        <input class="map_outputs" type="number" placeholder="80" min=0 max=100 oninput="direct_modify_map(1)">
+                    </div>
                 </div>
-            </div>
-            <div class="ui_statcards_container">
-                <div class="ui_statscard" id="ui_gold">
-                    <img src="img/ui/gold.png" class="ui_statcard_image">
-                    <h1 class="ui_statheader" id="gold_name">Gold</h1>
-                    <h1 class="ui_statvalue" id="gold_value">0</h1>
+                <div>
+                    <p>Interkingdom Routes</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="80" oninput="slider_modify_map(2)">
+                        <input class="map_outputs" type="number" placeholder="80" min=0 max=100 oninput="direct_modify_map(2)">
+                    </div>
                 </div>
-                <div class="ui_statscard" id="ui_fatigue">
-                    <img src="img/ui/fatigue.png" class="ui_statcard_image">
-                    <h1 class="ui_statheader" id="fatigue_name">Fatigue</h1>
-                    <h1 class="ui_statvalue" id="fatigue_value">0</h1>
+                <div>
+                    <p>Place Labels</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(3)">
+                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(3)">
+                    </div>
                 </div>
-                <div class="ui_statscard" id="ui_strength">
-                    <img src="img/ui/strength.png" class="ui_statcard_image">
-                    <h1 class="ui_statheader" id="strength_name">Strength</h1>
-                    <h1 class="ui_statvalue" id="strength_value">0</h1>
+                <div>
+                    <p>Place Dots</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(4)">
+                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(4)">
+                    </div>
                 </div>
-                <div class="ui_statscard" id="ui_agility">
-                    <img src="img/ui/agility.png" class="ui_statcard_image">
-                    <h1 class="ui_statheader" id="agility_name">Agility</h1>
-                    <h1 class="ui_statvalue" id="agility_value">0</h1>
-                </div>
-                <div class="ui_statscard" id="ui_proficiency">
-                    <img src="img/ui/proficiency.png" class="ui_statcard_image">
-                    <h1 class="ui_statheader" id="proficiency_name">Proficiency</h1>
-                    <h1 class="ui_statvalue" id="proficiency_value">0</h1>
-                </div>
-                <div class="ui_statscard" id="ui_perception">
-                    <img src="img/ui/perception.png" class="ui_statcard_image">
-                    <h1 class="ui_statheader" id="perception_name">Perception</h1>
-                    <h1 class="ui_statvalue" id="perception_value">0</h1>
+                <div>
+                    <p>Zoom</p>
+                    <div class="map_zoom">
+                        <button onclick="zoom(-0.1)">-</button>
+                        <p id="map_zoom_output">100%</p>
+                        <button onclick="zoom(0.1)">+</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id='ui_date' class='ui_page'>
-            <h1>Date</h1>
-        </div>
-        <div id='ui_time' class='ui_page'>
-            <h1>Time</h1>
-        </div>
-        <div id='ui_inventory' class='ui_page'>
-            <h1>Inventory</h1>
-        </div>
-    </div>
-    <div id='content'>
-        <div id='welcome'>
-            <h1>Welcome to Ignominy</h1>
-            <p>A text-based RPG by NachoToast.</p>
-        </div>
-        <button id='button_start' onclick='newgame()'>Begin</button>
-        <div id='input'>
-            <div id='name' class='input'>
-                <p>This will be the tale of...</p>
-                <input id='name_input' type="text" maxlength="25" minlength="2" placeholder="NachoToast">
-                <input id='name_submit' type="submit" onclick='submit_name()'>
+            <div id="location_select">
+                <img class="map_s" src="img/map/global/base.png">
+                <img class="map_s" src="img/map/global/base_labelled.png">
+                <img class="map_s" src="img/map/global/intraconnectives_all.png">
+                <img class="map_s" src="img/map/global/interconnectives_all.png">
+                <img class="map_s" src="img/map/global/labels_all.png">
+                <img class="map_s" src="img/map/global/nodes_all.png">
             </div>
-        </div>
-        <h1 id='location_prologue'>Error: Contact NachoToast.</h1>
-        <div id='location'>
-            <img id='location_map' src="img/map/worldmap.svg">
-            <div id='location_list'>
-                <div class='location_option'>
-                    <h1 id='location_0'>Ignoma</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Fishing</p>
-                    </div>
-                    <p>Population: High</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>Low</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Sandy Coastlines</p><p class='biome'>Grassy Plains</p><p class='biome'>Swamps and Marshes</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Fisherman</p><p>Sailor</p><p>Chef</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(0)'>Select</button>
+            <div id="location_chose">
+                <h1>Chose your starting location</h1>
+                <div class="location_options" onclick="location_choose(0)">
+                    <h2>Ignoma</h2>
+                    <ul>
+                        <li>Population: High</li>
+                        <li>Difficulty: <span class="lo_d_0">Low</span></li>
+                        <li>Geography: <span class="lo_g_sandy_coastlines">Sandy Coastlines</span> <span class="lo_g_grassy_plains">Grassy Plains</span><br> <span class="lo_g_swamps_and_marshes">Swamps and Marshes</span></li>
+                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
+                    </ul>
                 </div>
-                <div class='location_option'>
-                    <h1 id='location_1'>Light Witesia</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Hunting</p>
-                    </div>
-                    <p>Population: Low</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Forests</p><p class='biome'>Jungles</p><p class='biome'>Hills</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>Low</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Explorer</p><p>Villager</p><p>Hunter</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(1)'>Select</button>
+                <div class="location_options" onclick="location_choose(1)">
+                    <h2>Light Witesia</h2>
+                    <ul>
+                        <li>Population: Low</li>
+                        <li>Difficulty: <span class="lo_d_1">Medium</span></li>
+                        <li>Geography: <span class="lo_g_forests">Forests</span> <span class="lo_g_jungles">Jungles</span> <span class="lo_g_hills">Hills</span></li>
+                        <li>Wealth: <span class="lo_w_0">Low</span></li>
+                    </ul>
                 </div>
-                <div class='location_option'>
-                    <h1 id='location_2'>The Luma Empire</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Travel</p>
-                    </div>
-                    <p>Population: Low</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>High</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Deserts</p><p class='biome'>Mountains</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>Low</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Bandit</p><p>Innkeeper</p><p>Merchant</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(2)'>Select</button>
+                <div class="location_options" onclick="location_choose(2)">
+                    <h2>The Luma Empire</h2>
+                    <ul>
+                        <li>Population: Low</li>
+                        <li>Difficulty: <span class="lo_d_2">High</span></li>
+                        <li>Geography: <span class="lo_g_deserts">Deserts</span> <span class="lo_g_mountains">Mountains</span></li>
+                        <li>Wealth: <span class="lo_w_0">Low</span></li>
+                    </ul>
                 </div>
-                <div class='location_option'>
-                    <h1 id='location_3'>Kingdom of Dalia</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Education</p>
-                    </div>
-                    <p>Population: Medium</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>Low</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Grassy Plains</p><p class='biome'>Forests</p><p class='biome'>Mountains</p><p class='biome'>Volcanoes</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Magician</p><p>Student</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(3)'>Select</button>
+                <div class="location_options" onclick="location_choose(3)">
+                    <h2>Kingdom of Dalia</h2>
+                    <ul>
+                        <li>Population: Medium</li>
+                        <li>Difficulty: <span class="lo_d_0">Low</span></li>
+                        <li>Geography: <span class="lo_g_grassy_plains">Grassy Plains</span> <span class="lo_g_forests">Forests</span><br> <span class="lo_g_mountains">Mountains</span> <span class="lo_g_volcanoes">Volcanoes</span></li>
+                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
+                    </ul>
                 </div>
-                <div class='location_option'>
-                    <h1 id='location_4'>Zalrord</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Trade</p>
-                    </div>
-                    <p>Population: High</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Forests</p><p class='biome'>Mountains</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Diplomat</p><p>Merchant</p><p>Mercenary</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(4)'>Select</button>
+                <div class="location_options" onclick="location_choose(4)">
+                    <h2>Zalrord</h2>
+                    <ul>
+                        <li>Population: High</li>
+                        <li>Difficulty: <span class="lo_d_1">Medium</span></li>
+                        <li>Geography: <span class="lo_g_forests">Forests</span> <span class="lo_g_mountains">Mountains</span></li>
+                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
+                    </ul>
                 </div>
-                <div class='location_option'>
-                    <h1 id='location_5'>Kingdom of Cataclite</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Arms</p>
-                    </div>
-                    <p>Population: Medium</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>High</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Grassy Plains</p><p class='biome'>Forests</p><p class='biome'>Tundra</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Soldier</p><p>Blacksmith</p><p>Mercenary</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(5)'>Select</button>
+                <div class="location_options" onclick="location_choose(5)">
+                    <h2>Kingdom of Cataclite</h2>
+                    <ul>
+                        <li>Population: Medium</li>
+                        <li>Difficulty: <span class="lo_d_2">High</span></li>
+                        <li>Geography: <span class="lo_g_grassy_plains">Grassy Plains</span> <span class="lo_g_forests">Forests</span> <span class="lo_g_tundra">Tundra</span></li>
+                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
+                    </ul>
                 </div>
-                <div class='location_option'>
-                    <h1 id='location_6'>Seld</h1>
-                    <div class='location_field'>
-                        <p>Primary Industry: </p><p class='location_industry'>Farming</p>
-                    </div>
-                    <p>Population: Medium</p>
-                    <div class='location_field'>
-                        <p>Difficulty:</p><p class='location_difficulty'>Medium</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Geography:</p><p class='biome'>Grassy Plains</p><p class='biome'>Forests</p><p class='biome'>Mountains</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Wealth:</p><p class='location_wealth'>High</p>
-                    </div>
-                    <div class='location_field'>
-                        <p>Available Backstories:</p><p>Farmer</p><p>Noble</p><p>Merchant</p>
-                    </div>
-                    <button class='location_submit' onclick='submit_location(6)'>Select</button>
+                <div class="location_options" onclick="location_choose(6)">
+                    <h2>Seld</h2>
+                    <ul>
+                        <li>Population: Medium</li>
+                        <li>Difficulty: <span class="lo_d_1">Medium</span></li>
+                        <li>Geography: <span class="lo_g_grassy_plains">Grassy Plains</span> <span class="lo_g_forests">Forests</span> <span class="lo_g_mountains">Mountains</span></li>
+                        <li>Wealth: <span class="lo_w_2">High</span></li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-        <div id='backstory'>
-            <h1 id='backstory_prologue'>Error: Contact NachoToast.</h1>
-            <div id='backstory_container'>
-
             </div>
         </div>
     </div>

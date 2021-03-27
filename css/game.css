@@ -1,0 +1,12 @@
+#game {
+    width: 100vw;
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.std_window {
+    width: 95%;
+    padding-top: 20px;
+}

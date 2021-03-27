@@ -1,0 +1,31 @@
+#header {
+    background-color: #333;
+    width: 100vw;
+    display: flex;
+    flex-flow: row wrap;
+    font-size: 30px;
+    justify-content: center;
+    height: fit-content;
+}
+
+#header > div {
+    flex-grow: 1;
+    border-right: solid 1px gray;
+    border-bottom: solid 1px gray;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    cursor: pointer;
+    transition: 0.1s linear;
+    padding: 0 10px;
+}
+
+#header > div:hover {
+    background-color: #272727;
+}
+
+#header > .hidden {
+    display: none !important;
+}

@@ -1,0 +1,145 @@
+.lore h1 {
+    margin-bottom: 10px;
+}
+
+.lore p {
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+.lore .number_a {
+    color: rgb(255, 238, 139);
+}
+
+.lore #location_meta {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 20px;
+    padding-top: 5px;
+}
+
+.lore #location_meta > h1 {
+    width: 100%;
+    margin: 0;
+    margin-top: 15px;
+}
+
+.lore #location_meta > div {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.lore #location_meta > div > div {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.lore #location_meta > div > .map_zoom > button {
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    margin: 1px 3px 0 3px;
+    padding: 0 5px;
+}
+
+.lore #location_meta > div > div > .map_outputs {
+    color: black;
+    width: 40px;
+    margin-left: 5px;
+    outline: none;
+}
+
+.lore #location_select {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin-bottom: 30px;
+    overflow: auto;
+}
+
+.lore #location_select .map_s {
+    left: 1vw;
+    position: absolute;
+    max-width: unset;
+}
+
+.lore #location_select::-webkit-scrollbar {
+    width: 20px;
+}
+.lore #location_select::-webkit-scrollbar-track {
+    background-color: gray;
+}
+.lore #location_select::-webkit-scrollbar-thumb {
+    background-color: #333;
+}
+.lore #location_select::-webkit-scrollbar-thumb:hover {
+    background-color: #444;
+}
+.lore #location_select::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+
+#location_chose {
+    flex-flow: row wrap;
+    display: flex;
+}
+#location_chose > h1 {
+    width: 100vw;
+    padding-bottom: 10px;
+}
+.location_options {
+    flex-flow: column nowrap;
+    border: solid 1px gray;
+    cursor: pointer;
+    transition: 0.1s linear;
+    padding: 10px;
+    margin: 10px;
+    font-size: 20px;
+}
+.location_options:hover {
+    background-color: #333;
+}
+
+.location_options > h2 {
+    padding-bottom: 3px;
+    font-weight: lighter;
+}
+
+.location_options > ul {
+    flex-flow: column nowrap;
+    list-style-type: none;
+}
+
+
+/* Difficulties */
+.location_options .lo_d_0 {color: lightgreen}
+.location_options .lo_d_1 {color: yellow}
+.location_options .lo_d_2 {color: lightcoral}
+/* Wealths */
+.location_options .lo_w_0 {color: lightcoral}
+.location_options .lo_w_1 {color: yellow}
+.location_options .lo_w_2 {color: lightgreen}
+/* Geographies */
+.location_options .lo_g_sandy_coastlines {color: aqua}
+.location_options .lo_g_grassy_plains {color: #7cfc00}
+.location_options .lo_g_swamps_and_marshes {color: rgb(41, 171, 135)}
+.location_options .lo_g_forests {color: rgb(181, 101, 29)}
+.location_options .lo_g_jungles {color: rgb(25, 116, 25)}
+.location_options .lo_g_hills {color: rgb(144, 238, 144)}
+.location_options .lo_g_deserts {color: rgb(237, 201, 175)}
+.location_options .lo_g_mountains {color: rgb(169, 169, 169)}
+.location_options .lo_g_volcanoes {color: rgb(175, 27, 0)}
+.location_options .lo_g_tundra {color: rgb(255, 205, 140)}
+/* Locations */
+.lo_ignoma {color: aqua}
+
+/* Sub-Locations */
+.lo_ignoma_ebonfront {color: darkcyan}
