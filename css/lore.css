@@ -18,6 +18,12 @@
     justify-content: center;
     padding-bottom: 20px;
     padding-top: 5px;
+    position: sticky;
+    top: 0px;
+    z-index: 10;
+    background-color: #272727;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 .lore #location_meta > h1 {

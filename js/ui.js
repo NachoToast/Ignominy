@@ -26,21 +26,118 @@ function unhide_headers() {
 }
 
 function update_chrono() {
-    let date, year, month, day,
-    time, hour, a,
+    let date,
+    year = player.time.getFullYear(),
+    month = player.time.getMonth(),
+    day = player.time.getDate(),
+    time,
+    hour = player.time.getHours(),
+    minute = player.time.getMinutes(),
+    a = "";
 
-    // Day
-    if (player.config.chrono.day == "dd") {
-        day = player.time.getDate() + 1;
-        if (day < 10) day = "0" + day;
+    function update_date() {
+
+        function add_ordinals(num) {
+            if (num == "1") return "st";
+            else if (num == "2") return "nd";
+            else if (num == "3") return "rd";
+            else return "th";
+        }
+        
+        let long_day = player.time.getDay(), ordinals = "", date = player.config.chrono.date_format;
+
+        // Selector Conversion
+        // f = Marker
+        // 0 = Day, 1 = Month, 2 = Year
+        // 0 = Full, 1 = 3-Letter, 2 = Full Numerical, 3 = Short Numerical
+        // Days
+        date = date.replace(/dddd/g, "f00");
+        date = date.replace(/ddd/g, "f01");
+        date = date.replace(/dd/g, "f02");
+        date = date.replace(/d/g, "f03");
+        // Months
+        date = date.replace(/mmmm/g, "f10");
+        date = date.replace(/mmm/g, "f11");
+        date = date.replace(/mm/g, "f12");
+        date = date.replace(/m/g, "f13");
+        // Years
+        date = date.replace(/yyyy/g, "f20");
+        date = date.replace(/yy/g, "f21");
+
+        // Long Day
+        if (date.includes("f00")) date = date.replace(/f00/g, convert_day(long_day));
+        if (date.includes("f01")) date = date.replace(/f01/g, convert_day(long_day).substring(0, 3));
+        // Short Day
+        if (date.includes("f02")) {
+            let local_day = day;
+            if (player.config.chrono.ordinals == true) ordinals = add_ordinals(day);
+            if (day < 10) local_day = "0" + local_day;
+            date = date.replace(/f02/g, local_day + ordinals);
+        }
+        if (date.includes("f03")) {
+            if (player.config.chrono.ordinals == true) ordinals = add_ordinals(day);
+            date = date.replace(/f03/g, day + ordinals);
+        }
+
+        // Long Month
+        if (date.includes("f10")) date = date.replace(/f10/g, convert_month(month));
+        if (date.includes("f11")) date = date.replace(/f11/g, convert_month(month).substring(0, 3));
+        // Short Month
+        if (date.includes("f12")) {
+            let local_month = month + 1;
+            if (month < 10) local_month = "0" + local_month;
+            date = date.replace(/f12/g, local_month);
+        }
+        if (date.includes("f13")) date = date.replace(/f13/g, month + 1);
+
+        // Year
+        if (date.includes("f20")) date = date.replace(/f20/g, year);
+        if (date.includes("f21")) date = date.replace(/f21/g, year.toString().substring(2));
+
+        return date;
     }
-    else if (player.config.chrono.day == "dddd") {
-        day = player.time.getDay();
+
+    function update_time() {
+
+        let time = player.config.chrono.time_format;
+        // Selector Conversion
+        // f = Marker
+        // 0 = Hour, 1 = Minute
+        // 0 = Full, 1 = Short
+        time = time.replace(/hh/g, "f00");
+        time = time.replace(/h/g, "f01");
+        time = time.replace(/mm/g, "f10");
+        time = time.replace(/m/g, "f11");
+
+        if (player.config.chrono.time == 12) { // 12hr Conversion
+            if (hour >= 12) a = "pm";
+            else a = "am";
+
+            if (hour > 12) hour -= 12;
+            if (hour == 0) hour = 12;
+        }
+
+        if (time.includes("f00")) {
+            let local_hour = hour;
+            if (hour < 10) local_hour = "0" + local_hour;
+            time = time.replace(/f00/g, local_hour);
+        }
+        if (time.includes("f01")) time = time.replace(/f01/g, hour);
+        if (time.includes("f10")) {
+            let local_minute = minute;
+            if (minute < 10) local_minute = "0" + local_minute;
+            time = time.replace(/f10/g, local_minute);
+        }
+        if (time.includes("f11")) time = time.replace(/f11/g, minute);
+
+        return time + a;
     }
-    else if (player.config.chrono.day == "ddd") {
-        day = player.time.getDay();
-        day = convert_day(day).substring(3);
-    }
+
+    date = update_date();
+    time = update_time();
+
+    if (player.config.chrono.order == 0) header_options[3].innerHTML = date + " " + time;
+    else header_options[3].innerHTML = time + " " + date;
 }
 
 function convert_month(num) {
@@ -68,6 +165,18 @@ function convert_day(num) {
     if (num == 5) return "Friday";
     if (num == 6) return "Saturday";
     else return "Invalid day!"
+}
+
+function random_date() {
+    let random_year = Math.floor(Math.random() * (3052 - 2000) + 2000),
+    random_month = Math.floor(Math.random() * 12),
+    random_day = Math.floor(Math.random() * (29 - 1) + 1),
+    random_hour = Math.floor(Math.random() * 61),
+    random_minute = Math.floor(Math.random() * 61);
+
+    player.time = new Date(random_year, random_month, random_day, random_hour, random_minute, 0, 0);
+    update_chrono();
+    console.log(header_options[3].innerHTML);
 }
 
 function update_header_borders() {

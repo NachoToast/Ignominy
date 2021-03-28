@@ -39,37 +39,37 @@ function location_choose(location) {
     if (location == 0) {
         player.homekingdom = "Ignoma";
         player.hometown = "Ebonfront";
-        scene = 0;
+        scene = ["story_ignoma", 0];
     }
     else if (location == 1) {
         player.homekingdom = "Light Witesia";
         player.hometown = "Basinfront";
-        scene = 100;
+        scene = ["story_light_witesia", 0];
     }
     else if (location == 2) {
         player.homekingdom = "The Luma Empire";
         player.hometown = "Wildedenn";
-        scene = 200;
+        scene = ["story_luma_empire", 0];
     }
     else if (location == 3) {
         player.homekingdom = "The Kingdom of Dalia";
         player.hometown = "Oxlight";
-        scene = 300;
+        scene = ["story_kingdom_of_dalia", 0];
     }
     else if (location == 4) {
         player.homekingdom = "Zalrord";
         player.hometown = "Bellecairn";
-        scene = 400;
+        scene = ["story_zalrord", 0];
     }
     else if (location == 5) {
         player.homekingdom = "The Kingdom of Cataclite";
         player.hometown = "Beargarde";
-        scene = 500;
+        scene = ["story_kingdom_of_cataclite", 0];
     }
     else if (location == 6) {
         player.homekingdom = "Seld";
         player.hometown = "Westforest";
-        scene = 600;
+        scene = ["story_seld", 0];
     }
     generate_game(scene);
 }
