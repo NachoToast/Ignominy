@@ -1,0 +1,41 @@
+#header_0_saveload {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10px;
+    width: 98%;
+}
+
+#header_0_saveload > div {
+    width: 50%;
+}
+
+#header_0_saveload h2 {
+    font-weight: lighter;
+}
+
+
+#header_0_save > form > button, #header_0_load > form > button {
+    background-color: #272727;
+    font-size: 18px;
+    padding: 2px 5px;
+    cursor: pointer;
+    transition: 0.1s linear;
+}
+
+#header_0_save > form > button:hover, #header_0_load > form > button:hover {
+    color: pink;
+}
+
+#header_0_save > form > *, #header_0_load > form > * {
+    margin-top: 3px;
+}
+
+#header_0_save > form > input, #header_0_load > form > button:hover {
+    color: black;
+}
+
+#header_0 .hidden {
+    display: none;
+}

@@ -7,19 +7,162 @@
     <title>Ignominy</title>
     <link href="img/logo.png" rel="icon" type="image/png">
     <link href="css/main.css" rel="stylesheet" type="text/css">
-    <script defer src="story/global.js"></script>
-    <script defer src="story/ignoma.js"></script>
+    <script defer src="story/base.js"></script>
     <script defer src="js/main.js"></script>
     <script defer src="js/ui.js"></script>
     <script defer src="js/start.js"></script>
 </head>
 <body>
     <div id="header">
-        <div class="header_options" onclick="show_header(0)">Menu</div>
-        <div class="header_options hidden" onclick="show_header(1)">Stats</div>
-        <div class="header_options hidden" onclick="show_header(2)">Map</div>
-        <div class="header_options hidden" onclick="show_header(3)">Date Time</div>
-        <div class="header_options hidden" onclick="show_header(4)">Inventory</div>
+        <div class="header_options noselect" onclick="show_header(0)">Menu</div>
+        <div class="header_options hidden noselect" onclick="show_header(1)">Stats</div>
+        <div class="header_options hidden noselect" onclick="show_header(2)">Map</div>
+        <div class="header_options hidden noselect" onclick="show_header(3)">Date Time</div>
+        <div class="header_options hidden noselect" onclick="show_header(4)">Inventory</div>
+    </div>
+    <div id="global">
+        <div id="header_0" class="header_pages hidden">
+            <h1 id="header_0_main">Main Menu</h1>
+            <div id="header_0_saveload">
+                <div id="header_0_save">                
+                    <h2>Save Game</h2>
+                    <form>
+                        <button id="save_browser">Browser</button>
+                        <label for="save_browser">Saves to browser storage, only removed if cache is cleared.</label>
+                    </form>
+                    <form>
+                        <button id="save_file">File</button>
+                        <label for="save_file">Save to local machine, useful for storing multiple saves.</label>
+                    </form>
+                    <form>
+                        <button id="save_online">Online</button>
+                        <input type="password">
+                        <label for="save_online">Save to online server, for accessing same save across multiple devices.<br>You'll need to enter a password for your save to get it back later.</label>
+                    </form>
+                    <p class="hidden">Output Log</p>
+                </div>
+                <div id="header_0_load">
+                    <h2>Load Game</h2>
+                    <form>
+                        <button id="load_browser">Browser</button>
+                    </form>
+                    <form>
+                        <button id="load_file">File</button>
+                    </form>
+                    <form>
+                        <button id="load_online">Online</button>
+                        <input type="password">
+                    </form>
+                    <p class="hidden">Output Log</p>
+                </div>
+            </div>
+        </div>
+        <div id="header_1" class="header_pages hidden">
+            <h1>Player Name</h1>
+            <div id="header_1_1">
+                <div class="unshown">
+                </div>
+                <div class="shown">
+                    <img src="img/ui/health.png">
+                    <p id="stats_health">Health: 100/100 [100%]</p>
+                </div>
+                <div class="shown">
+                    <img src="img/ui/mana.png">
+                    <p id="stats_mana">Mana: 100/100 [100%]</p>
+                </div>
+                <div class="unshown">
+                </div>
+            </div>
+            <div id="header_1_2">
+                <div class="stats">
+                    <img src="img/ui/fatigue.png">
+                    <p id="stats_fatigue">Fatigue 0</p>
+                </div>
+                <div class="stats">
+                    <img src="img/ui/gold.png">
+                    <p id="stats_gold">Gold 0</p>
+                </div>
+                <div class="stats">
+                    <img src="img/ui/strength.png">
+                    <p id="stats_strength">Strength 0</p>
+                </div>
+                <div class="stats">
+                    <img src="img/ui/agility.png">
+                    <p id="stats_agility">Agility 0</p>
+                </div>
+                <div class="stats">
+                    <img src="img/ui/proficiency.png">
+                    <p id="stats_proficiency">Proficiency 0</p>
+                </div>
+                <div class="stats">
+                    <img src="img/ui/perception.png">
+                    <p id="stats_perception">Perception 0</p>
+                </div>
+            </div>
+        </div>
+        <div id="header_2" class="header_pages hidden">
+            <div id="location_meta">
+                <h1> World Map</h1>
+                <div>
+                    <p>Kingdom Labels</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(0)">
+                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(0)">
+                    </div>
+                </div>
+                <div>
+                    <p>Intrakingdom Routes</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="80" oninput="slider_modify_map(1)">
+                        <input class="map_outputs" type="number" placeholder="80" min=0 max=100 oninput="direct_modify_map(1)">
+                    </div>
+                </div>
+                <div>
+                    <p>Interkingdom Routes</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="80" oninput="slider_modify_map(2)">
+                        <input class="map_outputs" type="number" placeholder="80" min=0 max=100 oninput="direct_modify_map(2)">
+                    </div>
+                </div>
+                <div>
+                    <p>Place Labels</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(3)">
+                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(3)">
+                    </div>
+                </div>
+                <div>
+                    <p>Place Dots</p>
+                    <div>
+                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(4)">
+                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(4)">
+                    </div>
+                </div>
+                <div>
+                    <p>Zoom</p>
+                    <div class="map_zoom">
+                        <button onclick="zoom(-0.1)">-</button>
+                        <p id="map_zoom_output">100%</p>
+                        <button onclick="zoom(0.1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div id="location_select">
+                <img class="map_s" src="img/map/global/base.png">
+                <img class="map_s" src="img/map/global/base_labelled.png">
+                <img class="map_s" src="img/map/global/intraconnectives_all.png">
+                <img class="map_s" src="img/map/global/interconnectives_all.png">
+                <img class="map_s" src="img/map/global/labels_all.png">
+                <img class="map_s" src="img/map/global/nodes_all.png">
+            </div>
+        </div>
+        <div id="header_3" class="header_pages hidden">
+            <h1>Date & Time</h1>
+        </div>
+        <div id="header_4" class="header_pages hidden">
+            <h1>Inventory</h1>
+        </div>
+
     </div>
     <div id="game">
         <div class="lore std_window">

@@ -5,16 +5,33 @@
     flex-flow: column nowrap;
     align-items: center;
 }
-
 .std_window {
     width: 95%;
     padding-top: 20px;
 }
 
+.std_option_window {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+/* Unused 
 .std_story {
 
+} */
+.std_options_fake {
+    color: gray;
 }
 
 .std_options {
+    cursor: pointer;
+    transition: 0.1s linear;
+}
 
+.std_options:hover {
+    text-decoration: underline 1px;
+}
+
+.st_a {
+    color: pink;
 }

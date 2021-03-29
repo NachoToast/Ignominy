@@ -1,6 +1,9 @@
+@import "headers/menu.css";
+@import "headers/map.css";
+@import "headers/stats.css";
+
 #header {
     background-color: #333;
-    width: 100vw;
     display: flex;
     flex-flow: row wrap;
     font-size: 30px;
@@ -29,4 +32,17 @@
 
 #header > .hidden {
     display: none !important;
+}
+
+#global > .hidden {
+    display: none;
+}
+
+.header_pages {
+    width: 100vw;
+    background-color: rgba(39, 39, 39, 0.98);
+    z-index: 100;
+    position: absolute;
+    display: flex;
+    flex-flow: row wrap;
 }
