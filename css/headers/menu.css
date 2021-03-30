@@ -1,41 +1,60 @@
-#header_0_saveload {
+#header_0 {
+    align-content: flex-start;
+}
+
+#header_0_main {
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: normal;
+    cursor: default;
+}
+
+#header_0 .saveload button {
+    border: solid 1px gray;
+    padding: 5px;
+    font-size: 18px;
+    transition: 0.1s linear;
+    cursor: pointer;
+}
+
+#header_0 .saveload button:hover {
+    background-color: #272727;
+}
+
+#header_0 .saveload {
+    border-right: solid 1px gray;
+    border-top: solid 1px gray;
+    border-bottom: solid 1px gray;
+}
+
+#header_0 .saveload h2 {
+    font-weight: lighter;
+    width: 100%;
+    text-align: center;
+    transition: 0.1s linear;
+    padding: 5px 0;
+    border-bottom: solid 1px gray;
+    cursor: default;
+}
+
+#header_0 .saveload h2:hover {
+    background-color: #333;
+}
+
+#header_0 .saveload > div {
     display: flex;
     flex-flow: row nowrap;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 10px;
-    width: 98%;
-}
-
-#header_0_saveload > div {
-    width: 50%;
-}
-
-#header_0_saveload h2 {
-    font-weight: lighter;
-}
-
-
-#header_0_save > form > button, #header_0_load > form > button {
-    background-color: #272727;
-    font-size: 18px;
-    padding: 2px 5px;
-    cursor: pointer;
     transition: 0.1s linear;
+    padding: 10px 15px;
+    justify-content: space-between;
+    cursor: pointer;
 }
 
-#header_0_save > form > button:hover, #header_0_load > form > button:hover {
-    color: pink;
+#header_0 .saveload > div:hover {
+    background-color: #333;
 }
 
-#header_0_save > form > *, #header_0_load > form > * {
-    margin-top: 3px;
-}
-
-#header_0_save > form > input, #header_0_load > form > button:hover {
-    color: black;
-}
-
-#header_0 .hidden {
-    display: none;
+#header_0 .saveload > div:nth-child(3), #header_0 .saveload > div:nth-child(4) {
+    cursor: not-allowed;
 }

@@ -1,8 +1,9 @@
-const version = "0.1.6";
+const version = "0.1.9";
 
 const game_window = document.getElementById("game");
 
 var player = {
+    name: "Default",
     homekingdom: "Default",
     hometown: "Default",
     health: 100,
@@ -32,7 +33,7 @@ var player = {
     scene: -1,
     config: {
         headers: [0, 1, 2, 3, 4],
-        debug: 0,
+        debug: 1,
         chrono: {
             time: 12, // 12 or 24
             order: 0, // 0 = Date Time, 1 = Time Date
@@ -41,29 +42,45 @@ var player = {
             time_format: "h:mm"
         }
     },
+    history: [
+        {id: -5, amount: 10},
+        {id: 2, amount: 289}
+    ],
     version: version,
     time: new Date(3051, 0, 1, 7, 0, 0, 0)
 }
 
+function version_debugger() {
+    // use when introducing new object fields (for both story [unlikely] and player) in future versions.
+    if (player.config.debug > 0) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
+}
+
 function generate_game(scene) {
     unhide_headers();
-    setTimeout(update_header_borders, 10);
     update_chrono();
     if (player.config.debug > 0) console.log(`%cStarting game%c\nLoaded Scene: ${scene}\nPlayer Hometown: ${player.hometown}, ${player.homekingdom}`, 'color: lime', 'color: unset');
     next_scene(scene);
 }
 
 function next_scene(scene) {
+    if (player.config.debug > 0) console.log(`%c========== Progressing Scene ==========`, 'color: gold; font-size: 14px');
     clear_game();
+    if (scene === undefined) {
+        scene = player.scene;
+        if (player.config.debug > 0) console.log("No scene specified, so showing current one again.");
+    }
     let scene_index = story.map(e => e.id).indexOf(scene);
     // Probably should make function for universal scene identifiers
     if (scene_index == -1) {
-        if (player.config.debug > 0) console.log(`Could not find index of scene ${scene}.`);
-        scene_index = 0;
+        if (player.config.debug > 0) console.warn(`Could not find index of scene ${scene}.`);
+        scene_index = story.map(e => e.id).indexOf(-1);
     }
-    scene_index = 0;
+    //scene_index = 0;
     full_scene = story[scene_index];
-    if (player.config.debug > 0) console.log(`Displaying scene ${scene_index}.`);
+    //console.log(full_scene);
+    player.scene = full_scene.id;
+    if (player.config.debug > 0) console.log(`Displaying scene ${story[scene_index].id} [Index ${scene_index}].`);
+
     display_scene(full_scene);
 }
 
@@ -87,7 +104,7 @@ function display_scene(scene) {
             if (player.config.debug > 0) console.log("But found alternate text.");
         }
     }
-    if (player.config.debug > 0) console.log(`Found ${valid_text.length} valid text nodes.`);
+    if (player.config.debug > 0) console.log(`%cFound ${valid_text.length} valid text nodes.`, 'color: magenta');
 
     // now display all those recorded as 'valid'
     for (let i = 0, len = valid_text.length; i < len; i++) {
@@ -99,7 +116,7 @@ function display_scene(scene) {
 
     }
 
-    display_options(scene);
+    display_options(scene)
 }
 
 function display_options(scene) {
@@ -113,6 +130,7 @@ function display_options(scene) {
     valid_option_true = [];
     for (let i = 0, len = scene.options.length; i < len; i++) {
         if (player.config.debug > 0) console.log(`%cChecking option ${i + 1} conditions.`, 'color: turquoise');
+        //console.log(scene.options[i]);
         if (validate_conditions(scene.options[i])) {
             valid_option.push(scene.options[i]);
             valid_option_true.push(true)
@@ -123,7 +141,7 @@ function display_options(scene) {
             if (player.config.debug > 0) console.log("But found alternate text.");
         }
     }
-    if (player.config.debug > 0) console.log(`Found ${valid_option.length} valid option nodes.`);
+    if (player.config.debug > 0) console.log(`%cFound ${valid_option.length} valid option nodes.`, 'color: magenta');
     if (valid_option.length == 0) console.warn(`Found no available options for scene ${scene.id}!`);
 
     // option displaying
@@ -132,7 +150,9 @@ function display_options(scene) {
         if (valid_option_true[i] == true) {
             btn.classList.add("std_options");
             btn.innerHTML = valid_option[i].text;
+            //if (valid_option[i]?.scene === undefined) valid_option[i].scene = scene.id; // big brain
             btn.addEventListener('click', () => option_progress_scene(valid_option[i]));
+            //console.log(valid_option[i])
         }
         else {
             btn.classList.add("std_options_fake");
@@ -143,13 +163,16 @@ function display_options(scene) {
 }
 
 function option_progress_scene(option) {
-    console.log(option);
     if (option.time) {
         increment_time(option.time);
     }
+    if (player.config.debug > 0) console.log("Going to next scene: ", option.scene);
+    if (player.config.debug > 1) console.log("Which is:", option);
+    next_scene(option.scene);
 }
 
 function increment_time(date_object) {
+
     /* date_object format: {
         year: int,
         month: int,
@@ -179,25 +202,73 @@ function increment_time(date_object) {
 }
 
 function validate_conditions(part) {
-    if (part["conditions"] === undefined) { // no conditions specified = unconditional
-        if (player.config.debug > 0) console.log("No conditions specified.");
-        return true;
-    }
 
-    // should probably improve error checking for this
-    try {
-        if (part.conditions(player)) {
-            if (player.config.debug > 0) console.log("Met conditions specified.");
-            return true;
+    if (part.conditions !== undefined) { // functional conditions present
+        if (player.debug > 0) console.log("Found functional conditions, checking.");
+        try {
+            if (part.conditions(player)) {
+                if (player.config.debug > 0) console.log("Functional conditions met.");
+            }
+            else {
+                if (player.config.debug > 0) console.log("Functional conditions failed.");
+                return false;
+            }
         }
-        else {
-            if (player.config.debug > 0) console.log("Did not meet conditions specified.");
+        catch (err) {
+            if (player.config.debug > 0) console.log("Functional conditions failed with error.");
+            if (player.config.debug > 1) console.log("If this was (only) due to a undeclared statistic you can safely ignore this.\n", err);
             return false;
         }
     }
-    catch (err) {
-        if (player.config.debug > 0) console.log("Did not meet conditions specified, condition error.");
-        if (player.config.debug > 1) console.log(err);
-        return false;
+    else if (player.config.debug > 0) console.log("No functional conditions found.");
+
+    if (part.norepeat !== undefined) { // norepeat conditions present
+        if (player.config.debug > 0) console.log("Found repeat conditions, checking.");
+        if (part.norepeat == true) {
+            // check players previous scenes with the scene this option links to, if player has already been to that scene then dont show option.
+            // attempt index option scene to player previous scenes array, if index != -1, return false
+            // TO DO: THIS
+            if (player.done.indexOf(part) !== -1) {
+                if (player.config.debug > 0) console.log("Repeat conditions failed.");
+                return false;
+            }
+            else if (plauer.config.debug > 0) console.log("Repeat conditions met.");
+        }
+        else if (player.config.debug > 0) console.warn("Option 'norepeat' field present but set to false, instead just don't include the field!");
     }
+    else if (player.config.debug > 0) console.log("No repeat conditions found.");
+
+    return true;
+}
+
+function save_game(type) {
+    if (type == "browser") {
+        localStorage.setItem("Ignominy Save", JSON.stringify(player));
+        if (player.config.debug > 0) console.log("Executed browser save.");
+        change_save_option(0, "Saved to browser!", "#90EE90", "Successfully saved data to browser storage.");
+    }
+}
+
+function load_game(type) {
+    if (type == "browser") {
+        let data = JSON.parse(localStorage.getItem("Ignominy Save"));
+        if (data == null) {
+            if (player.config.debug > 0) console.log("No save found in local storage.");
+            change_load_option(0, "Save not found!", "#F08080", "Have you cleared cache?");
+        }
+        else {
+            //show_header(0);
+            change_load_option(0, "Save loaded!", "#90EE90", "Found data in browser storage.");
+            if (version !== data.version && player.config.debug > 0) console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}.`);
+            if (player.config.debug > 1) console.log("Executed browser load.");
+            if (player.config.debug > 1) console.log("Dumping save: ", data);
+            player = data;
+            player.time = new Date(data.time);
+            player.version = version;
+            generate_game(data.scene);
+        }
+
+    }
+
+    version_debugger();
 }

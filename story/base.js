@@ -38,7 +38,7 @@ var story = [
                 conditions: (player) =>
                 player.stats.strength > 5
                 ||
-                player.homekingdom == "gIgnoma",
+                player.homekingdom == "Ignjoma",
                 alternate: [
                     "unlucky ooz"
                 ]
@@ -73,14 +73,41 @@ var story = [
                 time: {
                     year: 5
                 }
+            },
+            {
+                text: "go to 0",
+                scene: 0
+            },
+            {
+                text: "this option can only be done if this scene hasn't been visited yet"
             }
         ]
     },
     {
         id: 0,
         text: [
-            "For better or for worse, you\'ve decided to become an adventurer. As you stand in the streets of Ebonfront, Ignoma\'s capital city, a warm feeling of freedom, inspiration, and motivation stirs within you.",
-            "What comes next is entirely up to you and you alone."
+            {
+                content: [
+                    "For better or for worse, you\'ve decided to become an adventurer. As you stand in the streets of Ebonfront, Ignoma\'s capital city, a warm feeling of freedom, inspiration, and motivation stirs within you.",
+                    "What comes next is entirely up to you and you alone."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "go to -1",
+                scene: -1
+            },
+            {
+                text: "go to 54",
+                scene: 54
+            },
+            {
+                text: "go to this",
+                time: {
+                    minute: 1
+                }
+            }
         ]
     }
 ]

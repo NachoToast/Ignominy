@@ -124,6 +124,42 @@
     list-style-type: none;
 }
 
+.lore #name_submit > h1 {
+    font-size: 25px;
+    margin-top: 20px;
+    font-weight: lighter;
+    font-style: italic;
+    color: rgba(200, 200, 200);
+}
+
+.lore #name_submit > input {
+    background-color: #333;
+    border: solid 1px gray;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    padding: 5px;
+    transition: 0.1s linear;
+}
+
+.lore #name_submit > button {
+    background-color: #333;
+    border: solid 1px gray;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    transition: 0.1s linear;
+}
+
+.lore #name_submit > button:hover, .lore #name_submit > input:hover, .lore #name_submit > input:focus {
+    background-color: #272727;
+}
+
+.lore #name_submit > button:disabled {
+    cursor: not-allowed;
+}
+
 
 /* Difficulties */
 .location_options .lo_d_0 {color: lightgreen}

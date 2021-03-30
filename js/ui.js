@@ -1,6 +1,11 @@
 function show_header(option) {
+    if (option == current_header) {
+        header_pages[option].classList.add("hidden");
+        current_header = -1;
+        return;
+    }
     if (option == 0) { // Menu
-        console.log("Menu");
+        update_menu();
     }
     else if (option == 1) { // Stats
         update_stats();
@@ -14,35 +19,30 @@ function show_header(option) {
     else if (option == 4) { // Inventory
         console.log("Inventory");
     }
-    if (option == current_header) {
-        header_pages[option].classList.add("hidden");
-        current_header = -1;
-    }
-    else {
-        header_pages[current_header]?.classList.add("hidden");
-        header_pages[option].classList.remove("hidden");
-        current_header = option;
-        header_pages[option].style.height = (document.body.offsetHeight - header.offsetHeight) + "px";
-    }
+    header_pages[current_header]?.classList.add("hidden");
+    header_pages[option].classList.remove("hidden");
+    current_header = option;
+    header_pages[option].style.height = (document.body.offsetHeight - header.offsetHeight) + "px";
 }
 
 var stats_health = document.getElementById("stats_health"),
 stats_mana = document.getElementById("stats_mana"),
 stats_fatigue = document.getElementById("stats_fatigue"),
 stats_gold = document.getElementById("stats_gold"),
-stats_strength = document.getElementById("stats_strength"),
-stats_agility = document.getElementById("stats_agility"),
-stats_proficiency = document.getElementById("stats_proficiency"),
-stats_perception = document.getElementById("stats_perception");
+stats_name = document.getElementById("stats_name");
 
 const std_red = {red: 240, green: 128, blue: 128},
 std_yellow = {red: 255, green: 214, blue: 0},
 std_green = {red: 144, green: 238, blue: 144},
 std_fullmana = {red: 127, green: 255, blue: 212},
-std_nomana = {red: 128, green: 128, blue: 128};
+std_nomana = {red: 128, green: 128, blue: 128},
+stats_container = document.getElementById("header_1_2");
 
 function update_stats() {
     // visual only
+
+    // name
+    stats_name.innerText = player.name;
     
     // health
     let health_rgb = color_gradient(0, player.max_health, player.health, std_red, std_yellow, std_green),
@@ -51,10 +51,35 @@ function update_stats() {
     stats_health.innerHTML = `Health: <span style='color: rgb(${health_rgb})'>${player.health}</span>/${player.max_health} [<span style='color: rgb(${health_rgb})'>${(100*player.health/player.max_health).toFixed(0)}%</span>]`;
 
     // mana
-    stats_mana.innerHTML = `Mana: <span style='color: rgb(${mana_rgb})'>${player.mana}</span>/${player.max_mana} [<span style='color: rgb(${mana_rgb})'>${(100*player.mana/player.max_mana).toFixed(0)}%</span>]`
+    stats_mana.innerHTML = `Mana: <span style='color: rgb(${mana_rgb})'>${player.mana}</span>/${player.max_mana} [<span style='color: rgb(${mana_rgb})'>${(100*player.mana/player.max_mana).toFixed(0)}%</span>]`;
+
+    // clear old stats elements [this could probably be optimized]
+    let children = stats_container.childElementCount;
+    while (children > 2) {
+        stats_container.removeChild(stats_container.lastElementChild);
+        children -= 1;
+    }
+    // stats
+    for (let i = 0, len = Object.keys(player.stats).length; i < len; i++) {
+        // div
+        let d = document.createElement("div");
+        d.classList.add("stats");
+        stats_container.appendChild(d);
+        // span
+        let s = document.createElement("span");
+        s.title = player.stats[Object.keys(player.stats)[i]].description;
+        d.appendChild(s);
+        // img
+        let img = document.createElement("img");
+        img.src = `img/ui/${Object.keys(player.stats)[i]}.png`;
+        s.appendChild(img);
+        // p
+        let p = document.createElement("p");
+        p.innerHTML = Object.keys(player.stats)[i].charAt(0).toUpperCase() + Object.keys(player.stats)[i].slice(1) + " " + player.stats[Object.keys(player.stats)[i]].amount
+        s.appendChild(p);
+    }
 
 }
-
 function color_gradient(min, max, current, color_a, color_b, color_c) {
     // returns an rgb value in the format "r, g, b"
     let color_progression;
@@ -83,8 +108,9 @@ function color_gradient(min, max, current, color_a, color_b, color_c) {
 
 }
 
-var header_0_main = document.getElementById("header_0_main");
-header_0_main.innerText = "Ignominy " + version;
+document.getElementById("header_0_main").innerHTML = `<span title='Playing Ignominy on version ${version}'>` + "Ignominy " + version + "</span>";
+//document.getElementById
+
 
 function unhide_headers() {
     for (let i = 0, len = player.config.headers.length; i < len; i++) {
@@ -203,11 +229,14 @@ function update_time() {
 
 function update_chrono() {
 
+
     let date = update_date(),
     time = update_time();
 
     if (player.config.chrono.order == 0) header_options[3].innerHTML = date + " " + time;
     else header_options[3].innerHTML = time + " " + date;
+
+    update_header_borders();
 }
 
 function convert_month(num) {
@@ -256,6 +285,65 @@ function update_header_borders() {
         if (Math.floor(my_right) >= header_width - 1) header_options[i].style.borderRight = "none";
         else header_options[i].style.borderRight = "solid 1px gray";
     }
+}
+
+var saveload_defaults = {
+    save: [
+        {
+            text: "Browser Storage",
+            inline: "Recommended",
+            inline_color: "#90EE90",
+            title: "Save is stored in selected browsers cache (local storage)."
+        },
+        {
+            text: "File",
+            inline: "Safest",
+            inline_color: "#FFD700",
+            title: "Saves to downloads folder of local machine."
+        },
+        {
+            text: "Server",
+            inline: "Cross-Platform",
+            inline_color: "#FFC0CB",
+            title: "Saves to online server, requires playing from official website."
+        }
+    ],
+    load: [
+        "Browser Storage", "Load from browser cache.",
+        "File", "Load file from computer.",
+        "Server", "Load file from server, requires playing from official website."
+    ]
+},
+saveload_current_changed = [-1, false],
+saveload_options = document.getElementsByClassName("saveload_option"),
+main_menu = document.getElementById("header_0_main");
+
+function update_menu() {
+
+    // generate save/load html
+
+    let save_elements = 0;
+    for (let i = 0, len = saveload_defaults["save"].length; i < len; i++, save_elements++) {
+        let o = saveload_defaults["save"][i];
+        saveload_options[i].innerHTML = `<span title="${o.title}">${o.text} (<span style="color: ${o.inline_color}">${o.inline}</span>)</span>`;
+    }
+
+    if (player.config.debug > 0) console.log(`Found ${save_elements} save elements in menu.`);
+    
+    for (let i = 0, len = saveload_defaults["load"].length - save_elements; i < len; i++) {
+        let o = saveload_defaults["load"][2 * i],
+        o2 = saveload_defaults["load"][2 * i + 1];
+        saveload_options[save_elements + i].innerHTML = `<span title="${o2}">${o}</span>`
+    }
+
+}
+
+function change_save_option(index, message, color, title) {
+    saveload_options[index].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
+}
+
+function change_load_option(index, message, color, title) {
+    saveload_options[index + saveload_defaults["save"].length].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
 }
 
 var header_options = document.getElementsByClassName("header_options"),

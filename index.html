@@ -22,43 +22,34 @@
     </div>
     <div id="global">
         <div id="header_0" class="header_pages hidden">
-            <h1 id="header_0_main">Main Menu</h1>
-            <div id="header_0_saveload">
-                <div id="header_0_save">                
-                    <h2>Save Game</h2>
-                    <form>
-                        <button id="save_browser">Browser</button>
-                        <label for="save_browser">Saves to browser storage, only removed if cache is cleared.</label>
-                    </form>
-                    <form>
-                        <button id="save_file">File</button>
-                        <label for="save_file">Save to local machine, useful for storing multiple saves.</label>
-                    </form>
-                    <form>
-                        <button id="save_online">Online</button>
-                        <input type="password">
-                        <label for="save_online">Save to online server, for accessing same save across multiple devices.<br>You'll need to enter a password for your save to get it back later.</label>
-                    </form>
-                    <p class="hidden">Output Log</p>
+            <h1 id="header_0_main">Ignominy Version Missing?</span></h1>
+            <div class="saveload">
+                <h2>Save</h2>
+                <div>
+                    <p class="saveload_option" onclick="save_game('browser')"></p>
                 </div>
-                <div id="header_0_load">
-                    <h2>Load Game</h2>
-                    <form>
-                        <button id="load_browser">Browser</button>
-                    </form>
-                    <form>
-                        <button id="load_file">File</button>
-                    </form>
-                    <form>
-                        <button id="load_online">Online</button>
-                        <input type="password">
-                    </form>
-                    <p class="hidden">Output Log</p>
+                <div>
+                    <p class="saveload_option"></span></p>
+                </div>
+                <div>
+                    <p class="saveload_option"></p>
+                </div>
+            </div>
+            <div class="saveload">
+                <h2>Load</h2>
+                <div>
+                    <p class="saveload_option" onclick="load_game('browser')"></p>
+                </div>
+                <div>
+                    <p class="saveload_option"></p>
+                </div>
+                <div>
+                    <p class="saveload_option"></p>
                 </div>
             </div>
         </div>
         <div id="header_1" class="header_pages hidden">
-            <h1>Player Name</h1>
+            <h1 id="stats_name">Player Name</h1>
             <div id="header_1_1">
                 <div class="unshown">
                 </div>
@@ -75,28 +66,16 @@
             </div>
             <div id="header_1_2">
                 <div class="stats">
-                    <img src="img/ui/fatigue.png">
-                    <p id="stats_fatigue">Fatigue 0</p>
+                    <span title="Don't let fatigue go over 100.">
+                        <img src="img/ui/fatigue.png">
+                        <p id="stats_fatigue">Fatigue 0</p>
+                    </span>
                 </div>
                 <div class="stats">
-                    <img src="img/ui/gold.png">
-                    <p id="stats_gold">Gold 0</p>
-                </div>
-                <div class="stats">
-                    <img src="img/ui/strength.png">
-                    <p id="stats_strength">Strength 0</p>
-                </div>
-                <div class="stats">
-                    <img src="img/ui/agility.png">
-                    <p id="stats_agility">Agility 0</p>
-                </div>
-                <div class="stats">
-                    <img src="img/ui/proficiency.png">
-                    <p id="stats_proficiency">Proficiency 0</p>
-                </div>
-                <div class="stats">
-                    <img src="img/ui/perception.png">
-                    <p id="stats_perception">Perception 0</p>
+                    <span title="Gold is the universal currency, used for virtually everything.">
+                        <img src="img/ui/gold.png">
+                        <p id="stats_gold">Gold 0</p>
+                    </span>
                 </div>
             </div>
         </div>
@@ -165,7 +144,7 @@
 
     </div>
     <div id="game">
-        <div class="lore std_window">
+        <div class="lore std_window" id="initial_lore">
             <h1>Welcome to the world of Ignominy!</h1>
             <p>The year is <span class="number_a" title='Know as the "Glowing Era"'>3051</span>, but human civilization hasn't reached the technological epoch it once dreamed of.</p>
             <p>Quite the contrary actually.</p>
@@ -177,125 +156,10 @@
             <p>Wild beasts aren't the only ones with magical powers.</p>
             <p>Humans have also coevolved magical abilities of their own.</p>
             <p>Although the term "humans" isn't really the same anymore.</p>
-            <div id="location_meta">
-                <h1> World Map</h1>
-                <div>
-                    <p>Kingdom Labels</p>
-                    <div>
-                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(0)">
-                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(0)">
-                    </div>
-                </div>
-                <div>
-                    <p>Intrakingdom Routes</p>
-                    <div>
-                        <input class="map_options" type="range" min=0 max=100 value="80" oninput="slider_modify_map(1)">
-                        <input class="map_outputs" type="number" placeholder="80" min=0 max=100 oninput="direct_modify_map(1)">
-                    </div>
-                </div>
-                <div>
-                    <p>Interkingdom Routes</p>
-                    <div>
-                        <input class="map_options" type="range" min=0 max=100 value="80" oninput="slider_modify_map(2)">
-                        <input class="map_outputs" type="number" placeholder="80" min=0 max=100 oninput="direct_modify_map(2)">
-                    </div>
-                </div>
-                <div>
-                    <p>Place Labels</p>
-                    <div>
-                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(3)">
-                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(3)">
-                    </div>
-                </div>
-                <div>
-                    <p>Place Dots</p>
-                    <div>
-                        <input class="map_options" type="range" min=0 max=100 value="100" oninput="slider_modify_map(4)">
-                        <input class="map_outputs" type="number" placeholder="100" min=0 max=100 oninput="direct_modify_map(4)">
-                    </div>
-                </div>
-                <div>
-                    <p>Zoom</p>
-                    <div class="map_zoom">
-                        <button onclick="zoom(-0.1)">-</button>
-                        <p id="map_zoom_output">100%</p>
-                        <button onclick="zoom(0.1)">+</button>
-                    </div>
-                </div>
-            </div>
-            <div id="location_select">
-                <img class="map_s" src="img/map/global/base.png">
-                <img class="map_s" src="img/map/global/base_labelled.png">
-                <img class="map_s" src="img/map/global/intraconnectives_all.png">
-                <img class="map_s" src="img/map/global/interconnectives_all.png">
-                <img class="map_s" src="img/map/global/labels_all.png">
-                <img class="map_s" src="img/map/global/nodes_all.png">
-            </div>
-            <div id="location_chose">
-                <h1>Chose your starting location</h1>
-                <div class="location_options" onclick="location_choose(0)">
-                    <h2>Ignoma</h2>
-                    <ul>
-                        <li>Population: High</li>
-                        <li>Difficulty: <span class="lo_d_0">Low</span></li>
-                        <li>Geography: <span class="lo_g_sandy_coastlines">Sandy Coastlines</span> <span class="lo_g_grassy_plains">Grassy Plains</span><br> <span class="lo_g_swamps_and_marshes">Swamps and Marshes</span></li>
-                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
-                    </ul>
-                </div>
-                <div class="location_options" onclick="location_choose(1)">
-                    <h2>Light Witesia</h2>
-                    <ul>
-                        <li>Population: Low</li>
-                        <li>Difficulty: <span class="lo_d_1">Medium</span></li>
-                        <li>Geography: <span class="lo_g_forests">Forests</span> <span class="lo_g_jungles">Jungles</span> <span class="lo_g_hills">Hills</span></li>
-                        <li>Wealth: <span class="lo_w_0">Low</span></li>
-                    </ul>
-                </div>
-                <div class="location_options" onclick="location_choose(2)">
-                    <h2>The Luma Empire</h2>
-                    <ul>
-                        <li>Population: Low</li>
-                        <li>Difficulty: <span class="lo_d_2">High</span></li>
-                        <li>Geography: <span class="lo_g_deserts">Deserts</span> <span class="lo_g_mountains">Mountains</span></li>
-                        <li>Wealth: <span class="lo_w_0">Low</span></li>
-                    </ul>
-                </div>
-                <div class="location_options" onclick="location_choose(3)">
-                    <h2>Kingdom of Dalia</h2>
-                    <ul>
-                        <li>Population: Medium</li>
-                        <li>Difficulty: <span class="lo_d_0">Low</span></li>
-                        <li>Geography: <span class="lo_g_grassy_plains">Grassy Plains</span> <span class="lo_g_forests">Forests</span><br> <span class="lo_g_mountains">Mountains</span> <span class="lo_g_volcanoes">Volcanoes</span></li>
-                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
-                    </ul>
-                </div>
-                <div class="location_options" onclick="location_choose(4)">
-                    <h2>Zalrord</h2>
-                    <ul>
-                        <li>Population: High</li>
-                        <li>Difficulty: <span class="lo_d_1">Medium</span></li>
-                        <li>Geography: <span class="lo_g_forests">Forests</span> <span class="lo_g_mountains">Mountains</span></li>
-                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
-                    </ul>
-                </div>
-                <div class="location_options" onclick="location_choose(5)">
-                    <h2>Kingdom of Cataclite</h2>
-                    <ul>
-                        <li>Population: Medium</li>
-                        <li>Difficulty: <span class="lo_d_2">High</span></li>
-                        <li>Geography: <span class="lo_g_grassy_plains">Grassy Plains</span> <span class="lo_g_forests">Forests</span> <span class="lo_g_tundra">Tundra</span></li>
-                        <li>Wealth: <span class="lo_w_1">Medium</span></li>
-                    </ul>
-                </div>
-                <div class="location_options" onclick="location_choose(6)">
-                    <h2>Seld</h2>
-                    <ul>
-                        <li>Population: Medium</li>
-                        <li>Difficulty: <span class="lo_d_1">Medium</span></li>
-                        <li>Geography: <span class="lo_g_grassy_plains">Grassy Plains</span> <span class="lo_g_forests">Forests</span> <span class="lo_g_mountains">Mountains</span></li>
-                        <li>Wealth: <span class="lo_w_2">High</span></li>
-                    </ul>
-                </div>
+            <div id="name_submit">
+                <h1>This will be the tale of...</h1>
+                <input id="player_input_name" placeholder="NachoToast" minlength=1 maxlength=20 autofocus required>
+                <button id="input_name_submit" disabled onclick="submit_name()">Continue</button>
             </div>
         </div>
     </div>
