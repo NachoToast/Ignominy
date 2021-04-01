@@ -48,7 +48,8 @@ var story = [
                 time: {
                     hour: 5
                 },
-                scene: -1
+                scene: -1,
+                novisit: true
             },
             {
                 text: "inc 5d",
@@ -72,14 +73,21 @@ var story = [
                 text: "inc 5y",
                 time: {
                     year: 5
-                }
+                },
             },
             {
                 text: "go to 0",
                 scene: 0
             },
             {
-                text: "this option can only be done if this scene hasn't been visited yet"
+                text: "this option can only be done if this scene hasn't been visited yet",
+                norepeat: 0
+            },
+            {
+                text: "add strength",
+                action: function() {
+                    if (player.stats.strength.amount < 5) player.stats.strength.amount += 1;
+                }
             }
         ]
     },

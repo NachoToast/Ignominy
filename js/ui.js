@@ -114,7 +114,7 @@ document.getElementById("header_0_main").innerHTML = `<span title='Playing Ignom
 
 function unhide_headers() {
     for (let i = 0, len = player.config.headers.length; i < len; i++) {
-        if (player.config.debug > 0) console.log(`Unhiding header ${player.config.headers[i]} (${header_options[player.config.headers[i]].innerHTML}).`);
+        if (player.config.debug > 3) console.log(`Unhiding header ${player.config.headers[i]} (${header_options[player.config.headers[i]].innerHTML}).`);
         header_options[player.config.headers[i]].classList.remove("hidden");
 
     }
@@ -328,7 +328,7 @@ function update_menu() {
         saveload_options[i].innerHTML = `<span title="${o.title}">${o.text} (<span style="color: ${o.inline_color}">${o.inline}</span>)</span>`;
     }
 
-    if (player.config.debug > 0) console.log(`Found ${save_elements} save elements in menu.`);
+    if (player.config.debug > 3) console.log(`Found ${save_elements} save elements in menu.`);
     
     for (let i = 0, len = saveload_defaults["load"].length - save_elements; i < len; i++) {
         let o = saveload_defaults["load"][2 * i],
