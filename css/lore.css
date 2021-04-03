@@ -160,6 +160,10 @@
     cursor: not-allowed;
 }
 
+.lore #name_submit {
+    padding-bottom: 20px;
+}
+
 
 /* Difficulties */
 .location_options .lo_d_0 {color: lightgreen}

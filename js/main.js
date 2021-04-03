@@ -1,4 +1,4 @@
-const version = "0.1.10";
+const version = "0.1.11";
 
 const game_window = document.getElementById("game");
 
@@ -33,13 +33,18 @@ var player = {
     scene: -1,
     config: {
         headers: [0, 1, 2, 3, 4],
-        debug: 1,
+        debug: 2,
         chrono: {
             time: 12, // 12 or 24
             order: 0, // 0 = Date Time, 1 = Time Date
             ordinals: true,
             date_format: "dddd d mmmm yyyy",
             time_format: "h:mm"
+        },
+        meta: {
+            authors: true,
+            version: true,
+            legacy_version: true
         }
     },
     history: [
@@ -117,7 +122,45 @@ function display_scene(scene) {
 
     }
 
-    display_options(scene)
+    display_options(scene);
+
+    if (Object.values(player.config.meta).indexOf(true) !== -1) display_meta(scene);
+}
+
+function display_meta(scene) {
+
+    if (player.config.debug > 1) console.log(`Attempting display metadata for scene ${scene.id}`);
+
+    if(scene.meta === undefined) {
+        if (player.config.debug > 1) console.warn(`Scene ${scene.id} has no metadata!`);
+        return;
+    }
+    // TODO: Add spans (maybe span detection for authors names?)
+    let d = document.createElement("div");
+    d.classList.add("std_window", "std_meta_window");
+    game_window.appendChild(d);
+    if (player.config.meta.authors == true) { // authors
+        let authors = document.createElement("p");
+        authors.classList.add("meta_authors");
+        authors.innerHTML = "Authors: <span style='color: lightgray'>";
+        for (let i = 0, len = scene.meta.authors.length; i < len; i++) {
+
+            authors.innerHTML += "<span style='color: lightgray'>" + scene.meta.authors[i] + "</span>"
+            if (i == len - 2) authors.innerHTML += ", & ";
+            else if (i !== len - 1) authors.innerHTML += ", "; 
+            else authors.innerHTML += ".";
+        }
+        d.appendChild(authors);
+    }
+    if (player.config.meta.version == true) { // version
+        let version = document.createElement("p");
+        version.classList.add("meta_version");
+        version.innerHTML = "Added: <span style='color: lightgray'>" + scene.meta.version + "</span>";
+        if (player.config.meta.legacy_version == true && scene.meta.legacy_version !== undefined) version.innerHTML += " [<span style='color: lightgray'>" + scene.meta.legacy_version + "</span>]";
+        d.appendChild(version);
+    }
+
+
 }
 
 function display_options(scene) {
@@ -355,6 +398,7 @@ function load_game(type) {
             if (player.config.debug > 1) console.log("Dumping save: ", data);
             player = data;
             player.time = new Date(data.time);
+            update_menu_elements();
             player.version = version;
             generate_game(data.scene);
         }
@@ -362,4 +406,10 @@ function load_game(type) {
     }
 
     version_debugger();
+}
+
+function reset_game() {
+    let r = confirm("Confirm game reset.");
+    if (r !== true) return;
+    console.log("Reset!");
 }

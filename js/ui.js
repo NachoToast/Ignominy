@@ -233,8 +233,11 @@ function update_chrono() {
     let date = update_date(),
     time = update_time();
 
-    if (player.config.chrono.order == 0) header_options[3].innerHTML = date + " " + time;
-    else header_options[3].innerHTML = time + " " + date;
+    if (player.config.chrono.order == 0) header_options[3].innerText = date + " " + time;
+    else header_options[3].innerText = time + " " + date;
+
+    if (player.config.chrono.order == 0) config_example.innerText = "Example Output: " + date + " " + time;
+    else config_example.innerText = "Example Output: " + time + " " + date;
 
     update_header_borders();
 }
@@ -336,6 +339,32 @@ function update_menu() {
         saveload_options[save_elements + i].innerHTML = `<span title="${o2}">${o}</span>`
     }
 
+    // split because save/load functions feedbacks shouldn't be overwritten on load.
+    update_menu_elements();
+
+}
+
+function update_menu_elements() {
+    config_date_format.value = player.config.chrono.date_format;
+    config_time_format.value = player.config.chrono.time_format;
+
+    if (player.config.chrono.time == 12) config_time_hours.checked = false;
+    else config_time_hours.checked = true;
+
+    if (player.config.chrono.order == 0) config_reverse.checked = false;
+    else config_reverse.checked = true;
+
+    config_date_ordinals.checked = player.config.chrono.ordinals;
+    config_authors.checked = player.config.meta.authors;
+    config_versions.checked = player.config.meta.version;
+    config_legacy_version.checked = player.config.meta.legacy_version;
+
+    update_chrono();
+
+    if (player.config.debug == 0) config_debug_out.innerText = "Off";
+    else config_debug_out.innerText = player.config.debug;
+    config_debug.value = player.config.debug;
+
 }
 
 function change_save_option(index, message, color, title) {
@@ -352,4 +381,72 @@ current_header = -1,
 header = document.getElementById("header");
 
 window.addEventListener("resize", update_header_borders);
-setTimeout(update_header_borders, 200);
+setTimeout(update_header_borders, 600);
+
+var config_debug = document.getElementById("debug_set"),
+config_debug_out = document.getElementById("debug_out"),
+config_authors = document.getElementById("meta_authors"),
+config_versions = document.getElementById("meta_versions"),
+config_legacy_version = document.getElementById("meta_versions_legacy"),
+config_date_format = document.getElementById("config_date_format"),
+config_date_ordinals = document.getElementById("date_ordinals"),
+config_time_format = document.getElementById("config_time_format"),
+config_time_hours = document.getElementById("time_hours"),
+config_reverse = document.getElementById("chrono_reverse"),
+config_example = document.getElementById("config_example");
+
+config_date_format.addEventListener("input", function() {
+    player.config.chrono.date_format = config_date_format.value;
+    update_chrono();
+})
+
+config_time_format.addEventListener("input", function() {
+    player.config.chrono.time_format = config_time_format.value;
+    update_chrono();
+})
+
+config_date_ordinals.addEventListener("change", function() {
+    if (this.checked) {
+        player.config.chrono.ordinals = true;
+    }
+    else {
+        player.config.chrono.ordinals = false;
+    }
+    update_chrono();
+})
+
+config_time_hours.addEventListener("change", function() {
+    if (this.checked) {
+        player.config.chrono.time = 24;
+    }
+    else {
+        player.config.chrono.time = 12;
+    }
+    update_chrono();
+})
+
+config_reverse.addEventListener("change", function() {
+    if (this.checked) {
+        player.config.chrono.order = 1;
+    }
+    else {
+        player.config.chrono.order = 0;
+    }
+    update_chrono();
+})
+
+config_authors.addEventListener("change", function() {
+    if (this.checked) player.config.meta.authors = true;
+    else player.config.meta.authors = false;
+})
+
+config_versions.addEventListener("change", function() {
+    if (this.checked) player.config.meta.version = true;
+    else player.config.meta.version = false;
+})
+
+function change_debug_mode() {
+    player.config.debug = config_debug.value;
+    if (player.config.debug == 0) config_debug_out.innerText = "Off";
+    else config_debug_out.innerText = player.config.debug;
+}

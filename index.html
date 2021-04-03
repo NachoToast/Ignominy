@@ -29,7 +29,7 @@
                     <p class="saveload_option" onclick="save_game('browser')"></p>
                 </div>
                 <div>
-                    <p class="saveload_option"></span></p>
+                    <p class="saveload_option"></p>
                 </div>
                 <div>
                     <p class="saveload_option"></p>
@@ -46,6 +46,58 @@
                 <div>
                     <p class="saveload_option"></p>
                 </div>
+            </div>
+            <div class="config">
+                <h2>Date & Time</h2>
+                <div>
+                    <input placeholder="Date Format" minlength=1 maxlength=20 id="config_date_format">
+                    <input type="checkbox" id="date_ordinals" class="config_check">
+                    <label for="date_ordinals" class="noselect">Ordinals</label>
+                </div>
+                <div>
+                    <input placeholder="Time Format" minlength=1 maxlength=20 id="config_time_format">
+                    <input type="checkbox" id="time_hours" class="config_check">
+                    <label for="time_hours" class="noselect">24 Hour</label>
+                </div>
+                <div id="config_example_div">
+                    <p id="config_example">Example Output: [Output]</p>
+                    <div>
+                        <input type="checkbox" id="chrono_reverse">
+                        <label for="chrono_reverse" id="chrono_reverse_label" class="noselect">Reverse</label>
+                    </div>
+                </div>
+            </div>
+            <div class="config" id="config_misc">
+                <h2>Misc</h2>
+                <div id="config_devmode">
+                    <label for="devmode_set">Debug Mode</label>
+                    <input type="range" id="debug_set" min=0 max=5 value="100" list="debugmarks" oninput="change_debug_mode()">
+                    <datalist id="debugmarks">
+                        <option value="0"></option>
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                        <option value="5"></option>
+                    </datalist>
+                    <p id="debug_out">Off</p>
+                </div>
+                <div id="config_meta">
+                    <p>Scene Metadata:</p>
+                    <div>
+                        <input type="checkbox" id="meta_authors">
+                        <label for="meta_authors" class="noselect">Authors</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="meta_versions">
+                        <label for="meta_versions" class="noselect">Version</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="meta_versions_legacy">
+                        <label for="meta_versions_legacy" class="noselect">Version [Legacy]</label>
+                    </div>
+                </div>
+                <div id="reset" onclick=reset_game()>Reset Game</div>
             </div>
         </div>
         <div id="header_1" class="header_pages hidden">
@@ -121,7 +173,7 @@
                     <p>Zoom</p>
                     <div class="map_zoom">
                         <button onclick="zoom(-0.1)">-</button>
-                        <p id="map_zoom_output">100%</p>
+                        <p class="map_zoom_output">100%</p>
                         <button onclick="zoom(0.1)">+</button>
                     </div>
                 </div>

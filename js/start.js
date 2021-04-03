@@ -9,7 +9,7 @@ maps = document.getElementsByClassName("map_s"),
 zoom_level = 1,
 base_height = 1405.5,
 base_width = 2880,
-zoom_output = document.getElementById("map_zoom_output");
+zoom_output = document.getElementsByClassName("map_zoom_output");
 
 
 function generate_map_menu() {
@@ -65,7 +65,7 @@ function generate_map_menu() {
             <p>Zoom</p>
             <div class="map_zoom">
                 <button onclick="zoom(-0.1)">-</button>
-                <p id="map_zoom_output">100%</p>
+                <p class="map_zoom_output">100%</p>
                 <button onclick="zoom(0.1)">+</button>
             </div>
         </div>
@@ -152,11 +152,21 @@ function generate_map_menu() {
     d1.innerHTML = content1;
     d2.innerHTML = content2;
     d3.innerHTML = content3;
+    map_sliders = document.getElementsByClassName("map_options");
+    map_outputs = document.getElementsByClassName("map_outputs");
+    maps = document.getElementsByClassName("map_s");
+    zoom_output = document.getElementsByClassName("map_zoom_output");
 }
 
 function slider_modify_map(layer) {
+    //console.log(layer);
+    if (current_header !== 2) {
+        map_outputs[5 + layer].value = map_sliders[5 + layer].value;
+        maps[5 + layer + 2].style.opacity = map_sliders[5 + layer].value / 100;
+        return;
+    }
     map_outputs[layer].value = map_sliders[layer].value;
-    maps[layer+1].style.opacity = map_sliders[layer].value / 100;
+    maps[layer + 1].style.opacity = map_sliders[layer].value / 100;
 }
 function direct_modify_map(layer) {
     map_sliders[layer].value = map_outputs[layer].value;
@@ -165,11 +175,16 @@ function direct_modify_map(layer) {
 function zoom(type) {
     if ((zoom_level * 100).toFixed(0) >= 500 && type == 0.1 || (zoom_level * 100).toFixed(0) <= 10 && type == -0.1) return;
     zoom_level += type;
-    for (let i = 0, len = maps.length; i < len; i++) {
-        maps[i].width = base_width * zoom_level;
-        maps[i].height = base_height * zoom_level;
+    let len = maps.length, mult = 0;
+    if (current_header !== 2) {
+        len = maps.length / 2;
+        mult = 6;
     }
-    zoom_output.innerText = (zoom_level * 100).toFixed(0) + "%";
+    for (let i = 0; i < len; i++) {
+        maps[i + mult].width = base_width * zoom_level;
+        maps[i + mult].height = base_height * zoom_level;
+    }
+    zoom_output[mult / 6].innerText = (zoom_level * 100).toFixed(0) + "%";
 }
 
 for (let i = 0, len = maps.length; i < len; i++) {

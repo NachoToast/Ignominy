@@ -33,10 +33,13 @@ var story = [
                     "poopoo"
                 ],
                 novisit: true,
-                norepeat: true // hide if visited this scene > once
+                norepeat: true, // hide if visited this scene > once
                 //norepeat: 5, // hide if visited specified scene > once
-                //norepeat: [0, 0, 0], // hide if visited specified scene < min or > max
-                //norepeat: [0, 0, true], // hide if visited specified scene < min
+                //norepeat: [id, min, max], // hide if visited specified scene < min or > max
+                //norepeat: [id, min, true], // hide if visited specified scene < min
+                action: function() {
+                    if (player.stats.strength.amount < 5) player.stats.strength.amount += 1;
+                }
             }
         ]
     }

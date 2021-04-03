@@ -1,5 +1,7 @@
 #header_0 {
     align-content: flex-start;
+    flex-flow: column nowrap;
+    align-content: flex-start;
 }
 
 #header_0_main {
@@ -8,6 +10,7 @@
     text-align: center;
     font-weight: normal;
     cursor: default;
+    border-bottom: solid 1px gray;
 }
 
 #header_0 .saveload button {
@@ -23,10 +26,9 @@
 }
 
 #header_0 .saveload {
-    border-right: solid 1px gray;
-    border-top: solid 1px gray;
     border-bottom: solid 1px gray;
 }
+
 
 #header_0 .saveload h2 {
     font-weight: lighter;
@@ -57,4 +59,101 @@
 
 #header_0 .saveload > div:nth-child(3), #header_0 .saveload > div:nth-child(4) {
     cursor: not-allowed;
+}
+
+#header_0 .config h2 {
+    font-weight: lighter;
+    width: 100%;
+    text-align: center;
+    transition: 0.1s linear;
+    padding: 5px 0;
+    border-bottom: solid 1px gray;
+    cursor: default;
+}
+
+#header_0 .config {
+    border-bottom: solid 1px gray;
+}
+
+#header_0 .config h2 {
+    font-weight: lighter;
+    width: 100%;
+    text-align: center;
+    transition: 0.1s linear;
+    padding: 5px 0;
+    border-bottom: solid 1px gray;
+    cursor: default;
+}
+
+#header_0 .config h2:hover {
+    background-color: #333;
+}
+
+#header_0 .config > div {
+    padding: 10px 15px;
+    display: flex;
+    flex-flow: row wrap;
+    transition: 0.1s linear;
+    align-items: center;
+}
+
+#header_0 .config > div:hover:not(#config_meta) {
+    background-color: #333;
+}
+
+#header_0 .config div > *:not(#header_0 .config div > *:last-child) {
+    margin-right: 3px;
+}
+
+#header_0 .config #config_meta {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    padding: 0;
+}
+
+#header_0 .config #config_meta p {
+    padding-bottom: 5px;
+    transition: 0.1s linear;
+    padding-left: 15px;
+    width: 100%;
+}
+
+#header_0 .config #config_meta > div {
+    transition: 0.1s linear;
+    width: 100%;
+    padding: 2px 0;
+    padding-left: 15px;
+}
+
+#header_0 .config #config_meta > div:hover, #header_0 .config #config_meta > p:hover {
+    background-color: #333;
+}
+
+#header_0 .config input {
+    color: black;
+    outline: none;
+}
+
+#header_0 .config #config_example_div {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+}
+
+#header_0 .config #config_meta > div:last-child {
+    padding-bottom: 5px;
+}
+
+#header_0 .config #debug_set {
+    color: white;
+}
+
+#header_0 #reset {
+    cursor: pointer;
+    transition: 0.1s linear;
+}
+
+#header_0 #reset:hover {
+    color: lightcoral;
 }

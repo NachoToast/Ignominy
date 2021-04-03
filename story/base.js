@@ -89,7 +89,12 @@ var story = [
                     if (player.stats.strength.amount < 5) player.stats.strength.amount += 1;
                 }
             }
-        ]
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.11",
+            legacy_version: "0.0.1"
+        }
     },
     {
         id: 0,
