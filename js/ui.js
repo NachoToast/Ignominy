@@ -319,7 +319,8 @@ var saveload_defaults = {
 },
 saveload_current_changed = [-1, false],
 saveload_options = document.getElementsByClassName("saveload_option"),
-main_menu = document.getElementById("header_0_main");
+main_menu = document.getElementById("header_0_main"),
+main_menu_cards = document.getElementsByClassName("mmc");
 
 function update_menu() {
 
@@ -365,6 +366,22 @@ function update_menu_elements() {
     else config_debug_out.innerText = player.config.debug;
     config_debug.value = player.config.debug;
 
+    
+    if (player.homekingdom == "Default") {
+        for (let i = 0, len = main_menu_cards.length; i < len; i++) {
+            if (i == 1) continue;
+            console.log("hiding card " + i);
+            main_menu_cards[i].classList.add("hidden");
+        }
+    }
+    else {
+        for (let i = 0, len = main_menu_cards.length; i < len; i++) {
+            main_menu_cards[i].classList.remove("hidden");
+        }
+    }
+
+    config_hotkeys.checked = player.config.keybinds;
+
 }
 
 function change_save_option(index, message, color, title) {
@@ -393,7 +410,8 @@ config_date_ordinals = document.getElementById("date_ordinals"),
 config_time_format = document.getElementById("config_time_format"),
 config_time_hours = document.getElementById("time_hours"),
 config_reverse = document.getElementById("chrono_reverse"),
-config_example = document.getElementById("config_example");
+config_example = document.getElementById("config_example"),
+config_hotkeys = document.getElementById("hotkey_set");
 
 config_date_format.addEventListener("input", function() {
     player.config.chrono.date_format = config_date_format.value;
@@ -442,7 +460,20 @@ config_authors.addEventListener("change", function() {
 
 config_versions.addEventListener("change", function() {
     if (this.checked) player.config.meta.version = true;
-    else player.config.meta.version = false;
+    else {
+        player.config.meta.version = false;
+        player.config.meta.legacy_version = false;
+        config_legacy_version.checked = false;
+    }
+})
+
+config_legacy_version.addEventListener("change", function() {
+    if (this.checked) {
+        config_versions.checked = true;
+        player.config.meta.legacy_version = true;
+        player.config.meta.version = true;
+    }
+    else player.config.meta.legacy_version = false;
 })
 
 function change_debug_mode() {
@@ -450,3 +481,9 @@ function change_debug_mode() {
     if (player.config.debug == 0) config_debug_out.innerText = "Off";
     else config_debug_out.innerText = player.config.debug;
 }
+
+config_hotkeys.addEventListener("change", function() {
+    if (this.checked) player.config.keybinds = true;
+    else player.config.keybinds = false;
+    update_keybind_config();
+})

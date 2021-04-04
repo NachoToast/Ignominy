@@ -23,31 +23,31 @@
     <div id="global">
         <div id="header_0" class="header_pages hidden">
             <h1 id="header_0_main">Ignominy Version Missing?</span></h1>
-            <div class="saveload">
+            <div class="saveload mmc">
                 <h2>Save</h2>
                 <div>
-                    <p class="saveload_option" onclick="save_game('browser')"></p>
+                    <p class="saveload_option noselect" onclick="save_game('browser')"></p>
                 </div>
                 <div>
-                    <p class="saveload_option"></p>
+                    <p class="saveload_option noselect"></p>
                 </div>
                 <div>
-                    <p class="saveload_option"></p>
+                    <p class="saveload_option noselect"></p>
                 </div>
             </div>
-            <div class="saveload">
+            <div class="saveload mmc">
                 <h2>Load</h2>
                 <div>
-                    <p class="saveload_option" onclick="load_game('browser')"></p>
+                    <p class="saveload_option noselect" onclick="load_game('browser')"></p>
                 </div>
                 <div>
-                    <p class="saveload_option"></p>
+                    <p class="saveload_option noselect"></p>
                 </div>
                 <div>
-                    <p class="saveload_option"></p>
+                    <p class="saveload_option noselect"></p>
                 </div>
             </div>
-            <div class="config">
+            <div class="config mmc">
                 <h2>Date & Time</h2>
                 <div>
                     <input placeholder="Date Format" minlength=1 maxlength=20 id="config_date_format">
@@ -67,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="config" id="config_misc">
+            <div class="config mmc" id="config_misc">
                 <h2>Misc</h2>
                 <div id="config_devmode">
                     <label for="devmode_set">Debug Mode</label>
@@ -81,6 +81,10 @@
                         <option value="5"></option>
                     </datalist>
                     <p id="debug_out">Off</p>
+                </div>
+                <div>
+                    <input type="checkbox" id="hotkey_set">
+                    <label for="hotkey_set" class="noselect">Enable Hotkeys</label>
                 </div>
                 <div id="config_meta">
                     <p>Scene Metadata:</p>

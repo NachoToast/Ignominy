@@ -10,11 +10,18 @@
     background-color: #272727;
     max-height: 150px;
     overflow-y: auto;
+    width: 100%;
 }
 
 #header_2 #location_meta > h1 {
     width: 100%;
     margin: 0;
+    padding-left: 15px;
+    transition: 0.1s linear;
+}
+
+#header_2 #location_meta > h1:hover {
+    background-color: #333;
 }
 
 #header_2 #location_meta > div {

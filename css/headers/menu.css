@@ -157,3 +157,7 @@
 #header_0 #reset:hover {
     color: lightcoral;
 }
+
+#header_0 div.hidden {
+    display: none;
+}

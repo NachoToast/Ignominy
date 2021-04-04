@@ -1,4 +1,4 @@
-const version = "0.1.11";
+const version = "0.1.12";
 
 const game_window = document.getElementById("game");
 
@@ -45,7 +45,8 @@ var player = {
             authors: true,
             version: true,
             legacy_version: true
-        }
+        },
+        keybinds: true
     },
     history: [
         {id: -5, amount: 10},
@@ -56,7 +57,7 @@ var player = {
     time: new Date(3051, 0, 1, 7, 0, 0, 0)
 }
 
-function version_debugger() {
+function version_debugger(save_version) {
     // use when introducing new object fields (for both story [unlikely] and player) in future versions.
     if (player.config.debug > 0) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
 }
@@ -66,6 +67,16 @@ function generate_game(scene) {
     update_chrono();
     if (player.config.debug > 0) console.log(`%cStarting game%c\nLoaded Scene: ${scene}\nPlayer Hometown: ${player.hometown}, ${player.homekingdom}`, 'color: lime', 'color: unset');
     next_scene(scene);
+    update_keybind_config();
+}
+
+function update_keybind_config() {
+    if (player.config.keybinds == true) document.addEventListener("keydown", function(e) {
+        keybind_progress_scene(e.key);
+    });
+    else document.removeEventListener("keydown", function(e) {
+        keybind_progress_scene(e.key);
+    })
 }
 
 function next_scene(scene) {
@@ -168,6 +179,7 @@ function display_options(scene) {
     let d = document.createElement("div");
     d.classList.add("std_window", "std_option_window");
     game_window.appendChild(d);
+    current_options_displayed = [];
 
     // condition checking
     let valid_option = [],
@@ -193,9 +205,11 @@ function display_options(scene) {
         let btn = document.createElement("btn");
         if (valid_option_true[i] == true) {
             btn.classList.add("std_options");
-            btn.innerHTML = valid_option[i].text;
+            if (player.config.keybinds == true) btn.innerHTML = keybind_text(current_options_displayed.length) + valid_option[i].text;
+            else btn.innerHTML = valid_option[i].text;
             //if (valid_option[i]?.scene === undefined) valid_option[i].scene = scene.id; // big brain
             btn.addEventListener('click', () => option_progress_scene(valid_option[i]));
+            current_options_displayed.push(valid_option[i]);
             //console.log(valid_option[i])
         }
         else {
@@ -204,7 +218,32 @@ function display_options(scene) {
         }
         d.appendChild(btn);
     }
+
+    // key binding
+    //options = document.getElementsByClassName("std_options");
+    //if (player.config.keybinds == true) display_keybinds();
 }
+
+var current_options_displayed = [];
+
+function keybind_progress_scene(key) {
+    if (current_header !== -1) return; // don't listen when pages open
+    let index = keybinds.indexOf(key);
+    if (index == -1) return; // only listen to allowed keys
+    if (index >= current_options_displayed.length) return; // don't listen for non-existent options
+    
+    option_progress_scene(current_options_displayed[index]);
+
+}
+
+function keybind_text(option_number) {
+    let msg = option_number + 1;
+    if (msg == 10) msg = 0;
+    else if (msg > 10 ) msg = "Shift+" + (msg - 10); 
+    return "[" + msg + "] ";
+}
+
+const keybinds = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")"];
 
 function add_to_history(scene_id) {
 
@@ -393,7 +432,10 @@ function load_game(type) {
         else {
             //show_header(0);
             change_load_option(0, "Save loaded!", "#90EE90", "Found data in browser storage.");
-            if (version !== data.version && player.config.debug > 0) console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}.`);
+            if (version !== data.version && player.config.debug > 0) {
+                console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}.`);
+                version_debugger(data.version);
+            }
             if (player.config.debug > 1) console.log("Executed browser load.");
             if (player.config.debug > 1) console.log("Dumping save: ", data);
             player = data;
@@ -405,11 +447,9 @@ function load_game(type) {
 
     }
 
-    version_debugger();
 }
 
 function reset_game() {
     let r = confirm("Confirm game reset.");
-    if (r !== true) return;
-    console.log("Reset!");
+    if (r == true) location.reload();
 }

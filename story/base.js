@@ -44,6 +44,11 @@ var story = [
                 ]
             },
             {
+                text: "false",
+                conditions: (player) => player.stats.strength < 0,
+                alternate: ["oof", "mb"]
+            },
+            {
                 text: "inc 5hr",
                 time: {
                     hour: 5
@@ -88,6 +93,18 @@ var story = [
                 action: function() {
                     if (player.stats.strength.amount < 5) player.stats.strength.amount += 1;
                 }
+            },
+            {
+                text: "9"
+            },
+            {
+                text: "0"
+            },
+            {
+                text: "shift 1?"
+            },
+            {
+                text: "shift 2???"
             }
         ],
         meta: {
