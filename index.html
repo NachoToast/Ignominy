@@ -29,7 +29,7 @@
                     <p class="saveload_option noselect" onclick="save_game('browser')"></p>
                 </div>
                 <div>
-                    <p class="saveload_option noselect"></p>
+                    <p class="saveload_option noselect" onclick="save_game('file')"></p>
                 </div>
                 <div>
                     <p class="saveload_option noselect"></p>
@@ -41,7 +41,8 @@
                     <p class="saveload_option noselect" onclick="load_game('browser')"></p>
                 </div>
                 <div>
-                    <p class="saveload_option noselect"></p>
+                    <label for="load_file" id="load_file_label">File</label>
+                    <input class="saveload_option noselect" id="load_file" type="file" style="display:none" onchange="load_game('file')" accept=".ignosave">
                 </div>
                 <div>
                     <p class="saveload_option noselect"></p>

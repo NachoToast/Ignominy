@@ -37,10 +37,6 @@
     background-color: gray;
 }
 
-.st_a {
-    color: pink;
-}
-
 .std_meta_window {
     display: flex;
     flex-flow: column nowrap;
@@ -60,4 +56,9 @@
 
 .std_meta_window > *:hover {
     background-color: #333;
+}
+
+
+.st_a {
+    color: pink;
 }

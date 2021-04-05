@@ -59,6 +59,12 @@ function update_stats() {
         stats_container.removeChild(stats_container.lastElementChild);
         children -= 1;
     }
+
+    // fatigue
+    stats_fatigue.innerHTML = `Fatigue <span style='color: rgb(${color_gradient(0, 100, Math.ceil(player.fatigue), {red:255,green:255,blue:255}, std_yellow, std_red)})'>` + Math.ceil(player.fatigue) + "</span>";
+    // gold
+    stats_gold.innerHTML = "Gold " + player.gold;
+
     // stats
     for (let i = 0, len = Object.keys(player.stats).length; i < len; i++) {
         // div
@@ -388,7 +394,13 @@ function change_save_option(index, message, color, title) {
     saveload_options[index].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
 }
 
+let special_load_option = document.getElementById("load_file_label");
+
 function change_load_option(index, message, color, title) {
+    if (index == 1) {
+        special_load_option.innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
+        return;
+    }
     saveload_options[index + saveload_defaults["save"].length].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
 }
 

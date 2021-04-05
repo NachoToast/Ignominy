@@ -49,15 +49,24 @@
     flex-flow: row nowrap;
     transition: 0.1s linear;
     padding: 10px 15px;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     cursor: pointer;
+}
+
+#header_0 .saveload > div p {
+    width:100%;
+}
+
+#header_0 .saveload > div label {
+    cursor: pointer;
+    width: 100%;
 }
 
 #header_0 .saveload > div:hover {
     background-color: #333;
 }
 
-#header_0 .saveload > div:nth-child(3), #header_0 .saveload > div:nth-child(4) {
+#header_0 .saveload > div:nth-child(4) {
     cursor: not-allowed;
 }
 

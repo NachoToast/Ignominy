@@ -24,7 +24,8 @@ var story = [
                     week: 1,
                     day: 1,
                     hour: 1,
-                    minute: 1
+                    minute: 1,
+                    second: 1
                 },
                 scene: -1,
                 conditions: (player) =>

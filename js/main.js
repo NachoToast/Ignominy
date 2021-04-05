@@ -1,6 +1,11 @@
-const version = "0.1.12";
+const version = "0.1.13";
 
 const game_window = document.getElementById("game");
+
+const scene_presets = {
+    default: {fatigue: 0.1, time: {second: 5}},
+    caravan: {fatigue: 10}
+}
 
 var player = {
     name: "Default",
@@ -271,7 +276,7 @@ function option_progress_scene(option) {
     if (player.config.debug > 2) console.log("Option Dump:", option);
     
     let checkhistory = true;
-    if (option?.novisit !== undefined) {
+    if (option.novisit) {
         if (option.novisit == true) {
             if (player.config.debug > 0) console.log("%cSkipped add to history for found scene due to 'novisit' tag.", "color: pink");
             checkhistory = false;
@@ -299,8 +304,16 @@ function option_progress_scene(option) {
         if (player.config.debug > 2) console.log("Doing option actions.");
         if (player.config.debug > 3) console.log("Action dump:", option.action);
     }
+    
+    if (option.fatigue) {
+        if (typeof option.fatigue == "number") player.fatigue += option.fatigue;
+        else if (option.fatigue !== true) {
+            if (player.config.debug > 0) console.warn("fatigue tag present but not true nor a number!");
+        }
+    }
+    else player.fatigue += scene_presets.default.fatigue;
 
-    if (player.config.debug > 0) console.log("Going to next scene: ", option.scene);
+    //if (player.config.debug > 0) console.log("Going to next scene: ", option.scene);
     next_scene(option.scene);
 }
 
@@ -312,7 +325,8 @@ function increment_time(date_object) {
         week: int,
         day: int,
         hour: int,
-        minute: int
+        minute: int,
+        second: int
     } */
 
     // Optimize this with fancy object stuff.
@@ -321,15 +335,17 @@ function increment_time(date_object) {
     old_day = player.time.getDate(),
     old_hour = player.time.getHours(),
     old_minute = player.time.getMinutes(),
+    old_second = player.time.getSeconds(),
     add_year = date_object.year ?? 0,
     add_month = date_object.month ?? 0,
     add_day = date_object.day ?? 0,
     add_hour = date_object.hour ?? 0,
-    add_minute = date_object.minute ?? 0;
+    add_minute = date_object.minute ?? 0,
+    add_second = date_object.second ?? 0;
 
     add_day += (date_object.week ?? 0) * 7;
 
-    new_time = new Date(old_year + add_year, old_month + add_month, old_day + add_day, old_hour + add_hour, old_minute + add_minute, 0, 0);
+    new_time = new Date(old_year + add_year, old_month + add_month, old_day + add_day, old_hour + add_hour, old_minute + add_minute, old_second + add_second, 0);
     player.time = new_time;
     update_chrono();
 }
@@ -420,7 +436,20 @@ function save_game(type) {
         if (player.config.debug > 0) console.log("Executed browser save.");
         change_save_option(0, "Saved to browser!", "#90EE90", "Successfully saved data to browser storage.");
     }
+    else if (type == "file") {
+        let file = new Blob([JSON.stringify(player)], {type: 'application/json'}),
+        elem = window.document.createElement("a");
+        elem.href = window.URL.createObjectURL(file);
+        elem.download = `${player.name}_${version}.ignosave`;
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+        if (player.config.debug > 0) console.log("Executed file save.");
+        change_save_option(1, "Saved to file!", "#90EE90", "Successfully saved file to local machine.");
+    }
 }
+
+var file_holder = document.getElementById("load_file");
 
 function load_game(type) {
     if (type == "browser") {
@@ -428,25 +457,62 @@ function load_game(type) {
         if (data == null) {
             if (player.config.debug > 0) console.log("No save found in local storage.");
             change_load_option(0, "Save not found!", "#F08080", "Have you cleared cache?");
+            return;
         }
-        else {
-            //show_header(0);
-            change_load_option(0, "Save loaded!", "#90EE90", "Found data in browser storage.");
-            if (version !== data.version && player.config.debug > 0) {
-                console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}.`);
-                version_debugger(data.version);
-            }
-            if (player.config.debug > 1) console.log("Executed browser load.");
-            if (player.config.debug > 1) console.log("Dumping save: ", data);
-            player = data;
-            player.time = new Date(data.time);
-            update_menu_elements();
-            player.version = version;
-            generate_game(data.scene);
+        true_load(0, "Found data in browser storage.", data);
+        return;
+    }
+    if (type == "file") {
+        let file = file_holder.files[0];
+        if (player.config.debug > 1) console.log("Dumping load meta: ", file);
+        if (!file) {
+            if (player.config.debug > 0) console.log("No file specified for browser load.");
+            change_load_option(1, "No file specified.", "#F08080", "Browser might be unsupported.");
+            return;
         }
+        if (file.name.slice(-9) !== ".ignosave") {
+            if (player.config.debug > 0) console.log("Invalid file type for browser load.");
+            change_load_option(1, "Invalid file type!", "#F08080", "Must be '.ignosave' extension.");
+            return;
+        }
+        if (typeof window.FileReader !== "function") {
+            if (player.config.debug > 0) console.warn("Browser does not support file reader API!");
+            change_load_option(1, "File loading not supported!", "#F08080", "Is your browser outdated?");
+            return;
+        }
+        if (player.config.debug > 2) console.log("Loaded file passed all checks.");
+        //change_load_option(1, "Loaded from file!", "#90EE90", "Local save file loaded!");
+        let reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = function (contents) {
+            let data = JSON.parse(contents.target.result);
+            if (player.config.debug > 0) console.log("Executed browser load.");
+            if (player.config.debug > 1) console.log("Dumping load: ", data);
+            true_load(1, "Local save filed loaded successfully!", data);
 
+        }
+        reader.onerror = function() {
+            if (player.config.debug > 0) console.error("Browser load error!");
+            change_load_option(1, "File read error!", "#F08080", "Something wrent wrong :P");
+        }
     }
 
+}
+
+function true_load(load_index, tooltip, data) {
+    //show_header(0);
+    change_load_option(load_index, "Save loaded!", "#90EE90", tooltip);
+    if (version !== data.version && player.config.debug > 0) {
+        console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}.`);
+        version_debugger(data.version);
+    }
+    if (player.config.debug > 0) console.log("Executed browser load.");
+    if (player.config.debug > 1) console.log("Dumping save: ", data);
+    player = data;
+    player.time = new Date(data.time);
+    update_menu_elements();
+    player.version = version;
+    generate_game(data.scene);
 }
 
 function reset_game() {

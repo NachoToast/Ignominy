@@ -1,3 +1,7 @@
+#header_2 {
+    align-content: flex-start;
+}
+
 #header_2 #location_meta {
     display: flex;
     flex-flow: row wrap;
@@ -11,6 +15,7 @@
     max-height: 150px;
     overflow-y: auto;
     width: 100%;
+    margin-top: 20px;
 }
 
 #header_2 #location_meta > h1 {
