@@ -4,7 +4,7 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    font-size: 18px;
+    font-size: 22px;
 }
 .std_window {
     width: 95%;
@@ -17,10 +17,10 @@
     align-items: flex-start;
 }
 
-/* Unused 
-.std_story {
+.std_options_dead {
+    color: lightcoral;
+}
 
-} */
 .std_options_fake {
     color: gray;
     padding: 3px 15px 3px 10px;
@@ -61,4 +61,16 @@
 
 .st_a {
     color: pink;
+}
+
+@media screen and (min-width: 1024px) {
+    .std_storywindow, .std_option_window {width: 90%}
+}
+
+@media screen and (min-width: 1440px) {
+    .std_storywindow, .std_option_window {width: 85%}
+}
+
+@media screen and (min-width: 1920px) {
+    .std_storywindow, .std_option_window {width: 80%}
 }

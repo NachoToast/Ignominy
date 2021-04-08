@@ -1,10 +1,10 @@
-const version = "0.1.13";
-
+const version = "0.1.14";
+const harsh_check = true;
 const game_window = document.getElementById("game");
 
 const scene_presets = {
-    default: {fatigue: 0.1, time: {second: 5}},
-    caravan: {fatigue: 10}
+    default: {fatigue: 0.3, time: {second: 5}},
+    caravan: {fatigue: 10} // unused
 }
 
 var player = {
@@ -38,7 +38,11 @@ var player = {
     scene: -1,
     config: {
         headers: [0, 1, 2, 3, 4],
-        debug: 2,
+        debug: 0,
+        devmode: {
+            dead_links: false,
+            saveload_data: false
+        },
         chrono: {
             time: 12, // 12 or 24
             order: 0, // 0 = Date Time, 1 = Time Date
@@ -47,24 +51,55 @@ var player = {
             time_format: "h:mm"
         },
         meta: {
-            authors: true,
-            version: true,
-            legacy_version: true
+            authors: false,
+            version: false,
+            legacy_version: false
         },
         keybinds: true
     },
-    history: [
-        {id: -5, amount: 10},
-        {id: 2, amount: 289},
-        {id: 69}
-    ],
+    history: [],
     version: version,
-    time: new Date(3051, 0, 1, 7, 0, 0, 0)
+    time: new Date(3051, 0, 1, 7, 0, 0, 0),
+    random: global_random(),
+    inns: [],
+    latest_time_increment: 0
 }
 
-function version_debugger(save_version) {
+function version_debugger(save, verbose) {
     // use when introducing new object fields (for both story [unlikely] and player) in future versions.
-    if (player.config.debug > 0) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
+    //if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
+    save.version = version;
+    if (save?.random === undefined) {
+        save.random = global_random();
+        if (verbose) console.log("%cAdded random field.","color: gray");
+    }
+    if (save?.inns === undefined) {
+        save.inns = [];
+        if (verbose) console.log("%cAdded inns array.","color: gray");
+    }
+    return save;
+}
+
+function global_random(min, max, step) { // returns number between min (inclusive) and max (exclusive).
+    if (min === undefined) {
+        min = 0;
+        max = 101;
+        step = 1;
+    }
+    else if (max === undefined) {
+        max = min;
+        min = 0;
+        step = 1;
+    }
+    else if (step === undefined) step = 1;
+    let num = Math.floor(Math.random() * (max - min));
+    num = Math.floor(num / step) * step;
+    return min + num;
+}
+
+function random_chance(percentage) {
+    if (percentage >= global_random()) return true;
+    return false;
 }
 
 function generate_game(scene) {
@@ -101,8 +136,12 @@ function next_scene(scene) {
     full_scene = story[scene_index];
     //console.log(full_scene);
     player.scene = full_scene.id;
-    if (player.config.debug > 0) console.log(`Displaying scene ${story[scene_index].id} [Index ${scene_index}].`);
+    if (full_scene?.random !== undefined) {
+        if (full_scene.random === true) player.random = global_random();
+        else player.random = global_random(full_scene.random);
+    }
 
+    if (player.config.debug > 0) console.log(`Displaying scene ${story[scene_index].id} [Index ${scene_index}].`);
     display_scene(full_scene);
 }
 
@@ -113,7 +152,7 @@ function clear_game() {
 function display_scene(scene) {
 
     let d = document.createElement("div");
-    d.classList.add("std_window");
+    d.classList.add("std_window", "std_storywindow");
     game_window.appendChild(d);
 
     // first check number of texts that satisfy conditions.
@@ -186,6 +225,15 @@ function display_options(scene) {
     game_window.appendChild(d);
     current_options_displayed = [];
 
+    // catch no options
+    try {
+        if (scene.options.length);
+    } catch {
+        if (player.config.debug > 0) console.warn(`Scene ${scene.id} has no options!`);
+        next_scene(-1);
+        return;
+    }
+
     // condition checking
     let valid_option = [],
     valid_option_true = [];
@@ -209,7 +257,7 @@ function display_options(scene) {
     for (let i = 0, len = valid_option.length; i < len; i++) {
         let btn = document.createElement("btn");
         if (valid_option_true[i] == true) {
-            btn.classList.add("std_options");
+            btn.classList.add("std_options", "noselect");
             if (player.config.keybinds == true) btn.innerHTML = keybind_text(current_options_displayed.length) + valid_option[i].text;
             else btn.innerHTML = valid_option[i].text;
             //if (valid_option[i]?.scene === undefined) valid_option[i].scene = scene.id; // big brain
@@ -219,7 +267,13 @@ function display_options(scene) {
         }
         else {
             btn.classList.add("std_options_fake");
-            btn.innerHTML = valid_option[i].alternate;
+            for (let j = 0, j_len = valid_option[i].alternate.length; j < j_len; j++) {
+                btn.innerHTML += valid_option[i].alternate[j];
+                if (j !== j_len) btn.innerHTML += "<br>";
+            }
+        }
+        if (player.config.devmode.dead_links == true && validate_option_scene(valid_option[i])) {
+            btn.classList.add("std_options_dead");
         }
         d.appendChild(btn);
     }
@@ -230,6 +284,13 @@ function display_options(scene) {
 }
 
 var current_options_displayed = [];
+
+function validate_option_scene(option) {
+    // returns true if option's scene is not found.
+    if (!option.scene) return false;
+    if (story.map(e => e.id).indexOf(option.scene) == -1) return true;
+    else return false;
+}
 
 function keybind_progress_scene(key) {
     if (current_header !== -1) return; // don't listen when pages open
@@ -275,43 +336,62 @@ function option_progress_scene(option) {
     if (player.config.debug > 0) console.log("%c=== Scene Pre-Processing ===", 'color: lime');
     if (player.config.debug > 2) console.log("Option Dump:", option);
     
-    let checkhistory = true;
-    if (option.novisit) {
+    // novisit
+    if (option?.novisit !== undefined) {
         if (option.novisit == true) {
             if (player.config.debug > 0) console.log("%cSkipped add to history for found scene due to 'novisit' tag.", "color: pink");
-            checkhistory = false;
         }
         else if (player.config.debug > 0) console.warn("novisit tag present but false, instead just don't include novisit tag at all!");
     }
-    if (checkhistory == true) {
-        if (option.scene === undefined) {
-            if (player.config.debug > 0) console.log("%cDoing add to history with current scene for undefined scene destination.", "color: pink");
-            add_to_history(player.scene);
-        }
-        else {
-            if (story.map(e => e.id).indexOf(option.scene) !== -1) add_to_history(option.scene);
-            else if (player.config.debug > 0) console.log("%cSkipped add to history for unfound scene destination.", "color: pink");
-        }
+    else if (option.scene === undefined) {
+        if (player.config.debug > 0) console.log("%cDoing add to history with current scene since option has undefined scene destination.", "color: pink");
+        add_to_history(player.scene);
     }
+    else if (story.map(e => e.id).indexOf(option.scene) !== -1) {
+        add_to_history(option.scene);
+        if (player.config.debug > 3) console.log("%cDoing add to history with found scene destination.", "color: pink");
+    }
+    else if (player.config.debug > 0) console.log("%cSkipped add to history for unfound scene destination.", "color: pink");
     
-    if (option.time) {
-        if (player.config.debug > 2) console.log("Incrementing Time:", option.time);
-        increment_time(option.time);
+    // time
+    if (option?.time !== undefined) {
+        if (player.config.debug > 2) console.log("Option time tag present, checking.")
+        if (typeof option.time == "object") {
+            if (player.config.debug > 3) console.log("Option time tag has object, incrementing.");
+            increment_time(option.time);
+        }
+        else if (option.time !== false) {
+            if (player.config.debug > 0) console.warn("time tag present but not false or an object!");
+        }
+        else if (player.config.debug > 3) console.log("Option time tag is boolean and false.");
+    }
+    else {
+        increment_time(scene_presets.default.time);
+        if (player.config.debug > 3) console.log("Option time tag absent, doing default time incrementation.");
     }
 
+    // action
     if (option.action) {
         option.action();
         if (player.config.debug > 2) console.log("Doing option actions.");
         if (player.config.debug > 3) console.log("Action dump:", option.action);
     }
     
-    if (option.fatigue) {
+    // fatigue
+    if (option?.fatigue !== undefined) {
         if (typeof option.fatigue == "number") player.fatigue += option.fatigue;
-        else if (option.fatigue !== true) {
-            if (player.config.debug > 0) console.warn("fatigue tag present but not true nor a number!");
+        else if (option.fatigue !== false) {
+            if (player.config.debug > 0) console.warn("fatigue tag present but not false nor a number!");
         }
     }
     else player.fatigue += scene_presets.default.fatigue;
+
+    // random
+    // this isn't documented or tested because its not advised to use, instead add random to the scene so that anything that points to it rolls a random number.
+    if (option?.random !== undefined) {
+        if (option.random === true) player.random = global_random();
+        else if (player.config.debug > 0) console.warn("Option random tag present but not boolean and true!");
+    }
 
     //if (player.config.debug > 0) console.log("Going to next scene: ", option.scene);
     next_scene(option.scene);
@@ -342,12 +422,44 @@ function increment_time(date_object) {
     add_hour = date_object.hour ?? 0,
     add_minute = date_object.minute ?? 0,
     add_second = date_object.second ?? 0;
-
     add_day += (date_object.week ?? 0) * 7;
 
     new_time = new Date(old_year + add_year, old_month + add_month, old_day + add_day, old_hour + add_hour, old_minute + add_minute, old_second + add_second, 0);
+    player.latest_time_increment = (new_time - player.time) / 1000;
     player.time = new_time;
     update_chrono();
+
+    if (player.inns.length > 0) track_inns(player.latest_time_increment / 3600);
+}
+
+function track_inns(elapsed) {
+    for (let i = 0, len = player.inns.length; i < len; i++) {
+        player.inns[i].hours -= elapsed;
+        if (player.inns[i].hours <= 0) player.inns.splice(i);
+    }
+}
+
+function has_inn(scene_id) {
+    if (scene_id === undefined) scene_id = player.scene;
+    if (player.inns.map(e => e.id).indexOf(scene_id) !== -1) return true;
+    return false;
+
+}
+
+function add_inn(inn_id, hour_length) {
+    if (inn_id === undefined) {
+        inn_id = player.scene;
+        hour_length = 24;
+    }
+    else if (hour_length === undefined) {
+        hour_length = 24;
+    }
+    if (has_inn() == false) {
+        player.inns.push({id: inn_id, hours: hour_length})
+    }
+    else {
+        player.inns[player.inns.map(e => e.id).indexOf(inn_id)].hours += hour_length;
+    }
 }
 
 function validate_conditions(part) {
@@ -500,18 +612,19 @@ function load_game(type) {
 }
 
 function true_load(load_index, tooltip, data) {
-    //show_header(0);
+    //show_header(0); (personal preference)
     change_load_option(load_index, "Save loaded!", "#90EE90", tooltip);
-    if (version !== data.version && player.config.debug > 0) {
-        console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}.`);
-        version_debugger(data.version);
+    player.config.devmode.saveload_data = player.config.devmode.saveload_data || data.config.devmode.saveload_data
+    if (player.config.devmode.saveload_data) console.log("Executed browser load.");
+
+    if (version !== data.version || harsh_check) {
+        if (player.config.devmode.saveload_data) console.warn(`Save version mismatch: Currently on ${version} but save is ${data.version}!`);
+        data = version_debugger(data, player.config.devmode.saveload_data);
     }
-    if (player.config.debug > 0) console.log("Executed browser load.");
-    if (player.config.debug > 1) console.log("Dumping save: ", data);
+
     player = data;
     player.time = new Date(data.time);
     update_menu_elements();
-    player.version = version;
     generate_game(data.scene);
 }
 

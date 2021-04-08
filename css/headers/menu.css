@@ -170,3 +170,50 @@
 #header_0 div.hidden {
     display: none;
 }
+
+#header_0 .links {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#header_0 .links > div {
+    justify-content: space-evenly;
+    flex-grow: 1;
+}
+
+#header_0 .links > div > a > img {
+    width: 100px;
+    height:100px;
+    cursor: pointer;
+    transition: 0.1s linear;
+}
+
+#header_0 .links > div > a > img:hover {
+    filter: brightness(70%);
+}
+
+@media screen and (min-width: 768px) {
+    #header_0 > div {width: 50%;}
+    #header_0 {flex-flow: row wrap;}
+}
+/*
+@media screen and (min-width: 768px) {
+    #header_0 > div {max-width: 50%; flex-grow: 1}
+    #header_0 {flex-flow: row wrap;}
+    #header_0 > div:nth-child(2), #header_0 > div:nth-child(4), #header_0 > div:nth-child(6) {border-right: solid 1px gray}
+}
+
+@media screen and (min-width: 1024px) {
+    #header_0 > div:nth-child(4), #header_0 > div:nth-child(6) {border-right: none}
+    #header_0 > div:nth-child(3) {border-right: solid 1px gray}
+}
+
+@media screen and (min-width: 1440px) {
+    #header_0 > div:nth-child(5) {border-right: none}
+    #header_0 > div:nth-child(4), #header_0 > div:nth-child(6) {border-right: solid 1px gray}
+}
+
+@media screen and (min-width: 1920px) {
+    #header_0 > div:nth-child(6) {border-right: none}
+    #header_0 > div:nth-child(5) {border-right: solid 1px gray}
+}*/

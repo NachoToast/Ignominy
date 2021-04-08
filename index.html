@@ -8,6 +8,7 @@
     <link href="img/logo.png" rel="icon" type="image/png">
     <link href="css/main.css" rel="stylesheet" type="text/css">
     <script defer src="story/base.js"></script>
+    <script defer src="story/ignoma.js"></script>
     <script defer src="js/main.js"></script>
     <script defer src="js/ui.js"></script>
     <script defer src="js/start.js"></script>
@@ -68,8 +69,8 @@
                     </div>
                 </div>
             </div>
-            <div class="config mmc" id="config_misc">
-                <h2>Misc</h2>
+            <div class="config mmc">
+                <h2>Dev</h2>
                 <div id="config_devmode">
                     <label for="devmode_set">Debug Mode</label>
                     <input type="range" id="debug_set" min=0 max=5 value="100" list="debugmarks" oninput="change_debug_mode()">
@@ -84,8 +85,19 @@
                     <p id="debug_out">Off</p>
                 </div>
                 <div>
+                    <input type="checkbox" id="config_dead_links">
+                    <label for="config_dead_links">Dead Link Highlighting</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="config_saveload_data">
+                    <label for="config_saveload_data">Save/Load Data</label>
+                </div>
+            </div>
+            <div class="config mmc" id="config_misc">
+                <h2>Misc</h2>
+                <div>
                     <input type="checkbox" id="hotkey_set">
-                    <label for="hotkey_set" class="noselect">Enable Hotkeys</label>
+                    <label for="hotkey_set" class="noselect">Hotkeys</label>
                 </div>
                 <div id="config_meta">
                     <p>Scene Metadata:</p>
@@ -103,6 +115,14 @@
                     </div>
                 </div>
                 <div id="reset" onclick=reset_game()>Reset Game</div>
+            </div>
+            <div class="config links">
+                <h2>Links</h2>
+                <div>
+                    <a href="https://github.com/NachoToast/Ignominy" target="_blank"><img src="img/ui/github.png"></a>
+                    <a href="https://discord.gg/PEGUcb4" target="_blank"><img src="img/ui/discord.png"></a>
+                    <a href="https://nachotoast.com/Ignominy" target="_blank"><img src="img/ui/website.png"></a>
+                </div>
             </div>
         </div>
         <div id="header_1" class="header_pages hidden">

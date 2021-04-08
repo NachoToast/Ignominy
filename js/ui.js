@@ -198,16 +198,19 @@ function update_time() {
 
     hour = player.time.getHours(),
     minute = player.time.getMinutes(),
+    second = player.time.getSeconds(),
     a = "",
     time = player.config.chrono.time_format;
     // Selector Conversion
     // f = Marker
-    // 0 = Hour, 1 = Minute
+    // 0 = Hour, 1 = Minute, 2 = Second
     // 0 = Full, 1 = Short
     time = time.replace(/hh/g, "f00");
     time = time.replace(/h/g, "f01");
     time = time.replace(/mm/g, "f10");
     time = time.replace(/m/g, "f11");
+    time = time.replace(/ss/g, "f21");
+    time = time.replace(/s/g, "f20");
 
     if (player.config.chrono.time == 12) { // 12hr Conversion
         if (hour >= 12) a = "pm";
@@ -229,7 +232,12 @@ function update_time() {
         time = time.replace(/f10/g, local_minute);
     }
     if (time.includes("f11")) time = time.replace(/f11/g, minute);
-
+    if (time.includes("f20")) time = time.replace(/f20/g, second);
+    if (time.includes("f21")) {
+        let local_second = second;
+        if (second < 10) local_second = "0" + local_second;
+        time = time.replace(/f21/g, local_second);
+    }
     return time + a;
 }
 
@@ -376,7 +384,7 @@ function update_menu_elements() {
     if (player.homekingdom == "Default") {
         for (let i = 0, len = main_menu_cards.length; i < len; i++) {
             if (i == 1) continue;
-            console.log("hiding card " + i);
+            //console.log("hiding card " + i);
             main_menu_cards[i].classList.add("hidden");
         }
     }
@@ -387,6 +395,8 @@ function update_menu_elements() {
     }
 
     config_hotkeys.checked = player.config.keybinds;
+    config_dead_links.checked = player.config.devmode.dead_links;
+    config_saveload_data.checked = player.config.devmode.saveload_data;
 
 }
 
@@ -423,7 +433,9 @@ config_time_format = document.getElementById("config_time_format"),
 config_time_hours = document.getElementById("time_hours"),
 config_reverse = document.getElementById("chrono_reverse"),
 config_example = document.getElementById("config_example"),
-config_hotkeys = document.getElementById("hotkey_set");
+config_hotkeys = document.getElementById("hotkey_set"),
+config_dead_links = document.getElementById("config_dead_links"),
+config_saveload_data = document.getElementById("config_saveload_data");
 
 config_date_format.addEventListener("input", function() {
     player.config.chrono.date_format = config_date_format.value;
@@ -498,4 +510,14 @@ config_hotkeys.addEventListener("change", function() {
     if (this.checked) player.config.keybinds = true;
     else player.config.keybinds = false;
     update_keybind_config();
+})
+
+config_dead_links.addEventListener("change", function() {
+    if (this.checked) player.config.devmode.dead_links = true;
+    else player.config.devmode.dead_links = false
+})
+
+config_saveload_data.addEventListener("change", function() {
+    if (this.checked) player.config.devmode.saveload_data = true;
+    else player.config.devmode.saveload_data = false;
 })
