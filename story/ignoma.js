@@ -512,7 +512,7 @@ var story_ignoma = [
             version: "0.1.14",
             legacy_version: "0.1.1"
         }
-    },
+    }, // 12
     {
         id: 13,
         text: [
@@ -543,6 +543,571 @@ var story_ignoma = [
             version: "0.1.14",
             legacy_version: "0.1.1"
         }
-    }
+    }, // 13
+    {
+        id: 14,
+        text: [
+            {
+                content: [
+                    "You help organize the caravan and shortly set off for Freygrave. The sound of the ocean fades as you travel further inland, and as the journey nears its end you see the town of Freygrave approaching.",
+                    "As you arrive at Freygrave you disembark from the wagon and thank the others as they go on their way."
+                ]
+            },
+            {
+                content: [
+                    "You're now in Freygrave, a small town on the eastern border of Ignoma. There's not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 15
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.14",
+            legacy_version: "0.1.1"
+        }
+    }, // 14
+    {
+        id: 15,
+        text: [
+            {
+                content: [
+                    "You stand on the main streets, or rather street, of Freygrave."
+                ]
+            },
+            {
+                content: [
+                    "A few groups of people on horse-drawn wagons are travelling through the street."
+                ],
+                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 18
+            },
+            {
+                content: [
+                    "A large caravan headed of Wildedenn is preparing to depart soon."
+                ],
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 12,
+                alternate: [
+                    "The daily caravan to Wildedenn has already departed. You'll have to wait until tomorrow if you want to visit The Luma Empire."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Approach a wagon headed to Ebonfront.",
+                scene: 16,
+                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 18
+            },
+            {
+                text: "Approach a wagon headed towards Timberside.",
+                scene: 25,
+                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 18
+            },
+            {
+                text: "Ask to join the Wildedenn caravan.",
+                scene: 31,
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 12
+            },
+            {
+                text: "Wander the street.",
+                time: {minute: 15}
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.1"
+        }
+    }, // 15
+    {
+        id: 16,
+        text: [
+            {
+                content: [
+                    "You run up to a group of travellers who are headed in the direction of Ebonfront."
+                ]
+            },
+            {
+                content: [
+                    "\"We've got plenty of room if you need a lift to Ebonfront, don't worry about payment.\""
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Travel to Ebonfront.",
+                scene: 17,
+                time: {day: 1}
+            },
+            {
+                text: "Nevermind.",
+                scene: 15
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.1"
+        }
+    }, // 16
+    {
+        id: 17,
+        text: [
+            {
+                content: [
+                    "Thanking the travellers for their kindness, you board the wagon and head to Ebonfront.",
+                    "The day-long journey seems to fly by in an instant, and before you know it you're approaching the outskirts of Ebonfront."
+                ]
+            },
+            {
+                content: [
+                    "You've arrived at Ebonfront, Ignoma's capital city and home to it's reputable fishing industry and glamorous ports."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 11
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.1"
+        }
+    }, // 17
+    {
+        id: 18,
+        text: [
+            {
+                content: [
+                    "You run up to the head of the caravan and ask to join.",
+                    "\"Sure that's fine, we're in a bit of a hurry though so we're leaving straight away, still on board?\""
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "\"Sure.\"",
+                scene: 19,
+                time: {hour: 23, minute: 30}
+            },
+            {
+                text: "Nevermind."
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 18
+    {
+        id: 19,
+        text: [
+            {
+                content: [
+                    "You hastily join the caravan and set off towards Timberside. As you head further inland the ocean's sound and breeze slowly fades, replaced with the smell of pine.",
+                    "The day-long journey goes by quickly and you arrive earlier than expected due to the caravan's haste.",
+                    "You thank the travellers for their generosity and quickly disembark the wagon as they make their way further into the residential area of town."
+                ]
+            },
+            {
+                content: [
+                    "Welcome to Timberside, a medium-sized town on Ignoma's southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 20
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 19
+    {
+        id: 20,
+        text: [
+            {
+                content: [
+                    "You wander through the main streets of Timberside."
+                ]
+            },
+            {
+                content: [
+                    "Various farmers from nearby Ignoman and Light Witesian villages are managing stalls along the main roads, selling fresh produce and a multitude of animal products."
+                ],
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 18
+            },
+            {
+                content: [
+                    "A large hub for arriving and departing caravans is situated further up the main road, crowded with the many travelling merchants, villagers, hunters, and more all looking to go somewhere."
+                ],
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 18,
+                alternate: [
+                    "A large hub for arriving and departing caravans is situated further up the main road, at this time little activity is present around it, although it still remains open."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Make your way towards the travel hub.",
+                scene: 21,
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 18
+            },
+            {
+                text: "Visit the local inn.",
+                scene: 28
+            },
+            {
+                text: "Wander the streets.",
+                time: {minute: 15}
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 20
+    {
+        id: 21,
+        text: [
+            {
+                content: [
+                    "You enter the Timberside travel hub through it's large front-facing gateway. It's spaceious interior is full of parked wagons and carriages."
+                ]
+            },
+            {
+                content: [
+                    "At this time of day, the building is crowded with carriages, wagons, and carts carrying all sorts of goods, standing out amidst a sea of merchants, travellers, and locals.",
+                    "A few passenger carriages line up at the far end of the building, likely waiting for customers to transport."
+                ],
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 18,
+                alternate: [
+                    "There are very few people wandering around the building at this time, a few guards here and there and sparse merchants, some of whom seem less than savoury."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Go towards the taxi carriages.",
+                scene: 22,
+                conditions: (player) => player.time.getHours() >= 6 && player.time.getHours() <= 18,
+                alternate: [
+                    "You'll have to wait until 6am if you want to catch a lift anywhere."
+                ]
+            },
+            {
+                text: "Leave the building.",
+                scene: 20
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 21
+    {
+        id: 22,
+        text: [
+            {
+                content: [
+                    "You approach the line of waiting carriages, a staff member nearby walks up to you.",
+                    "\"Rides from the Timberside travel hub are priced at the standard 20 gold coins, where are you headed?\""
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Ebonfront",
+                scene: 23,
+                conditions: (player) => player.gold >= 20,
+                action: function() {player.gold -= 20},
+                time: {day: 1}
+            },
+            {
+                text: "Freygrave",
+                scene: 24,
+                conditions: (player) => player.gold >= 20,
+                action: function() {player.gold -= 20},
+                time: {hour: 12}
+            },
+            {
+                text: "Basinfront",
+                scene: 27,
+                conditions: (player) => player.gold >= 20,
+                action: function() {player.gold -= 20},
+                time: {day: 1}
+            },
+            {
+                text: "Nevermind",
+                scene: 21
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 22
+    {
+        id: 23,
+        text: [
+            {
+                content: [
+                    "The staff member quickly hails a carriage and sends you off on your way to Ebonfront once you pay your fare.",
+                    "The journey is plain and uneventful, and after a day the city of Ebonfront visibly draws closer."
+                ]
+            },
+            {
+                content: [
+                    "You've arrived at Ebonfront, Ignoma's capital city and home to it's reputable fishing industry and glamorous ports."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 11
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 23
+    {
+        id: 24,
+        text: [
+            {
+                content: [
+                    "The staff member quickly hails a carriage and send you off on your way to Freygrave.",
+                    "The journey passes by uneventfully, and once the half-day is up you thank the driver as you dismount the carriage onto the streets of Freygrave."
+                ]
+            },
+            {
+                content: [
+                    "You're now in Freygrave, a small town on the eastern border of Ignoma, there's not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 15
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 24
+    {
+        id: 25,
+        text: [
+            {
+                content: [
+                    "You run up to a group of travellers who are headed in the direction of Timberside, one of them stops to talk to you.",
+                    "\"15 Gold if you want to tag along, not negotiating.\""
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Accept",
+                scene: 26,
+                time: {hour: 12},
+                conditions: (player) => player.gold >= 15,
+                alternate: [
+                    "You do not have enough gold to accept this offer."
+                ]
+            },
+            {
+                text: "Decline",
+                scene: 15
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        }
+    }, // 25
+    {
+        id: 26,
+        text: [
+            {
+                content: [
+                    "You give the travellers 15 gold and join their caravan. The weather takes a turn on the way to Timberside but luckily the carriages are enclosed by a waterproof layer of tarp.",
+                    "As the journey comes to an end and the rain settles, you being to see the outskirts of Timberside coming into view."
+                ]
+            },
+            {
+                content: [
+                    "Welcome to Timberside. a medium-sized town on Ignoma's southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 20
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.2"
+        } 
+    }, // 26
+    {
+        id: 27,
+        text: [
+            {
+                content: [
+                    "You give the staff member the gold as they hail a waiting carriage.",
+                    "As you being to journey towards Light Witesia, the surrounding woods become more dense and the path less built-up. Signs of human civilization become less frequent all the way up until you reach the village of Basinfront."
+                ]
+            },
+            {
+                content: [
+                    "You've reached Basinfront, a prominent village in the north of Light Witesia. Hunters and explorers frequent this village due to its close proximity to the vast, dense, and unexplored jungles surrounding it."
+                ],
+                norepeat: true
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 101
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.3"
+        }
+    }, // 27
+    {
+        id: 28,
+        text: [
+            {
+                content: [
+                    "You stand inside Timberside's primary inn."
+                ]
+            },
+            {
+                content: [
+                    "The innkeeper stands at the counter."
+                ],
+                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 22,
+                alternate: [
+                    "An innkeeper working the night shift stands at the counter."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Approach them.",
+                scene: 29
+            },
+            {
+                text: "Go upstairs to your room.",
+                scene: 30,
+                conditions: () => has_inn(30)
+            },
+            {
+                text: "Leave",
+                scene: 20
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.5"
+        }
+    }, // 28
+    {
+        id: 29,
+        text: [
+            {
+                content: [
+                    "You walk up to the counter."
+                ]
+            },
+            {
+                content: [
+                    "Welcome to the inn, we've got rooms for 12 gold each, and serve meals as well."
+                ],
+                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 22,
+                alternate: [
+                    "Welcome, rooms are 12 gold each and the kitchen opens at 7."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "\"A room please.\"",
+                conditions: (player) => player.gold >= 12 && has_inn(30) == false,
+                scene: 28,
+                action: function() {player.gold -= 12; add_inn(30)},
+                alternate: [
+                    "You do not have enough gold for a room."
+                ]
+            },
+            {
+                text: "\"What's on the menu?\""
+            },
+            {
+                text: "\"Nevermind.\"",
+                scene: 28
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.5"
+        }
+    }, // 29
+    {
+        id: 30,
+        text: [
+            {
+                content: [
+                    "You are in your room at the Timberside inn."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Leave",
+                scene: 28
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.15",
+            legacy_version: "0.1.5"
+        }
+    }, // 30
 ]
 story = story.concat(story_ignoma);
