@@ -43,6 +43,7 @@ var story = [
                 //norepeat: [id, min, true], // hide if visited specified scene < min
                 fatigue: false,
                 //fatigue: number, // increments fatigue by number, if fatigue tab absent will increment by default amount.
+                perm_timestamps: true, // always shows time stamps
                 action: function() {
                     if (player.stats.strength.amount < 5) player.stats.strength.amount += 1,
                     player.homekingdom = "The Kingdom of Dalia"

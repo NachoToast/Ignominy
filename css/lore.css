@@ -164,6 +164,11 @@
     padding-bottom: 20px;
 }
 
+.lore #name_submit .nope {
+    color: lightcoral;
+    cursor: not-allowed;
+}
+
 
 /* Difficulties */
 .location_options .lo_d_0 {color: lightgreen}

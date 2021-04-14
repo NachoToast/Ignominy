@@ -1,11 +1,37 @@
-const version = "0.1.15";
-const harsh_check = true;
-const game_window = document.getElementById("game");
+const version = "0.1.16",
+harsh_check = true,
+game_window = document.getElementById("game"),
 
-const scene_presets = {
+scene_presets = {
     default: {fatigue: 0.3, time: {second: 5}},
     caravan: {fatigue: 10} // unused
-}
+},
+
+defaults = {
+    timestamps_config: {
+        enabled: true,
+        threshold: 15,
+        unit: 0 // 0 - Minute, 1 - Hour, 2 - Day
+    },
+    devmode: {
+        dead_links: true,
+        saveload_data: false,
+        scene_tracking: false
+    },
+    random: global_random(),
+    chrono: {
+        time: 12, // 12 or 24
+        order: 0, // 0 = Date Time, 1 = Time Date
+        ordinals: true,
+        date_format: "dddd d mmmm yyyy",
+        time_format: "h:mm"
+    },
+    meta: {
+        authors: false,
+        version: false,
+        legacy_version: false
+    },
+};
 
 var player = {
     name: "Default",
@@ -36,53 +62,56 @@ var player = {
         }
     },
     scene: -1,
+    previous_scene: null,
     config: {
         headers: [0, 1, 2, 3, 4],
         debug: 0,
-        devmode: {
-            dead_links: false,
-            saveload_data: false
-        },
-        chrono: {
-            time: 12, // 12 or 24
-            order: 0, // 0 = Date Time, 1 = Time Date
-            ordinals: true,
-            date_format: "dddd d mmmm yyyy",
-            time_format: "h:mm"
-        },
-        meta: {
-            authors: false,
-            version: false,
-            legacy_version: false
-        },
-        keybinds: true
+        devmode: defaults.devmode,
+        chrono: defaults.chrono,
+        meta: defaults.meta,
+        keybinds: true,
+        timestamps: defaults.timestamps_config
     },
     history: [],
     version: version,
     time: new Date(3051, 0, 1, 7, 0, 0, 0),
-    random: global_random(),
+    random: defaults.random,
     inns: [],
     latest_time_increment: 0
 }
 
 function version_debugger(save, verbose) {
-    // use when introducing new object fields (for both story [unlikely] and player) in future versions.
+    // use when introducing new object fields (for story [unlikely] and player objects) in future versions.
     //if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
+
+    // 0.1.16
     save.version = version;
     if (save?.random === undefined) {
-        save.random = global_random();
+        save.random = defaults.random;
         if (verbose) console.log("%cAdded random field.","color: gray");
     }
     if (save?.inns === undefined) {
         save.inns = [];
         if (verbose) console.log("%cAdded inns array.","color: gray");
     }
+    if (save?.config.timestamps === undefined) {
+        save.config.timestamps = defaults.timestamps_config;
+        if (verbose) console.log("%cAdded config.timestamps object.", "color: gray");
+    }
+    if (save?.previous_scene === undefined) {
+      save.previous_scene = null;
+      if (verbose) console.log("%cAdded previous_scene field.", "color: gray");
+    }
+    if (save?.config?.devmode?.scene_tracking === undefined) {
+        save.config.devmode.scene_tracking = defaults.devmode.scene_tracking;
+        if (verbose) console.log("%cAdded config.devmode.scene_tracking field.", "color: gray");
+    }
     return save;
 }
 
 function global_random(min, max, step) { // returns number between min (inclusive) and max (exclusive).
     if (min === undefined) {
-        min = 0;
+        min = 1;
         max = 101;
         step = 1;
     }
@@ -119,7 +148,14 @@ function update_keybind_config() {
     })
 }
 
+function filter_text(string) {
+    string = string.replace(/PLAYERNAME/g, player.name);
+    return string;
+}
+
 function next_scene(scene) {
+    if (player.config.devmode.scene_tracking) console.log(`Updating previous scene from ${player.previous_scene} to ${player.scene}`);
+    player.previous_scene = player.scene;
     if (player.config.debug > 0) console.log(`%c========== Progressing Scene ==========`, 'color: gold; font-size: 14px');
     clear_game();
     if (scene === undefined) {
@@ -160,9 +196,11 @@ function display_scene(scene) {
     for (let i = 0, len = scene.text.length; i < len; i++) {
         if (player.config.debug > 1) console.log(`%cChecking text ${i + 1} conditions.`, 'color: aquamarine');
         if (validate_conditions(scene.text[i])) valid_text.push(scene.text[i].content);
-        else if (!(scene.text[i].alternate === undefined)) {
-            valid_text.push(scene.text[i].alternate);
-            if (player.config.debug > 2) console.log("But found alternate text.");
+        else if (scene.text[i].alternate !== undefined) {
+            if (validate_hard_conditions(scene.text[i])) {
+                valid_text.push(scene.text[i].alternate);
+                if (player.config.debug > 2) console.log("But found alternate text.");
+            }
         }
     }
     if (player.config.debug > 0) console.log(`%cFound ${valid_text.length} valid text nodes.`, 'color: magenta');
@@ -171,7 +209,7 @@ function display_scene(scene) {
     for (let i = 0, len = valid_text.length; i < len; i++) {
         for (let j = 0, j_len = valid_text[i].length; j < j_len; j++) {
             let p = document.createElement("p");
-            p.innerHTML = valid_text[i][j];
+            p.innerHTML = filter_text(valid_text[i][j]);
             d.appendChild(p);
         }
 
@@ -237,6 +275,33 @@ function display_options(scene) {
     // condition checking
     let valid_option = [],
     valid_option_true = [];
+
+    // inn room/rest scenes standard options (always before other options)
+    if (rest_scenes.indexOf(scene.id) !== -1) {
+        valid_option.push({
+            text: "Sleep (-10% Fatigue)",
+            time: {hour: 1},
+            action: function() {player.stats.fatigue *= 0.9},
+            fatigue: false,
+            perm_timestamps: true
+        },
+        {
+            text: "Sleep (-50% Fatigue) (Restores Health)",
+            time: {hour: 3},
+            action: function() {player.fatigue *= 0.5; player.health = player.max_health},
+            fatigue: false,
+            perm_timestamps: true
+        },
+        {
+            text: "Sleep (-100% Fatigue) (Restores Health & Mana)",
+            time: {hour: 6},
+            action: function() {player.fatigue = 0; player.health = player.max_health; player.mana = player.max_mana},
+            fatigue: false,
+            perm_timestamps: true
+        });
+        valid_option_true.push(true, true, true);
+    }
+
     for (let i = 0, len = scene.options.length; i < len; i++) {
         if (player.config.debug > 1) console.log(`%cChecking option ${i + 1} conditions.`, 'color: turquoise');
         //console.log(scene.options[i]);
@@ -244,10 +309,12 @@ function display_options(scene) {
             valid_option.push(scene.options[i]);
             valid_option_true.push(true)
         }
-        else if (!(scene.options[i].alternate === undefined)) {
-            valid_option.push(scene.options[i]);
-            valid_option_true.push(false);
-            if (player.config.debug > 2) console.log("But found alternate text.");
+        else if (scene.options[i].alternate !== undefined) {
+            if (validate_hard_conditions(scene.options[i])) {
+                valid_option.push(scene.options[i]);
+                valid_option_true.push(false);
+                if (player.config.debug > 2) console.log("But found alternate text.");
+            }
         }
     }
     if (player.config.debug > 0) console.log(`%cFound ${valid_option.length} valid option nodes.`, 'color: magenta');
@@ -258,12 +325,19 @@ function display_options(scene) {
         let btn = document.createElement("btn");
         if (valid_option_true[i] == true) {
             btn.classList.add("std_options", "noselect");
+
+            // keybinds
             if (player.config.keybinds == true) btn.innerHTML = keybind_text(current_options_displayed.length) + valid_option[i].text;
             else btn.innerHTML = valid_option[i].text;
+
+            // timestamps
+            if (player.config.timestamps.enabled == true || valid_option[i]?.perm_timestamps === true && valid_option[i]?.time !== undefined) btn.innerHTML = btn.innerHTML + get_timestamps(valid_option[i].time);
+
             //if (valid_option[i]?.scene === undefined) valid_option[i].scene = scene.id; // big brain
             btn.addEventListener('click', () => option_progress_scene(valid_option[i]));
             current_options_displayed.push(valid_option[i]);
             //console.log(valid_option[i])
+            btn.innerHTML = filter_text(btn.innerHTML);
         }
         else {
             btn.classList.add("std_options_fake");
@@ -283,12 +357,46 @@ function display_options(scene) {
     //if (player.config.keybinds == true) display_keybinds();
 }
 
+function get_timestamps(time_object) {
+        /* date_object format: {
+        year: int,
+        month: int,
+        week: int,
+        day: int,
+        hour: int,
+        minute: int,
+        second: int
+    } */
+
+    //unit: 0 - Minute, 1 - Hour, 2 - Day
+    if (time_object?.year !== undefined) return ` [${time_object.year}y]`;
+    if (time_object?.month !== undefined) return ` [${time_object.month}mo]`;
+    if (time_object?.week !== undefined) return ` [${time_object.week}w]`;
+
+    // assume threshold is never >= 7 days
+    if (player.config.timestamps.unit >= 2 && time_object?.day !== undefined && time_object.day >= player.config.timestamps.threshold) return ` [${time_object.day}d]`;
+    if (player.config.timestamps.unit >= 1) {
+        // assume threshold is never >= 24 hours
+        if (time_object?.day !== undefined) return ` [${time_object.day}d]`;
+        if (time_object?.hour !== undefined && time_object.hour >= player.config.timestamps.threshold) return ` [${time_object.hour}h]`
+    }
+    if (player.config.timestamps.unit >= 0) {
+        if (time_object?.day !== undefined) return ` [${time_object.day}d]`;
+        // assume threshold is never >= 60 minutes
+        if (time_object?.hour !== undefined) return ` [${time_object.hour}h]`;
+        if (time_object?.minute !== undefined && time_object.minute >= player.config.timestamps.threshold) return ` [${time_object.minute}m]`;
+    }
+
+    return "";
+}
+
 var current_options_displayed = [];
 
 function validate_option_scene(option) {
     // returns true if option's scene is not found.
     if (!option.scene) return false;
     if (story.map(e => e.id).indexOf(option.scene) == -1) return true;
+    if (story[story.map(e => e.id).indexOf(option.scene)]?.options?.length === undefined) return true;
     else return false;
 }
 
@@ -542,6 +650,12 @@ function validate_conditions(part) {
     return true;
 }
 
+function validate_hard_conditions(part) {
+    if (part.hard_conditions === undefined) return true;
+    if (part.hard_conditions(player)) return true;
+    return false;
+}
+
 function save_game(type) {
     if (type == "browser") {
         localStorage.setItem("Ignominy Save", JSON.stringify(player));
@@ -549,7 +663,7 @@ function save_game(type) {
         change_save_option(0, "Saved to browser!", "#90EE90", "Successfully saved data to browser storage.");
     }
     else if (type == "file") {
-        let file = new Blob([JSON.stringify(player)], {type: 'application/json'}),
+        let file = new Blob([JSON.stringify(player, null, 2)], {type: 'application/json'}),
         elem = window.document.createElement("a");
         elem.href = window.URL.createObjectURL(file);
         elem.download = `${player.name}_${version}.ignosave`;

@@ -1,3 +1,5 @@
+var rest_scenes = [];
+
 var story = [
     {
        id: -1,

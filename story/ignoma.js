@@ -13,8 +13,7 @@ var story_ignoma = [
                 text: "Continue",
                 scene: 1,
                 time: false,
-                fatigue: false,
-                time: false
+                fatigue: false
             }
         ],
         meta: {
@@ -312,27 +311,6 @@ var story_ignoma = [
         ],
         options: [
             {
-                text: "Sleep [1hr] (-10% Fatigue)",
-                scene: 10,
-                action: function() {player.fatigue *= 0.9},
-                fatigue: false,
-                time: {hour: 1}
-            },
-            {
-                text: "Sleep [3hr] (-50% Fatigue) (Restores Health)",
-                scene: 10,
-                action: function() {player.fatigue *= 0.5; player.health = player.max_health},
-                fatigue: false,
-                time: {hour: 3}
-            },
-            {
-                text: "Sleep [6hr] (-100% Fatigue) (Restors Health & Mana)",
-                scene: 10,
-                action: function() {player.fatigue = 0; player.health = player.max_health; player.mana = player.max_health},
-                fatigue: false,
-                time: {hour: 6}
-            },
-            {
                 text: "Go downstairs.",
                 scene: 9
             }
@@ -407,27 +385,6 @@ var story_ignoma = [
             }
         ],
         options: [
-            {
-                text: "Sleep [1hr] (-10% Fatigue)",
-                scene: 10,
-                action: function() {player.fatigue *= 0.9},
-                fatigue: false,
-                time: {hour: 1}
-            },
-            {
-                text: "Sleep [3hr] (-50% Fatigue) (Restores Health)",
-                scene: 10,
-                action: function() {player.fatigue *= 0.5; player.health = player.max_health},
-                fatigue: false,
-                time: {hour: 3}
-            },
-            {
-                text: "Sleep [6hr] (-100% Fatigue) (Restors Health & Mana)",
-                scene: 10,
-                action: function() {player.fatigue = 0; player.health = player.max_health; player.mana = player.max_health},
-                fatigue: false,
-                time: {hour: 6}
-            },
             {
                 text: "Go downstairs.",
                 scene: 9
@@ -531,7 +488,8 @@ var story_ignoma = [
                 alternate: [
                     "You don't have enough gold to accept this offer."
                 ],
-                action: function() {player.gold -= 20}
+                action: function() {player.gold -= 20},
+                time: {day: 1, minute:5}
             },
             {
                 text: "Decline",
@@ -552,12 +510,6 @@ var story_ignoma = [
                     "You help organize the caravan and shortly set off for Freygrave. The sound of the ocean fades as you travel further inland, and as the journey nears its end you see the town of Freygrave approaching.",
                     "As you arrive at Freygrave you disembark from the wagon and thank the others as they go on their way."
                 ]
-            },
-            {
-                content: [
-                    "You're now in Freygrave, a small town on the eastern border of Ignoma. There's not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire."
-                ],
-                norepeat: true
             }
         ],
         options: [
@@ -575,6 +527,12 @@ var story_ignoma = [
     {
         id: 15,
         text: [
+            {
+                content: [
+                    "Freygrave is a small town on the eastern border of Ignoma. There isn't much to do here as the town is merely used as a checkpoint between Ignoma and The Luma Empire."
+                ],
+                norepeat: true
+            },
             {
                 content: [
                     "You stand on the main streets, or rather street, of Freygrave."
@@ -717,12 +675,6 @@ var story_ignoma = [
                     "The day-long journey goes by quickly and you arrive earlier than expected due to the caravan's haste.",
                     "You thank the travellers for their generosity and quickly disembark the wagon as they make their way further into the residential area of town."
                 ]
-            },
-            {
-                content: [
-                    "Welcome to Timberside, a medium-sized town on Ignoma's southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia."
-                ],
-                norepeat: true
             }
         ],
         options: [
@@ -740,6 +692,13 @@ var story_ignoma = [
     {
         id: 20,
         text: [
+            {
+                content: [
+                    "Welcome to Timberside, a medium-sized town on Ignoma's southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia."
+                ],
+                conditions: (player) => player.hometown !== "Timberside",
+                norepeat: true
+            },
             {
                 content: [
                     "You wander through the main streets of Timberside."
@@ -900,12 +859,6 @@ var story_ignoma = [
                     "The staff member quickly hails a carriage and send you off on your way to Freygrave.",
                     "The journey passes by uneventfully, and once the half-day is up you thank the driver as you dismount the carriage onto the streets of Freygrave."
                 ]
-            },
-            {
-                content: [
-                    "You're now in Freygrave, a small town on the eastern border of Ignoma, there's not much to do here, the town is merely used as a checkpoint between Ignoma and The Luma Empire."
-                ],
-                norepeat: true
             }
         ],
         options: [
@@ -959,12 +912,6 @@ var story_ignoma = [
                     "You give the travellers 15 gold and join their caravan. The weather takes a turn on the way to Timberside but luckily the carriages are enclosed by a waterproof layer of tarp.",
                     "As the journey comes to an end and the rain settles, you being to see the outskirts of Timberside coming into view."
                 ]
-            },
-            {
-                content: [
-                    "Welcome to Timberside. a medium-sized town on Ignoma's southeast border. Timberside is a common stopover point and trade center for the various small villages in Light Witesia."
-                ],
-                norepeat: true
             }
         ],
         options: [
@@ -987,12 +934,6 @@ var story_ignoma = [
                     "You give the staff member the gold as they hail a waiting carriage.",
                     "As you being to journey towards Light Witesia, the surrounding woods become more dense and the path less built-up. Signs of human civilization become less frequent all the way up until you reach the village of Basinfront."
                 ]
-            },
-            {
-                content: [
-                    "You've reached Basinfront, a prominent village in the north of Light Witesia. Hunters and explorers frequent this village due to its close proximity to the vast, dense, and unexplored jungles surrounding it."
-                ],
-                norepeat: true
             }
         ],
         options: [
@@ -1109,5 +1050,63 @@ var story_ignoma = [
             legacy_version: "0.1.5"
         }
     }, // 30
-]
+    {
+        id: 31,
+        text: [
+            {
+                content: [
+                    "You walk to up the caravan overseers and enquire about joining.",
+                    "\"It's 30 gold if you're joining as an ordinary traveller, The Luma Empire is a dangerous place and hiring protection is costly. If you're any good with a weapon however, we'd be more than happy having you onboard for free.\""
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Join Caravan",
+                conditions: (player) => player.gold >= 30,
+                action: function() {player.gold -= 30},
+                time: {day: 5},
+                scene: 32,
+                alternate: [
+                    "You do not have enough gold to join the caravan."
+                ]
+            },
+            {
+                text: "Nevermind",
+                scene: 15
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.16",
+            legacy_version: "0.1.5"
+        }
+    }, // 31
+    {
+        id: 32,
+        text: [
+            {
+                content: [
+                    "You pay the gold and join the caravan. By midday everyone is ready and you set off on the 5-day journey to Wildedenn.",
+                    "The lush forestry and grassy plains of Ignoma are left behind and the surroundings turn into vast sandy deserts and dunes as far as the eye can see.",
+                    "You cross few others on the road, most travelling in a similar manner to your caravan, heavily guarded and leveraging safety in numbers.",
+                    "Thanks to the caravan's hired guards, most lurking bandits are deterred and you are able to get to Wildedenn without any trouble.",
+                    "You thank the caravan organisers for helping you safely get to Wildedenn, they bid you farewell."
+                ]
+            }
+        ],
+        options: [
+            {
+                text: "Continue",
+                scene: 201
+            }
+        ],
+        meta: {
+            authors: ["NachoToast"],
+            version: "0.1.16",
+            legacy_version: "0.1.5"
+        }
+    }, // 32
+];
 story = story.concat(story_ignoma);
+rest_scenes.push(8, 10, 30);

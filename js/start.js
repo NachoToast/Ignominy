@@ -238,9 +238,13 @@ input_name_submit = document.getElementById("input_name_submit");
 input_name.addEventListener("keyup", function(input) {
     if (input_name.value.length < 1 || input_name.value.length > 20) {
         input_name_submit.disabled = true;
+        input_name_submit.classList.add("nope");
         return;
     }
-    if (input_name_submit.disabled == true) input_name_submit.disabled = false;
+    if (input_name_submit.disabled == true) {
+        input_name_submit.disabled = false;
+        input_name_submit.classList.remove("nope");
+    }
     if (input.key == "Enter") {
         submit_name();
     }

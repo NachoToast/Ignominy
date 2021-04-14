@@ -9,9 +9,16 @@
     <link href="css/main.css" rel="stylesheet" type="text/css">
     <script defer src="story/base.js"></script>
     <script defer src="story/ignoma.js"></script>
+    <script defer src="story/the_luma_empire.js"></script>
+    <script defer src="story/light_witesia.js"></script>
+    <script defer src="story/the_kingdom_of_dalia.js"></script>
+    <script defer src="story/zalrord.js"></script>
+    <script defer src="story/the_kingdom_of_cataclite.js"></script>
+    <script defer src="story/seld.js"></script>
     <script defer src="js/main.js"></script>
     <script defer src="js/ui.js"></script>
     <script defer src="js/start.js"></script>
+    <script defer src="js/tools.js"></script>
 </head>
 <body>
     <div id="header">
@@ -90,7 +97,11 @@
                 </div>
                 <div>
                     <input type="checkbox" id="config_saveload_data">
-                    <label for="config_saveload_data">Save/Load Data</label>
+                    <label for="config_saveload_data">Log Save/Load Data</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="config_scene_tracking">
+                    <label for="config_scene_tracking">Scene Tracking</label>
                 </div>
             </div>
             <div class="config mmc" id="config_misc">
@@ -98,6 +109,8 @@
                 <div>
                     <input type="checkbox" id="hotkey_set">
                     <label for="hotkey_set" class="noselect">Hotkeys</label>
+                    <input type="checkbox" id="timestamps_set" style="margin-left: 5px">
+                    <label for="timestamps_set" class="noselect">Timestamps</label>
                 </div>
                 <div id="config_meta">
                     <p>Scene Metadata:</p>
@@ -236,7 +249,7 @@
             <div id="name_submit">
                 <h1>This will be the tale of...</h1>
                 <input id="player_input_name" placeholder="NachoToast" minlength=1 maxlength=20 autofocus required>
-                <button id="input_name_submit" disabled onclick="submit_name()">Continue</button>
+                <button id="input_name_submit" class="nope" disabled onclick="submit_name()">Continue</button>
             </div>
         </div>
     </div>

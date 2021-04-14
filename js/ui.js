@@ -397,6 +397,8 @@ function update_menu_elements() {
     config_hotkeys.checked = player.config.keybinds;
     config_dead_links.checked = player.config.devmode.dead_links;
     config_saveload_data.checked = player.config.devmode.saveload_data;
+    config_timestamps_enable.checked = player.config.timestamps.enabled;
+    config_scene_tracking.checked = player.config.devmode.scene_tracking;
 
 }
 
@@ -435,7 +437,17 @@ config_reverse = document.getElementById("chrono_reverse"),
 config_example = document.getElementById("config_example"),
 config_hotkeys = document.getElementById("hotkey_set"),
 config_dead_links = document.getElementById("config_dead_links"),
-config_saveload_data = document.getElementById("config_saveload_data");
+config_saveload_data = document.getElementById("config_saveload_data"),
+config_timestamps_enable = document.getElementById("timestamps_set"),
+config_scene_tracking = document.getElementById("config_scene_tracking");
+
+config_scene_tracking.addEventListener("input", function() {
+    player.config.devmode.scene_tracking = this.checked;
+})
+
+config_timestamps_enable.addEventListener("input", function() {
+        player.config.timestamps.enabled = this.checked;
+})
 
 config_date_format.addEventListener("input", function() {
     player.config.chrono.date_format = config_date_format.value;
