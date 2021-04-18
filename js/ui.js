@@ -17,7 +17,7 @@ function show_header(option) {
         console.log("Date");
     }
     else if (option == 4) { // Inventory
-        console.log("Inventory");
+        open_inventory();
     }
     header_pages[current_header]?.classList.add("hidden");
     header_pages[option].classList.remove("hidden");
@@ -421,8 +421,18 @@ header_pages = document.getElementsByClassName("header_pages"),
 current_header = -1,
 header = document.getElementById("header");
 
-window.addEventListener("resize", update_header_borders);
-setTimeout(update_header_borders, 600);
+window.addEventListener("resize", recheck_ui_elements);
+setTimeout(recheck_ui_elements, 600);
+
+function recheck_ui_elements() {
+    update_header_borders();
+    calibrate_trade_menu();
+    if (Object.values(player.config.meta).indexOf(true) !== -1) calibrate_meta(document.getElementsByClassName("std_meta_window")[0]);
+}
+
+function calibrate_meta(meta_element) {
+    meta_element.style.marginTop = window.innerHeight - header.offsetHeight + "px";
+}
 
 var config_debug = document.getElementById("debug_set"),
 config_debug_out = document.getElementById("debug_out"),
@@ -533,3 +543,149 @@ config_saveload_data.addEventListener("change", function() {
     if (this.checked) player.config.devmode.saveload_data = true;
     else player.config.devmode.saveload_data = false;
 })
+
+var trade_menu = document.getElementById("trade"),
+trade_shop = document.getElementById("trade_shop");
+
+function calibrate_trade_menu() {
+    //trade_menu.style.minHeight = window.innerHeight - header.offsetHeight - 40 + "px";
+}
+
+function toggle_trade_menu(currently_open) {
+    if (currently_open) {
+        trade_menu.style.display = "none";
+        doing_trade = false;
+        game_window.style.display = "flex";
+        document.removeEventListener("keydown", function(e) {
+            if (e.key !== "x") return;
+            toggle_trade_menu(true);
+        });
+        return;
+    }
+    trade_menu.style.display = "flex";
+    document.addEventListener("keydown", function(e) {
+        if (e.key !== "x") return;
+        toggle_trade_menu(true);
+    });
+    doing_trade = true;
+    game_window.style.display = "none";
+    recheck_ui_elements(); // holy shit it works as intended
+}
+
+var inventory_title = document.getElementById("inv_title");
+inventory_container = document.getElementById("inv_container");
+
+function open_inventory() {
+    let unique_item_count = player.inventory.length,
+    full_item_count = 0;
+    inv_items = [];
+    inventory_container.innerHTML = "";
+
+    if (unique_item_count != 0) {
+        for (let i = 0; i < unique_item_count; i++) {
+            // find the item in global items array
+            let item_index = item_map.indexOf(player.inventory[i].name);
+            if (item_index == -1) {
+                console.warn(`Couldn't find item ${i + 1} from players inventory in global items array! (${player.inventory[i].name})`);
+                continue;
+            }
+            let item = items[item_index],
+            item_element = inventory_generate_item_card(item, i);
+            inventory_container.appendChild(item_element);
+            inv_items.push(item_element);
+            full_item_count += player.inventory[i].count;
+    
+            
+        }
+    }
+    inventory_title.innerHTML = `${player.name}'s Inventory (<span title="Unique item count" class="hover_gray">${unique_item_count}</span> <span title="Total item count" class="hover_gray">[${full_item_count}]</span>)`;
+}
+
+function inventory_generate_item_card(item, index) {
+    // item div
+    let d = document.createElement("div");
+    d.classList.add("inv_item");
+    // item image
+    let img = document.createElement("img");
+    img.src = `img/item/${item.src}`;
+    d.appendChild(img);
+    // div with the rest
+    let d2 = document.createElement("div");
+    d.appendChild(d2);
+    // item name + count
+    let h1 = document.createElement("h1");
+    var count = player.inventory[index].count;
+    h1.innerHTML = `${item.name} (${count})`;
+    d2.appendChild(h1);
+    // item description
+    let desc = document.createElement("p");
+    desc.innerHTML = item.desc;
+    d2.appendChild(desc);
+    // use/discard div
+    var d3 = document.createElement("div");
+    d2.appendChild(d3);
+    // (use) div [not yet sure if should implement this feature]
+    /*if (item?.use !== undefined) {
+        let p = document.createElement("p");
+        p.innerHTML = "Use:";
+        d3.appendChild(p);
+        let p1 = document.createElement("p");
+        p1.classList.add("iu");
+        p1.innerHTML = "1";
+        p1.onclick = function() {inventory_use(index, 1)};
+        d3.appendChild(p1);
+        if (count >= 50) {
+            let p = document.createElement("p");
+            p.innerHTML = "10";
+            p.classList.add("iu");
+            p.onclick = function() {inventory_use(index, 10)};
+            d3.appendChild(p);
+        }
+        else if (count >= 10) {
+            let p = document.createElement("p");
+            p.innerHTML = "5";
+            p.classList.add("iu");
+            p.onclick = function() {inventory_use(index, 5)};
+            d3.appendChild(p);  
+        }
+        if (count > 1) {
+            let p = document.createElement("p");
+            p.innerHTML = "All";
+            p.classList.add("iu");
+            p.onclick = function() {inventory_use(index, count)};
+            d3.appendChild(p);
+        }
+    }*/
+    let d4 = document.createElement("div");
+    d2.appendChild(d4);
+    let p = document.createElement("p");
+    p.innerHTML = "Discard:"
+    d4.appendChild(p);
+    let p1 = document.createElement("p");
+    p1.classList.add("id");
+    p1.innerHTML = "1";
+    p1.onclick = function() {inventory_discard(index, 1)};
+    d4.appendChild(p1);
+    if (count >= 50) {
+        let p = document.createElement("p");
+        p.innerHTML = "10";
+        p.classList.add("id");
+        p.onclick = function() {inventory_discard(index, 10)};
+        d4.appendChild(p);
+    }
+    else if (count >= 10) {
+        let p = document.createElement("p");
+        p.innerHTML = "5";
+        p.classList.add("id");
+        p.onclick = function() {inventory_discard(index, 5)};
+        d4.appendChild(p);  
+    }
+    if (count > 1) {
+        let p = document.createElement("p");
+        p.classList.add("id");
+        p.innerHTML = "All";
+        p.onclick = function() {inventory_discard(index, count)};
+        d4.appendChild(p);
+    }
+    return d;
+}

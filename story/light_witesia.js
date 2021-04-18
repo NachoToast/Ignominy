@@ -534,6 +534,12 @@ var story_light_witesia = [
                 scene: 118
             },
             {
+                text: "Browse the menu",
+                conditions: (player) => player.time.getHours() >= 7,
+                scene: 113,
+                action: function() {start_trade("Innkeeper")}
+            },
+            {
                 text: "Nevermind",
                 scene: 113
             }

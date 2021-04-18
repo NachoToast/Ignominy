@@ -1,5 +1,5 @@
-const version = "0.1.16",
-harsh_check = true,
+const version = "0.1.17",
+harsh_check = false,
 game_window = document.getElementById("game"),
 
 scene_presets = {
@@ -16,7 +16,8 @@ defaults = {
     devmode: {
         dead_links: true,
         saveload_data: false,
-        scene_tracking: false
+        scene_tracking: false,
+        trade_info: false
     },
     random: global_random(),
     chrono: {
@@ -77,15 +78,24 @@ var player = {
     time: new Date(3051, 0, 1, 7, 0, 0, 0),
     random: defaults.random,
     inns: [],
-    latest_time_increment: 0
-}
+    latest_time_increment: 0,
+    inventory: [
+        {
+            name: "Seafood Meal",
+            count: 900
+        }
+    ]
+},
+
+past_versions = ["0.1.16"],
+doing_trade = false;
 
 function version_debugger(save, verbose) {
     // use when introducing new object fields (for story [unlikely] and player objects) in future versions.
-    //if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
-
-    // 0.1.16
+    // if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
+    // to do: use the above 'past_versions' array for conditional checks instead of checking everything all the time.
     save.version = version;
+    // 0.1.16
     if (save?.random === undefined) {
         save.random = defaults.random;
         if (verbose) console.log("%cAdded random field.","color: gray");
@@ -104,7 +114,16 @@ function version_debugger(save, verbose) {
     }
     if (save?.config?.devmode?.scene_tracking === undefined) {
         save.config.devmode.scene_tracking = defaults.devmode.scene_tracking;
-        if (verbose) console.log("%cAdded config.devmode.scene_tracking field.", "color: gray");
+        if (verbose) console.log("%cAdded config.devmode.scene_tracking bool.", "color: gray");
+    }
+    // 0.1.17
+    if (save?.config?.devmode?.trade_info === undefined) {
+        save.config.devmode.trade_info = defaults.devmode.trade_info;
+        if (verbose) console.log("%cAdded config.devmode.trade_info bool.", "color: gray");
+    }
+    if (save?.inventory === undefined) {
+        save.inventory = [];
+        if (verbose) console.log("%cAdded inventory array.", "color: gray");
     }
     return save;
 }
@@ -253,7 +272,7 @@ function display_meta(scene) {
         d.appendChild(version);
     }
 
-
+    calibrate_meta(d);
 }
 
 function display_options(scene) {
@@ -402,6 +421,7 @@ function validate_option_scene(option) {
 
 function keybind_progress_scene(key) {
     if (current_header !== -1) return; // don't listen when pages open
+    if (doing_trade) return; // don't listen when trade menu open
     let index = keybinds.indexOf(key);
     if (index == -1) return; // only listen to allowed keys
     if (index >= current_options_displayed.length) return; // don't listen for non-existent options
@@ -740,9 +760,207 @@ function true_load(load_index, tooltip, data) {
     player.time = new Date(data.time);
     update_menu_elements();
     generate_game(data.scene);
+    toggle_trade_menu(true);
 }
 
 function reset_game() {
     let r = confirm("Confirm game reset.");
     if (r == true) location.reload();
+}
+
+var trademenu_goldcount = document.getElementById("trade_gold"),
+item_map = items.map(e => e.name);
+
+function start_trade(vendor_name, modifiers, global_modifiers) {
+    trade_shop.innerHTML = "";
+    trademenu_goldcount.innerHTML = `<span style='color: rgb(${color_gradient(0, 100, player.gold, std_red, {red: 255, green: 215, blue: 0})})'>Gold: ` + player.gold + "</span>";
+    let verbose = player.config.devmode.trade_info,
+    index = vendors.map(e => e.name).indexOf(vendor_name);
+    if (index == -1) {
+        if (verbose) console.warn(`Couldn't find vendor ${vendor_name} for scene ${player.scene}.`);
+        return;
+    }
+    let trade_items = [];
+    for (let i = 0, len = vendors[index].items.length; i < len; i++) {
+        if (item_map.indexOf(vendors[index].items[i]) == -1) {
+            if (verbose) console.warn(`Couldn't find item ${vendors[index].items[i]}.`);
+            continue;
+        }
+        trade_items.push(items[item_map.indexOf(vendors[index].items[i])]);
+    }
+    if (trade_items.length == 0) {
+        if (verbose) console.log(`No items to display for ${vendor_name} on scene ${player.scene}.`);
+        // To Do: Add conditionality to items (maybe tie into reputation system).
+        return;
+    }
+
+    // not necessary but good practice imo
+    if (modifiers === undefined || modifiers === null) modifiers = [];
+    if (typeof modifiers == "string") var mods = [modifiers];
+    else var mods = modifiers;
+
+    if (global_modifiers === undefined || global_modifiers === null) global_modifiers = [];
+    if (typeof global_modifiers == "string") var global_mods = [global_modifiers];
+    else var global_mods = global_modifiers;
+
+    let inventory_map = player.inventory.map(e => e.name);
+    for (let i = 0, len = trade_items.length; i < len; i++) {
+        // main div
+        let d = document.createElement("div");
+        d.classList.add("trade_item");
+        trade_shop.appendChild(d);
+        // picture
+        let img = document.createElement("img");
+        img.src = `img/item/${trade_items[i].src}`;
+        d.appendChild(img);
+        // everything else
+        let d2 = document.createElement("div");
+        d.appendChild(d2);
+        // item name
+        let h = document.createElement("h1");
+        h.classList.add("item_name");
+        h.innerHTML = trade_items[i].name
+        d2.appendChild(h);
+        // description
+        let p = document.createElement("p");
+        p.classList.add("item_desc");
+        p.innerHTML = trade_items[i].desc
+        d2.appendChild(p);
+        // own + cost container
+        let d3 = document.createElement("div");
+        d2.appendChild(d3);
+        // own
+        let p3 = document.createElement("p");
+        p3.classList.add("item_owncount");
+        if (inventory_map.indexOf(trade_items[i].name) == -1) p3.innerHTML = "Own: 0";
+        else p3.innerHTML = "Own: " + player.inventory[inventory_map.indexOf(trade_items[i].name)].count;
+        d3.appendChild(p3);
+        // cost
+        let p2 = document.createElement("p");
+        p2.classList.add("item_cost");
+        let cost = trade_items[i].cost;
+        if (trade_items[i].tags !== undefined && modifiers.length > 0) cost = modify_item_cost(cost, trade_items[i].tags, mods, verbose);
+        if (global_mods.length > 0) cost = modify_global_item_cost(cost, global_mods, verbose);
+        if (player.gold < cost) p2.innerHTML = "<span style='color: lightcoral'>" + cost + " Gold</span>";
+        else p2.innerHTML = cost + " Gold";
+        d3.appendChild(p2);
+        
+        d.onclick = function() {attempt_buy_item(trade_items[i], cost, i)};
+    }
+
+    toggle_trade_menu();
+}
+
+var item_modifier_map = item_modifiers.map(e => e.name);
+
+function attempt_buy_item(item, cost, el_index) {
+    let inventory_map = player.inventory.map(e => e.name);
+    let verbose = player.config.devmode.trade_info;
+    if (verbose) console.log(`Attempting to buy item ${item.name} for ${cost} gold, player has ${player.gold} gold.`);
+    if (player.gold < cost) {
+        document.getElementsByClassName("item_cost")[el_index].innerHTML = "<span style='color: lightcoral'>Not Enough Gold!</span>";
+        return;
+    }
+    player.gold -= cost;
+    if (inventory_map.indexOf(item.name) !== -1) {
+        if (verbose) console.log("Found item in inventory already, incrementing count by 1.", item);
+        player.inventory[inventory_map.indexOf(item.name)].count += 1;
+    }
+    else {
+        if (verbose) console.log("Adding new item to inventory.", item);
+        player.inventory.push({name: item.name, count: 1});
+        inventory_map.push(item.name);
+    }
+
+    document.getElementsByClassName("item_owncount")[el_index].innerHTML = "Own: " + player.inventory[inventory_map.indexOf(item.name)].count;
+    trademenu_goldcount.innerHTML = `<span style='color: rgb(${color_gradient(0, 100, player.gold, std_red, {red: 255, green: 215, blue: 0})})'>Gold: ` + player.gold + "</span>";
+
+    update_item_gold_color();
+}
+
+function update_item_gold_color() {
+    let items = document.getElementsByClassName("item_cost");
+    for (let i = 0, len = items.length, g = player.gold; i < len; i++) {
+        if (items[i].innerHTML.includes("N")) continue;
+        if (items[i].innerHTML.includes("<")) continue;
+        if (g < items[i].innerHTML.slice(0, items[i].innerHTML.indexOf(" "))) items[i].innerHTML = "<span style='color: lightcoral'>" + items[i].innerHTML + "</span>";
+    }
+}
+
+function modify_item_cost(cost, item_tags, modifiers, verbose) {
+    if (verbose) {
+        //console.log(`Doing modify item cost with original cost ${cost}`);
+        console.log("Item tags:", item_tags);
+        console.log("Modifiers:", modifiers);
+    }
+    for (let i = 0, len = item_tags.length; i < len; i++) {
+        if (modifiers.indexOf(item_tags[i]) == -1) continue;
+        let mod_index = item_modifier_map.indexOf(item_tags[i]);
+        if (mod_index == -1) {
+            if (verbose) console.warn(`Couldn't find cost modifier for item with tag ${item_tags[i]}`);
+            continue;
+        }
+        if (verbose) {
+            let shown_cost = cost;
+            console.log(`Changed the cost of an item from ${shown_cost} to ${shown_cost += item_modifiers[mod_index].offset} Gold thanks to tag ${item_tags[i]}.`);
+        }
+        cost += item_modifiers[mod_index].offset
+    }
+    return cost;
+}
+
+var global_item_modifiers_map = global_item_modifiers.map(e => e.name);
+
+function modify_global_item_cost(cost, global_modifiers, verbose) {
+    if (verbose) {
+        //console.log(`Doing modify global item cost with original cost ${cost}`);
+        console.log("Global Modifiers:", global_modifiers);
+    }
+    for (let i = 0, len = global_modifiers.length; i < len; i++) {
+        if (global_item_modifiers_map.indexOf(global_modifiers[i]) == -1) {
+            if (verbose) console.warn(`Couldn't find any global item modifiers for ${global_modifiers[i]}`);
+            continue;
+        }
+        if (verbose) console.log(`Applying global item modifier ${global_modifiers[i]} to item.`);
+        cost += global_item_modifiers[global_item_modifiers_map.indexOf(global_modifiers[i])].offset;
+    }
+    return cost;
+}
+
+function inventory_use(index, amount) {
+    //console.log(`Using ${amount} x ${index}.`);
+}
+function inventory_discard(index, amount) {
+    //console.log(`Discarding ${amount} x ${index}.`);
+    player.inventory[index].count -= amount;
+    if (doing_trade) regenerate_trade_owns(player.inventory[index].name, player.inventory[index].count);
+    if (player.inventory[index].count <= 0) player.inventory.splice(index, 1);
+    open_inventory(); // optimize this so it only changes the 1 item instead of refreshing all of them. currently stuck trying to delete node/child at index.
+}
+
+function regenerate_trade_owns(name, new_count) {
+    //console.log("regenerating owns count with ", name, " and amount: ", new_count);
+    let owns = document.getElementsByClassName("item_owncount"),
+    names = document.getElementsByClassName("item_name");
+    if (owns.length != names.length) {
+        console.warn(`Couldn't check update trade menu own count for item ${name}, found ${names.length} item names but ${owns.length} item own counts!`);
+        return;
+    }
+    for (let i = 0, len = names.length; i < len; i++) {
+        if (name != names[i].innerText) continue;
+        owns[i].innerText = "Own: " + new_count;
+        break;
+    }
+}
+
+function has_item(name, amount, max_amount) {
+    // amount and max_amount are optional and both inclusively return true.
+    let inventory_map = player.inventory.map(e => e.name);
+    if (typeof name == "string") {
+        let index = inventory_map.indexOf(name);
+        if (index == -1) return false;
+        if (amount && player.inventory[index].count < amount) return false;
+        if (max_amount && player.inventory[index].count > max_amount) return false;
+        return true;
+    }
 }

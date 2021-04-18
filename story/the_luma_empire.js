@@ -219,13 +219,15 @@ var story_the_luma_empire = [
         options: [
             {
                 text: "A room please.",
-                scene: 205,
+                scene: 207,
                 conditions: (player) => player.gold >= 10 && has_inn(207) == false,
                 action: function() {player.gold -= 10; add_inn(207)}
             },
             {
                 text: "The menu.",
-                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 22
+                conditions: (player) => player.time.getHours() >= 7 && player.time.getHours() <= 22,
+                scene: 205,
+                action: function() {start_trade("Innkeeper", null, "isolated")}
             },
             {
                 text: "Nevermind",
@@ -243,6 +245,10 @@ var story_the_luma_empire = [
         text: [
             {
                 content: [
+                   "You get your key and make your way to the room at the inn." 
+                ],
+                conditions: (player) => player.previous_scene == 206,
+                alternate: [
                     "You stand in your room at the Wildedenn inn."
                 ]
             }

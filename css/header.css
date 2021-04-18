@@ -1,6 +1,7 @@
 @import "headers/menu.css";
 @import "headers/map.css";
 @import "headers/stats.css";
+@import "headers/inventory.css";
 
 #header {
     background-color: #333;

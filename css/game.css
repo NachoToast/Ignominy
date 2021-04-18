@@ -43,7 +43,6 @@
     border-top: solid 1px gray;
     width: 100vw;
     padding: 0;
-    margin-top: 100vh;
 }
 
 .std_meta_window > * {
@@ -64,13 +63,13 @@
 }
 
 @media screen and (min-width: 1024px) {
-    .std_storywindow, .std_option_window {width: 90%}
+    .std_storywindow, .std_option_window, #trade {width: 90%}
 }
 
 @media screen and (min-width: 1440px) {
-    .std_storywindow, .std_option_window {width: 85%}
+    .std_storywindow, .std_option_window, #trade {width: 85%}
 }
 
 @media screen and (min-width: 1920px) {
-    .std_storywindow, .std_option_window {width: 80%}
+    .std_storywindow, .std_option_window, #trade {width: 80%}
 }

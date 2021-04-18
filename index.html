@@ -15,6 +15,7 @@
     <script defer src="story/zalrord.js"></script>
     <script defer src="story/the_kingdom_of_cataclite.js"></script>
     <script defer src="story/seld.js"></script>
+    <script defer src="items/core.js"></script>
     <script defer src="js/main.js"></script>
     <script defer src="js/ui.js"></script>
     <script defer src="js/start.js"></script>
@@ -22,11 +23,11 @@
 </head>
 <body>
     <div id="header">
-        <div class="header_options noselect" onclick="show_header(0)">Menu</div>
-        <div class="header_options hidden noselect" onclick="show_header(1)">Stats</div>
-        <div class="header_options hidden noselect" onclick="show_header(2)">Map</div>
-        <div class="header_options hidden noselect" onclick="show_header(3)">Date Time</div>
-        <div class="header_options hidden noselect" onclick="show_header(4)">Inventory</div>
+        <div class="header_options header_title" onclick="show_header(0)">Menu</div>
+        <div class="header_options hidden header_title" onclick="show_header(1)">Stats</div>
+        <div class="header_options hidden header_title" onclick="show_header(2)">Map</div>
+        <div class="header_options hidden header_title" onclick="show_header(3)">Date Time</div>
+        <div class="header_options hidden header_title" onclick="show_header(4)">Inventory</div>
     </div>
     <div id="global">
         <div id="header_0" class="header_pages hidden">
@@ -229,9 +230,43 @@
             <h1>Date & Time</h1>
         </div>
         <div id="header_4" class="header_pages hidden">
-            <h1>Inventory</h1>
+            <h1 id="inv_title">Inventory Placeholder Title</h1>
+            <div id="inv_container">
+                <div class="inv_item">
+                    <img src="img/item/seafood_meal.png">
+                    <div>
+                        <h1>Seafood Meal (1)</h1>
+                        <p>An average seafood meal.An average seafood meal.An average seafood meal.An average seafood meal.</p>
+                        <div>
+                            <p>Use:</p>
+                            <p class="iu">1</p>
+                            <p class="iu">5</p>
+                            <p class="iu">All</p>
+                        </div>
+                        <div>
+                            <p>Discard:</p>
+                            <p class="id">1</p>
+                            <p class="id">5</p>
+                            <p class="id">All</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="inv_item"></div>
+                <div class="inv_item"></div>
+                <div class="inv_item"></div>
+                <div class="inv_item"></div>
+                <div class="inv_item"></div>
+                <div class="inv_item"></div>
+            </div>
         </div>
-
+    </div>
+    <div id="trade">
+        <div>
+            <h1 id="trade_gold">Gold: 100</h1>
+            <h1 id="trade_close" onclick="toggle_trade_menu(true)">Close [x]</h1>
+        </div>
+        <div id="trade_shop">
+        </div>
     </div>
     <div id="game">
         <div class="lore std_window" id="initial_lore">

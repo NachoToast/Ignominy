@@ -216,6 +216,8 @@ var story_ignoma = [
             },
             {
                 text: "\"Some food and drink.\"",
+                action: function() {start_trade("Innkeeper", "seaside")},
+                scene: 9
             },
             {
                 text: "\"Nevermind.\"",
@@ -1016,7 +1018,9 @@ var story_ignoma = [
                 ]
             },
             {
-                text: "\"What's on the menu?\""
+                text: "\"What's on the menu?\"",
+                action: function() {start_trade("Innkeeper")},
+                scene: 28
             },
             {
                 text: "\"Nevermind.\"",

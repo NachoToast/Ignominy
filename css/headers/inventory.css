@@ -1,0 +1,130 @@
+#header_4 {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#header_4 > #inv_title {
+    text-align: center;
+    padding: 5px 0;
+    border-bottom: solid 1px gray;
+    transition: 0.1s linear;
+    font-size: 20px;
+    font-weight: lighter;
+}
+#header_4 > #inv_title:hover {
+    background-color: #333;
+}
+
+#inv_container {
+    display: flex;
+    flex-flow: column nowrap;
+    grid-template-columns: auto auto;
+}
+
+.inv_item {
+    height: 100px;
+    width: 100%;
+    border-bottom: solid 1px gray;
+    transition: 0.1s linear;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 5px 0;
+}
+.inv_item:hover {
+    background-color: #333;
+}
+
+.inv_item > img {
+    width: 100px;
+    height: 100px;
+    padding-left: 10px;
+}
+.inv_item > div {
+    display: flex;
+    flex-flow: column nowrap;
+    padding-left: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.inv_item > div > h1 {
+    font-size: 18px;
+}
+.inv_item > div > p {
+    color: #d3d3d3;
+    flex-grow: 1;
+}
+.inv_item > div > div {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    font-size: 20px;
+}
+
+.inv_item > div > div > .iu, .inv_item > div > div > .id {
+    margin-left: 15px;
+    transition: 0.1s linear;
+    cursor: pointer;
+}
+
+.inv_item > div > div .iu {
+    color: aquamarine;
+}
+.inv_item > div > div .iu:hover {
+    color: lightgreen;
+}
+
+.inv_item > div > div .id {
+    color: pink;
+}
+
+.inv_item > div > div .id:hover {
+    color: lightcoral;
+}
+
+.inv_item > div > div > .iu:hover, .inv_item > div > div > .id:hover {
+    text-decoration: underline;
+}
+
+.hover_gray {
+    transition: 0.1s linear;
+}
+
+.hover_gray:hover {
+    color: gray;
+    text-decoration: underline;
+}
+
+@media screen and (min-width: 768px) {
+    #header_4 > #inv_title {
+        font-size: 26px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    #inv_container {
+        display: grid;
+    }
+    .inv_item {
+        border-right: solid 1px gray;
+        border-left: solid 1px gray;
+        width: auto;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    #inv_container {
+        grid-template-columns: auto auto auto;
+    }
+    #header_4 > #inv_title {
+        padding: 8px 0;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    #inv_container {
+        grid-template-columns: auto auto auto;
+    }
+    #header_4 > #inv_title {
+        padding: 10px 0;
+    }
+}
