@@ -62,14 +62,20 @@
     color: pink;
 }
 
+.std_delta > * {
+    color: gray;
+    font-size: 18px;
+    line-height: 22px;
+}
+
 @media screen and (min-width: 1024px) {
-    .std_storywindow, .std_option_window, #trade {width: 90%}
+    .std_storywindow, .std_option_window, #trade, .std_delta {width: 90%}
 }
 
 @media screen and (min-width: 1440px) {
-    .std_storywindow, .std_option_window, #trade {width: 85%}
+    .std_storywindow, .std_option_window, #trade, .std_delta {width: 85%}
 }
 
 @media screen and (min-width: 1920px) {
-    .std_storywindow, .std_option_window, #trade {width: 80%}
+    .std_storywindow, .std_option_window, #trade, .std_delta {width: 80%}
 }

@@ -32,3 +32,12 @@ function meta_check(min, max) {
     }
     console.log(`${no_meta.length}/${checked} scenes are missing metadata (${Date.now() - start}ms)`, no_meta);
 }
+
+function general_debugger() {
+    // hopeful
+    if (player.stats.fatigue !== undefined) {
+        console.warn("Something assigned 'fatigue' to player.stats!");
+        delete player.stats.fatigue;
+    }
+    // to be continued...
+}

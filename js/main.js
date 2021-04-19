@@ -1,6 +1,7 @@
-const version = "0.1.17",
+const version = "0.1.18",
 harsh_check = false,
 game_window = document.getElementById("game"),
+// should move declarations to another document tbh
 
 scene_presets = {
     default: {fatigue: 0.3, time: {second: 5}},
@@ -34,7 +35,17 @@ defaults = {
     },
 };
 
-var player = {
+var tracked_stats = {
+    health: 0,
+    max_health: 0,
+    mana: 0,
+    max_mana: 0,
+    stats: {},
+    gold: 0,
+    fatigue: 0
+},
+
+player = {
     name: "Default",
     homekingdom: "Default",
     hometown: "Default",
@@ -79,21 +90,27 @@ var player = {
     random: defaults.random,
     inns: [],
     latest_time_increment: 0,
-    inventory: [
-        {
-            name: "Seafood Meal",
-            count: 900
-        }
-    ]
+    inventory: []
 },
 
 past_versions = ["0.1.16"],
-doing_trade = false;
+doing_trade = false,
+
+delta_thresholds = { // (only shows messages if change is >= threshold)
+    fatigue: 5,
+    gold: 1,
+    health: 1,
+    mana: 1,
+    max_mana: 1,
+    max_health: 1,
+    stats: 1
+};
 
 function version_debugger(save, verbose) {
     // use when introducing new object fields (for story [unlikely] and player objects) in future versions.
     // if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
     // to do: use the above 'past_versions' array for conditional checks instead of checking everything all the time.
+    // maybe procedural append it aswell?
     save.version = version;
     // 0.1.16
     if (save?.random === undefined) {
@@ -150,11 +167,11 @@ function random_chance(percentage) {
     return false;
 }
 
-function generate_game(scene) {
+function generate_game(scene, fromload) {
     unhide_headers();
     update_chrono();
     if (player.config.debug > 0) console.log(`%cStarting game%c\nLoaded Scene: ${scene}\nPlayer Hometown: ${player.hometown}, ${player.homekingdom}`, 'color: lime', 'color: unset');
-    next_scene(scene);
+    next_scene(scene, fromload);
     update_keybind_config();
 }
 
@@ -172,7 +189,7 @@ function filter_text(string) {
     return string;
 }
 
-function next_scene(scene) {
+function next_scene(scene, fromload) {
     if (player.config.devmode.scene_tracking) console.log(`Updating previous scene from ${player.previous_scene} to ${player.scene}`);
     player.previous_scene = player.scene;
     if (player.config.debug > 0) console.log(`%c========== Progressing Scene ==========`, 'color: gold; font-size: 14px');
@@ -197,14 +214,40 @@ function next_scene(scene) {
     }
 
     if (player.config.debug > 0) console.log(`Displaying scene ${story[scene_index].id} [Index ${scene_index}].`);
-    display_scene(full_scene);
+    display_scene(full_scene, fromload);
 }
 
 function clear_game() {
     game_window.innerHTML = "";
 }
 
-function display_scene(scene) {
+function display_scene(scene, fromload) {
+
+    if (!fromload) {
+        let deltas = check_tracked_stats(),
+        elements = [];
+        for (let i = 0, len = deltas.length; i < len; i++) {
+            let delta_msg = make_delta_element(deltas[i]);
+            if (delta_msg !== undefined) {
+                if (Array.isArray(delta_msg)) {
+                    for (let j = 0; j < delta_msg.length; j++) {
+                        elements.push(delta_msg[j]);
+                    }
+                }
+                else elements.push(delta_msg);
+            }
+        }
+        if (elements.length > 0) {
+            let d = document.createElement("div");
+            d.classList.add("std_window", "std_delta")
+            game_window.appendChild(d);
+            for (let i = 0, len = elements.length; i < len; i++) {
+                d.appendChild(elements[i]);
+            }
+        }
+    }
+    set_tracked_stats();
+
 
     let d = document.createElement("div");
     d.classList.add("std_window", "std_storywindow");
@@ -300,7 +343,7 @@ function display_options(scene) {
         valid_option.push({
             text: "Sleep (-10% Fatigue)",
             time: {hour: 1},
-            action: function() {player.stats.fatigue *= 0.9},
+            action: function() {player.fatigue *= 0.9},
             fatigue: false,
             perm_timestamps: true
         },
@@ -329,6 +372,7 @@ function display_options(scene) {
             valid_option_true.push(true)
         }
         else if (scene.options[i].alternate !== undefined) {
+            //console.log("found alternate");
             if (validate_hard_conditions(scene.options[i])) {
                 valid_option.push(scene.options[i]);
                 valid_option_true.push(false);
@@ -671,7 +715,9 @@ function validate_conditions(part) {
 }
 
 function validate_hard_conditions(part) {
+    //console.log("checking for harsh conditions");
     if (part.hard_conditions === undefined) return true;
+    if (player.config.debug >= 3) console.log("Evaulating harsh conditions.");
     if (part.hard_conditions(player)) return true;
     return false;
 }
@@ -759,7 +805,7 @@ function true_load(load_index, tooltip, data) {
     player = data;
     player.time = new Date(data.time);
     update_menu_elements();
-    generate_game(data.scene);
+    generate_game(data.scene, true);
     toggle_trade_menu(true);
 }
 
@@ -963,4 +1009,66 @@ function has_item(name, amount, max_amount) {
         if (max_amount && player.inventory[index].count > max_amount) return false;
         return true;
     }
+}
+
+function set_tracked_stats() {
+    for (var k in tracked_stats) {
+        tracked_stats[k] = JSON.parse(JSON.stringify(player[k]));
+        // Does not work for: Date, undefined, Infinity, RegExps, Maps, Sets, Blobs, FileLists, ImageDatas, sparse Arrays, Typed Arrays, and other complex types. Good thing I don't know what half of those are.
+    }
+}
+
+function check_tracked_stats() {
+    let return_array = [];
+    for (var k in tracked_stats) {
+        if (JSON.stringify(tracked_stats[k]) == JSON.stringify(player[k])) continue;
+        return_array.push(k);
+    }
+    return return_array;
+}
+
+function make_delta_element(statname) {
+    if (statname == "stats") {
+        let output_array = [],
+        player_stats = Object.keys(player.stats),
+        local_tracked_stats = Object.keys(tracked_stats.stats);
+        if (player_stats.length != local_tracked_stats.length) { // new stats added
+            if (player_stats.length < local_tracked_stats.length) {
+                console.warn("Option removed a player stat! This might be supported in the future, but for now please do not do this!");
+                return;
+            }
+            for (let i = local_tracked_stats.length, len = player_stats.length; i < len; i++) {
+                let p = document.createElement("p"),
+                amount = player.stats[player_stats[i]].amount,
+                name = player_stats[i];
+                p.innerHTML = `${get_sign(amount)}${amount} ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+                //console.log(`New stat added: ${player_stats[i]}, ${player.stats[player_stats[i]].amount}`);
+                output_array.push(p);
+            }
+        }
+        else {
+            for (let i = 0, len = player_stats.length; i < len; i++) {
+                let new_amount = player.stats[player_stats[i]].amount,
+                old_amount = tracked_stats.stats[local_tracked_stats[i]].amount,
+                signed_delta = Math.floor(new_amount - old_amount),
+                delta = Math.abs(signed_delta);
+                if (delta < delta_thresholds.stats) continue;
+                let p = document.createElement("p");
+                p.innerHTML = `${get_sign(signed_delta)}${delta} ${player_stats[i].charAt(0).toUpperCase() + player_stats[i].slice(1)}`;
+                output_array.push(p);
+            }
+        }
+        return output_array;
+    }
+    let signed_delta = Math.floor((player[statname] ?? 0) - tracked_stats[statname]),
+    delta = Math.abs(signed_delta);
+    if (delta < delta_thresholds[statname] ?? delta + 1) return;
+    let p = document.createElement("p");
+    p.innerHTML = `${get_sign(signed_delta)}${delta} ${statname.charAt(0).toUpperCase() + statname.slice(1)}`;
+    return p;
+}
+
+function get_sign(num) {
+    if (num < 0) return "-";
+    return "+";
 }

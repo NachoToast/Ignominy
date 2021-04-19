@@ -1015,7 +1015,8 @@ var story_ignoma = [
                 action: function() {player.gold -= 12; add_inn(30)},
                 alternate: [
                     "You do not have enough gold for a room."
-                ]
+                ],
+                hard_conditions: () => has_inn(30) == false
             },
             {
                 text: "\"What's on the menu?\"",
