@@ -1,6 +1,5 @@
-var rest_scenes = [];
-
-var story = [
+var rest_scenes = [],
+story = [
     {
        id: -1,
        text: [

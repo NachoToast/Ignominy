@@ -1,111 +1,3 @@
-const version = "0.1.18",
-harsh_check = false,
-game_window = document.getElementById("game"),
-// should move declarations to another document tbh
-
-scene_presets = {
-    default: {fatigue: 0.3, time: {second: 5}},
-    caravan: {fatigue: 10} // unused
-},
-
-defaults = {
-    timestamps_config: {
-        enabled: true,
-        threshold: 15,
-        unit: 0 // 0 - Minute, 1 - Hour, 2 - Day
-    },
-    devmode: {
-        dead_links: true,
-        saveload_data: false,
-        scene_tracking: false,
-        trade_info: false
-    },
-    random: global_random(),
-    chrono: {
-        time: 12, // 12 or 24
-        order: 0, // 0 = Date Time, 1 = Time Date
-        ordinals: true,
-        date_format: "dddd d mmmm yyyy",
-        time_format: "h:mm"
-    },
-    meta: {
-        authors: false,
-        version: false,
-        legacy_version: false
-    },
-};
-
-var tracked_stats = {
-    health: 0,
-    max_health: 0,
-    mana: 0,
-    max_mana: 0,
-    stats: {},
-    gold: 0,
-    fatigue: 0
-},
-
-player = {
-    name: "Default",
-    homekingdom: "Default",
-    hometown: "Default",
-    health: 100,
-    max_health: 100,
-    mana: 100,
-    max_mana: 100,
-    gold: 100,
-    fatigue: 0,
-    stats: {
-        strength: {
-            amount: 0,
-            description: "Strength dictates fatigue gain, health, and damage dealt."
-        },
-        agility: {
-            amount: 0,
-            description: "Agility is how fluently and rapidly you move."
-        },
-        proficiency: {
-            amount: 0,
-            description: "Proficiency is how efficiently you consume mana and how much of it you can store."
-        },
-        perception: {
-            amount: 0,
-            description: "Perception is your skill at detecting and observing your surroundings."
-        }
-    },
-    scene: -1,
-    previous_scene: null,
-    config: {
-        headers: [0, 1, 2, 3, 4],
-        debug: 0,
-        devmode: defaults.devmode,
-        chrono: defaults.chrono,
-        meta: defaults.meta,
-        keybinds: true,
-        timestamps: defaults.timestamps_config
-    },
-    history: [],
-    version: version,
-    time: new Date(3051, 0, 1, 7, 0, 0, 0),
-    random: defaults.random,
-    inns: [],
-    latest_time_increment: 0,
-    inventory: []
-},
-
-past_versions = ["0.1.16"],
-doing_trade = false,
-
-delta_thresholds = { // (only shows messages if change is >= threshold)
-    fatigue: 5,
-    gold: 1,
-    health: 1,
-    mana: 1,
-    max_mana: 1,
-    max_health: 1,
-    stats: 1
-};
-
 function version_debugger(save, verbose) {
     // use when introducing new object fields (for story [unlikely] and player objects) in future versions.
     // if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
@@ -453,8 +345,6 @@ function get_timestamps(time_object) {
     return "";
 }
 
-var current_options_displayed = [];
-
 function validate_option_scene(option) {
     // returns true if option's scene is not found.
     if (!option.scene) return false;
@@ -480,8 +370,6 @@ function keybind_text(option_number) {
     else if (msg > 10 ) msg = "Shift+" + (msg - 10); 
     return "[" + msg + "] ";
 }
-
-const keybinds = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")"];
 
 function add_to_history(scene_id) {
 
@@ -741,8 +629,6 @@ function save_game(type) {
     }
 }
 
-var file_holder = document.getElementById("load_file");
-
 function load_game(type) {
     if (type == "browser") {
         let data = JSON.parse(localStorage.getItem("Ignominy Save"));
@@ -813,9 +699,6 @@ function reset_game() {
     let r = confirm("Confirm game reset.");
     if (r == true) location.reload();
 }
-
-var trademenu_goldcount = document.getElementById("trade_gold"),
-item_map = items.map(e => e.name);
 
 function start_trade(vendor_name, modifiers, global_modifiers) {
     trade_shop.innerHTML = "";
@@ -897,8 +780,6 @@ function start_trade(vendor_name, modifiers, global_modifiers) {
     toggle_trade_menu();
 }
 
-var item_modifier_map = item_modifiers.map(e => e.name);
-
 function attempt_buy_item(item, cost, el_index) {
     let inventory_map = player.inventory.map(e => e.name);
     let verbose = player.config.devmode.trade_info;
@@ -955,8 +836,6 @@ function modify_item_cost(cost, item_tags, modifiers, verbose) {
     return cost;
 }
 
-var global_item_modifiers_map = global_item_modifiers.map(e => e.name);
-
 function modify_global_item_cost(cost, global_modifiers, verbose) {
     if (verbose) {
         //console.log(`Doing modify global item cost with original cost ${cost}`);
@@ -973,9 +852,10 @@ function modify_global_item_cost(cost, global_modifiers, verbose) {
     return cost;
 }
 
-function inventory_use(index, amount) {
+function inventory_use(index, amount) { // Unused
     //console.log(`Using ${amount} x ${index}.`);
 }
+
 function inventory_discard(index, amount) {
     //console.log(`Discarding ${amount} x ${index}.`);
     player.inventory[index].count -= amount;

@@ -25,19 +25,6 @@ function show_header(option) {
     header_pages[option].style.height = (document.body.offsetHeight - header.offsetHeight) + "px";
 }
 
-var stats_health = document.getElementById("stats_health"),
-stats_mana = document.getElementById("stats_mana"),
-stats_fatigue = document.getElementById("stats_fatigue"),
-stats_gold = document.getElementById("stats_gold"),
-stats_name = document.getElementById("stats_name");
-
-const std_red = {red: 240, green: 128, blue: 128},
-std_yellow = {red: 255, green: 214, blue: 0},
-std_green = {red: 144, green: 238, blue: 144},
-std_fullmana = {red: 127, green: 255, blue: 212},
-std_nomana = {red: 128, green: 128, blue: 128},
-stats_container = document.getElementById("header_1_2");
-
 function update_stats() {
     // visual only
 
@@ -86,6 +73,7 @@ function update_stats() {
     }
 
 }
+
 function color_gradient(min, max, current, color_a, color_b, color_c) {
     // returns an rgb value in the format "r, g, b"
     let color_progression;
@@ -113,10 +101,6 @@ function color_gradient(min, max, current, color_a, color_b, color_c) {
     // where x is how far along u are (1 = done, 0 = none)
 
 }
-
-document.getElementById("header_0_main").innerHTML = `<span title='Playing Ignominy on version ${version}'>` + "Ignominy " + version + "</span>";
-//document.getElementById
-
 
 function unhide_headers() {
     for (let i = 0, len = player.config.headers.length; i < len; i++) {
@@ -304,38 +288,6 @@ function update_header_borders() {
     }
 }
 
-var saveload_defaults = {
-    save: [
-        {
-            text: "Browser Storage",
-            inline: "Recommended",
-            inline_color: "#90EE90",
-            title: "Save is stored in selected browsers cache (local storage)."
-        },
-        {
-            text: "File",
-            inline: "Safest",
-            inline_color: "#FFD700",
-            title: "Saves to downloads folder of local machine."
-        },
-        {
-            text: "Server",
-            inline: "Cross-Platform",
-            inline_color: "#FFC0CB",
-            title: "Saves to online server, requires playing from official website."
-        }
-    ],
-    load: [
-        "Browser Storage", "Load from browser cache.",
-        "File", "Load file from computer.",
-        "Server", "Load file from server, requires playing from official website."
-    ]
-},
-saveload_current_changed = [-1, false],
-saveload_options = document.getElementsByClassName("saveload_option"),
-main_menu = document.getElementById("header_0_main"),
-main_menu_cards = document.getElementsByClassName("mmc");
-
 function update_menu() {
 
     // generate save/load html
@@ -406,8 +358,6 @@ function change_save_option(index, message, color, title) {
     saveload_options[index].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
 }
 
-let special_load_option = document.getElementById("load_file_label");
-
 function change_load_option(index, message, color, title) {
     if (index == 1) {
         special_load_option.innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
@@ -415,14 +365,6 @@ function change_load_option(index, message, color, title) {
     }
     saveload_options[index + saveload_defaults["save"].length].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
 }
-
-var header_options = document.getElementsByClassName("header_options"),
-header_pages = document.getElementsByClassName("header_pages"),
-current_header = -1,
-header = document.getElementById("header");
-
-window.addEventListener("resize", recheck_ui_elements);
-setTimeout(recheck_ui_elements, 600);
 
 function recheck_ui_elements() {
     update_header_borders();
@@ -434,118 +376,11 @@ function calibrate_meta(meta_element) {
     meta_element.style.marginTop = window.innerHeight - header.offsetHeight + "px";
 }
 
-var config_debug = document.getElementById("debug_set"),
-config_debug_out = document.getElementById("debug_out"),
-config_authors = document.getElementById("meta_authors"),
-config_versions = document.getElementById("meta_versions"),
-config_legacy_version = document.getElementById("meta_versions_legacy"),
-config_date_format = document.getElementById("config_date_format"),
-config_date_ordinals = document.getElementById("date_ordinals"),
-config_time_format = document.getElementById("config_time_format"),
-config_time_hours = document.getElementById("time_hours"),
-config_reverse = document.getElementById("chrono_reverse"),
-config_example = document.getElementById("config_example"),
-config_hotkeys = document.getElementById("hotkey_set"),
-config_dead_links = document.getElementById("config_dead_links"),
-config_saveload_data = document.getElementById("config_saveload_data"),
-config_timestamps_enable = document.getElementById("timestamps_set"),
-config_scene_tracking = document.getElementById("config_scene_tracking");
-
-config_scene_tracking.addEventListener("input", function() {
-    player.config.devmode.scene_tracking = this.checked;
-})
-
-config_timestamps_enable.addEventListener("input", function() {
-        player.config.timestamps.enabled = this.checked;
-})
-
-config_date_format.addEventListener("input", function() {
-    player.config.chrono.date_format = config_date_format.value;
-    update_chrono();
-})
-
-config_time_format.addEventListener("input", function() {
-    player.config.chrono.time_format = config_time_format.value;
-    update_chrono();
-})
-
-config_date_ordinals.addEventListener("change", function() {
-    if (this.checked) {
-        player.config.chrono.ordinals = true;
-    }
-    else {
-        player.config.chrono.ordinals = false;
-    }
-    update_chrono();
-})
-
-config_time_hours.addEventListener("change", function() {
-    if (this.checked) {
-        player.config.chrono.time = 24;
-    }
-    else {
-        player.config.chrono.time = 12;
-    }
-    update_chrono();
-})
-
-config_reverse.addEventListener("change", function() {
-    if (this.checked) {
-        player.config.chrono.order = 1;
-    }
-    else {
-        player.config.chrono.order = 0;
-    }
-    update_chrono();
-})
-
-config_authors.addEventListener("change", function() {
-    if (this.checked) player.config.meta.authors = true;
-    else player.config.meta.authors = false;
-})
-
-config_versions.addEventListener("change", function() {
-    if (this.checked) player.config.meta.version = true;
-    else {
-        player.config.meta.version = false;
-        player.config.meta.legacy_version = false;
-        config_legacy_version.checked = false;
-    }
-})
-
-config_legacy_version.addEventListener("change", function() {
-    if (this.checked) {
-        config_versions.checked = true;
-        player.config.meta.legacy_version = true;
-        player.config.meta.version = true;
-    }
-    else player.config.meta.legacy_version = false;
-})
-
 function change_debug_mode() {
     player.config.debug = config_debug.value;
     if (player.config.debug == 0) config_debug_out.innerText = "Off";
     else config_debug_out.innerText = player.config.debug;
 }
-
-config_hotkeys.addEventListener("change", function() {
-    if (this.checked) player.config.keybinds = true;
-    else player.config.keybinds = false;
-    update_keybind_config();
-})
-
-config_dead_links.addEventListener("change", function() {
-    if (this.checked) player.config.devmode.dead_links = true;
-    else player.config.devmode.dead_links = false
-})
-
-config_saveload_data.addEventListener("change", function() {
-    if (this.checked) player.config.devmode.saveload_data = true;
-    else player.config.devmode.saveload_data = false;
-})
-
-var trade_menu = document.getElementById("trade"),
-trade_shop = document.getElementById("trade_shop");
 
 function calibrate_trade_menu() {
     //trade_menu.style.minHeight = window.innerHeight - header.offsetHeight - 40 + "px";
@@ -571,9 +406,6 @@ function toggle_trade_menu(currently_open) {
     game_window.style.display = "none";
     recheck_ui_elements(); // holy shit it works as intended
 }
-
-var inventory_title = document.getElementById("inv_title");
-inventory_container = document.getElementById("inv_container");
 
 function open_inventory() {
     let unique_item_count = player.inventory.length,
@@ -689,3 +521,6 @@ function inventory_generate_item_card(item, index) {
     }
     return d;
 }
+
+window.addEventListener("resize", recheck_ui_elements);
+setTimeout(recheck_ui_elements, 600);

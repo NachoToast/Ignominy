@@ -1,17 +1,3 @@
-var this_year = new Date().getFullYear(),
-calculate_year = document.getElementById("calculate_year");
-calculate_year.innerHTML = this_year;
-calculate_year.title = 3051 - this_year + " Years";
-
-var map_sliders = document.getElementsByClassName("map_options"),
-map_outputs = document.getElementsByClassName("map_outputs"),
-maps = document.getElementsByClassName("map_s"),
-zoom_level = 1,
-base_height = 1405.5,
-base_width = 2880,
-zoom_output = document.getElementsByClassName("map_zoom_output");
-
-
 function generate_map_menu() {
     let lore = document.getElementById("initial_lore");
     let d1 = document.createElement("div"),
@@ -168,10 +154,12 @@ function slider_modify_map(layer) {
     map_outputs[layer].value = map_sliders[layer].value;
     maps[layer + 1].style.opacity = map_sliders[layer].value / 100;
 }
+
 function direct_modify_map(layer) {
     map_sliders[layer].value = map_outputs[layer].value;
     maps[layer+1].style.opacity = map_outputs[layer].value / 100;
 }
+
 function zoom(type) {
     if ((zoom_level * 100).toFixed(0) >= 500 && type == 0.1 || (zoom_level * 100).toFixed(0) <= 10 && type == -0.1) return;
     zoom_level += type;
@@ -185,11 +173,6 @@ function zoom(type) {
         maps[i + mult].height = base_height * zoom_level;
     }
     zoom_output[mult / 6].innerText = (zoom_level * 100).toFixed(0) + "%";
-}
-
-for (let i = 0, len = maps.length; i < len; i++) {
-    maps[i].width = base_width;
-    maps[i].height = base_height;
 }
 
 function location_choose(location) {
@@ -232,34 +215,9 @@ function location_choose(location) {
     generate_game(scene);
 }
 
-var input_name = document.getElementById("player_input_name"),
-input_name_submit = document.getElementById("input_name_submit");
-
-input_name.addEventListener("keyup", function(input) {
-    if (input_name.value.length < 1 || input_name.value.length > 20) {
-        input_name_submit.disabled = true;
-        input_name_submit.classList.add("nope");
-        return;
-    }
-    if (input_name_submit.disabled == true) {
-        input_name_submit.disabled = false;
-        input_name_submit.classList.remove("nope");
-    }
-    if (input.key == "Enter") {
-        submit_name();
-    }
-})
-
-
 function submit_name() {
     player.name = input_name.value;
     let form = document.getElementById("name_submit");
     form.parentNode.removeChild(form);
     generate_map_menu();
 }
-
-/*setTimeout(function() {
-    generate_game(0);
-    show_header(0);
-}, 200)
-*/
