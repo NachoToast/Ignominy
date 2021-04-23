@@ -1,0 +1,71 @@
+body {
+    background-color: #333;
+    padding: 0;
+    margin: 0;
+}
+
+* {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+}
+
+#header {
+    color: white;
+    margin: 0;
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+    transition: border 0.1s linear;
+    transition: background-color 0.3s linear;
+    background-color: transparent;
+    border-bottom: solid 1px transparent;
+    margin-bottom: 0px;
+}
+
+#header:hover {
+    background-color: #272727;
+    border-bottom: solid 1px gray;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
+
+#load_file_label {
+    cursor: pointer;
+    position: absolute;
+    padding: 10px;
+    top: 0px;
+    left: 0px;
+    transition: border 0.1s linear;
+    transition: background-color 0.3s linear;
+    background-color: transparent;
+    border-bottom: transparent;
+    border-right: transparent;
+}
+
+#load_file_label:hover {
+    background-color: #272727;
+    border-bottom: solid 1px gray;
+    border-right: solid 1px gray;
+    visibility: visible;
+}
+
+.node {
+    position: absolute;
+    background-color: gray;
+    padding: 1px;
+    margin: 1px;
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
