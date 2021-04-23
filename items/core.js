@@ -31,7 +31,4 @@ global_item_modifiers = [
         name: "isolated", // places far away from others, like Wildedenn, have generally more expensive goods
         offset: 5
     }
-],
-item_map = items.map(e => e.name),
-item_modifier_map = item_modifiers.map(e => e.name),
-global_item_modifiers_map = global_item_modifiers.map(e => e.name);
+];

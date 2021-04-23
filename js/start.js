@@ -143,7 +143,6 @@ function generate_map_menu() {
     maps = document.getElementsByClassName("map_s");
     zoom_output = document.getElementsByClassName("map_zoom_output");
 }
-
 function slider_modify_map(layer) {
     //console.log(layer);
     if (current_header !== 2) {
@@ -154,12 +153,10 @@ function slider_modify_map(layer) {
     map_outputs[layer].value = map_sliders[layer].value;
     maps[layer + 1].style.opacity = map_sliders[layer].value / 100;
 }
-
 function direct_modify_map(layer) {
     map_sliders[layer].value = map_outputs[layer].value;
     maps[layer+1].style.opacity = map_outputs[layer].value / 100;
 }
-
 function zoom(type) {
     if ((zoom_level * 100).toFixed(0) >= 500 && type == 0.1 || (zoom_level * 100).toFixed(0) <= 10 && type == -0.1) return;
     zoom_level += type;
@@ -174,7 +171,6 @@ function zoom(type) {
     }
     zoom_output[mult / 6].innerText = (zoom_level * 100).toFixed(0) + "%";
 }
-
 function location_choose(location) {
     let scene;
     if (location == 0) {
@@ -212,9 +208,8 @@ function location_choose(location) {
         player.hometown = "Westforest";
         scene = 600;
     }
-    generate_game(scene);
+    generate_game(scene, true);
 }
-
 function submit_name() {
     player.name = input_name.value;
     let form = document.getElementById("name_submit");
