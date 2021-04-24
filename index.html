@@ -15,8 +15,11 @@
             <label for="load_file" id="load_file_label">Select File(s)</label>
             <input id="load_file" type="file" style="display:none" onchange="load_file()" accept=".json" multiple>
         </div>
+        <div id="height_div">
+            <label for="height" id="height_label">Height</label>
+            <input id="height" maxlength="4" oninput="change_height(this.value)">
+        </div>
         <div id="container">
-                <!--p class="node">69</p-->
         </div>
 </body>
 </html>
