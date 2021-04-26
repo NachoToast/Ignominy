@@ -14,7 +14,7 @@ console_message_count = 0,
 console_message_repeats = 0,
 console_previous_message = "",
 color_mode = "default",
-//pretty_mode = true,
+pretty_mode = false,
 pretty_factor = 1;
 
 height_direct.value = height;
