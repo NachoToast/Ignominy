@@ -13,7 +13,9 @@ weight = 7,
 console_message_count = 0,
 console_message_repeats = 0,
 console_previous_message = "",
-color_mode = "default";
+color_mode = "default",
+//pretty_mode = true,
+pretty_factor = 1;
 
 height_direct.value = height;
 weight_direct.value = weight;
@@ -93,6 +95,14 @@ function generate_nodes(data, start = Date.now()) {
         p.style.left = output_points[i].x + "px";
         output_nodes.push(p);
     }
+    if (pretty_mode) {
+        for (let i = 0; i < len; i++) {
+            data[i].options = [];
+            for (let j = 0; j < len; j += pretty_factor) {
+                data[i].options.push({scene: j})
+            }
+        }
+    }
     generate_lines(data, output_nodes, len)
     log(`Done! (${Date.now() - start}ms)`);
 }
@@ -128,6 +138,7 @@ function generate_lines(data, nodes, len) {
             else if (color_mode == "red") chosen_color = color_gradient(0, len, i, colors.white, colors.red);
             else if (color_mode == "green") chosen_color = color_gradient(0, len, i, colors.white, colors.green);
             else if (color_mode == "blue") chosen_color = color_gradient(0, len, i, colors.white, colors.blue);
+            else if (color_mode == "rgb2") chosen_color = color_gradient(0, j_len, j, colors.red, colors.green, colors.blue);
 
             draw_curve(start, weighted_center, weighted_center, end, chosen_color);
             
