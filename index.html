@@ -15,11 +15,47 @@
             <label for="load_file" id="load_file_label">Select File(s)</label>
             <input id="load_file" type="file" style="display:none" onchange="load_file()" accept=".json" multiple>
         </div>
-        <div id="height_div">
+        <div id="weight_div" class="config_div">
+            <label for="weight" id="weight_label">Weight</label>
+            <input id="weight" type="range" value="7" min="1" max="20" step="0.1" oninput="change_weight(this.value)" list="weight_marks">
+            <input id="weight_direct" class="config_input" type="number" step="0.1" oninput="change_weight_direct(this.value)">
+            <!--datalist id="weight_marks">
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+                <option value="6"></option>
+                <option value="7"></option>
+                <option value="8"></option>
+                <option value="9"></option>
+                <option value="10"></option>
+            </datalist-->
+        </div>
+        <div id="height_div" class="config_div">
             <label for="height" id="height_label">Height</label>
-            <input id="height" maxlength="4" oninput="change_height(this.value)">
+            <input id="height" class="config_input" type="number" oninput="change_height(this.value)">
+            <button onclick="reset_height()">Reset</button>
+        </div>
+        <div id="regenerate_div" class="config_div">
+            <button onclick="regenerate()">Regenerate</button>
+        </div>
+        <div id="color_div" class="config_div">
+            <label for="color">Color Mode</label>
+            <select id="color" oninput="change_color_mode(this.value)">
+                <option value="default">Default</option>
+                <option value="invert">Invert</option>
+                <option value="rgb">RGB</option>
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+
+            </select>
+        </div>
+        <div id="console_element">
         </div>
         <div id="container">
         </div>
+        <canvas id="canvas"></canvas>
 </body>
 </html>

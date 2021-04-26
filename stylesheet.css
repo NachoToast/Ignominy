@@ -26,10 +26,10 @@ body {
     background-color: #272727;
     border-bottom: solid 1px gray;
 }
-#header:hover ~ #height_div {
+/*#header:hover ~ .config_div {
     border-bottom: solid 1px rgba(128, 128, 128, 0.2);
     border-left: solid 1px rgba(128, 128, 128, 0.2);
-}
+}*/
 
 #header:hover ~ div > #load_file_label {
     border-bottom: solid 1px rgba(128, 128, 128, 0.2);
@@ -78,33 +78,95 @@ body {
     align-items: center;
 }
 
-#height_div {
+.config_div {
     cursor: pointer;
     position: absolute;
     padding: 10px;
-    top: 0px;
-    right: 0px;
+    padding-right: 0;
     transition: border 0.1s linear;
     transition: background-color 0.3s linear;
-    background-color: transparent;
-    border-left: transparent;
-    border-bottom: transparent;
+    border: solid transparent 1px;
+    right: 0px;
+    min-width: 200px;
 }
-
 #height_div > *:not(input) {
     cursor: pointer;
 }
-
-#height_div:hover {
+#height_div {
+    top: 103px;
+}
+.config_div:hover {
     background-color: #272727;
     border-bottom: solid 1px gray;
     border-left: solid 1px gray;
+    border-top: solid 1px gray;
 }
 
-#height {
+.config_div > button {
+    background-color: transparent;
+    border: solid 1px gray;
+    height: 24px;
+    transition: background-color 0.1s linear;
+    transition: color 0.1s linear;
+}
+.config_div > button:hover {
+    background-color: pink;
+    color: black;
+}
+
+.config_input {
     color: black;
     width: 40px;
     outline: none;
     padding: 0px;
     font-size: 16px;
+}
+#weight_div {
+    top: 58px;
+    padding-right: 10px;
+}
+
+#console_element {
+    width: 200px;
+    height: 100px;
+    position: absolute;
+    top: 58px;
+    left: 0px;
+    border: solid 1px transparent;
+    border-left: none;
+    transition: border 0.1s linear;
+    transition: background-color 0.3s linear;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+#console_element::-webkit-scrollbar {
+    display: none;
+}
+
+#console_element:hover {
+    border: solid 1px gray;
+    border-left: none;
+    background-color: #272727;
+}
+
+.console_msg {
+    margin: 0;
+    padding: 0;
+    color: gray;
+}
+
+#regenerate_div {
+    top: 0px;
+    min-width: auto;
+    padding-right: 10px;
+}
+
+#color_div {
+    top: 150px;
+}
+
+select, option {
+    color: black;
+    outline: none;
 }
