@@ -27,14 +27,12 @@ var story_ignoma = [
         text: [
             {
                 content: [
-                    "You stand in the main streets of Ebonfront, Ignoma's capital."
-                ]
-            },
-            {
-                content: [
                     "Ebonfront is the capital city of Ignoma, located on its Northeast coastline, and has enormous harbors to support its vibrant fishing and trade industry."
                 ],
-                norepeat: true
+                norepeat: true,
+                alternate: [
+                    "You stand in the main streets of Ebonfront, Ignoma's capital."
+                    ]
             },
             {
                 content: [
