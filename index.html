@@ -29,11 +29,11 @@
 </head>
 <body>
     <div id="header">
-        <div class="header_options header_title" onclick="show_header(0)">Menu</div>
-        <div class="header_options hidden header_title" onclick="show_header(1)">Stats</div>
-        <div class="header_options hidden header_title" onclick="show_header(2)">Map</div>
-        <div class="header_options hidden header_title" onclick="show_header(3)">Date Time</div>
-        <div class="header_options hidden header_title" onclick="show_header(4)">Inventory</div>
+        <div class="header_options header_title" onclick="HeaderManager.showHeader(0)">Menu</div>
+        <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(1)">Stats</div>
+        <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(2)">Map</div>
+        <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(3)">Date Time</div>
+        <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(4)">Inventory</div>
     </div>
     <div id="global">
         <div id="header_0" class="header_pages hidden">
@@ -56,8 +56,8 @@
                     <p class="saveload_option noselect" onclick="load_game('browser')"></p>
                 </div>
                 <div>
-                    <label for="load_file" id="load_file_label">File</label>
-                    <input class="saveload_option noselect" id="load_file" type="file" style="display:none" onchange="load_game('file')" accept=".ignosave">
+                    <label for="load_file" id="load_file_label" class="saveload_option noselect">File</label>
+                    <input id="load_file" type="file" style="display:none" onchange="load_game('file')" accept=".ignosave">
                 </div>
                 <div>
                     <p class="saveload_option noselect"></p>
@@ -87,7 +87,7 @@
                 <h2>Dev</h2>
                 <div id="config_devmode">
                     <label for="devmode_set">Debug Mode</label>
-                    <input type="range" id="debug_set" min=0 max=5 value="100" list="debugmarks" oninput="change_debug_mode()">
+                    <input type="range" id="debug_set" min=0 max=5 value="100" list="debugmarks" oninput="UIManager.changeDebugMode()">
                     <datalist id="debugmarks">
                         <option value="0"></option>
                         <option value="1"></option>
@@ -244,7 +244,7 @@
     <div id="trade">
         <div>
             <h1 id="trade_gold">Gold: 100</h1>
-            <h1 id="trade_close" onclick="toggle_trade_menu(true)">Close [x]</h1>
+            <h1 id="trade_close" onclick="TradeManager.toggleMenu()">Close [x]</h1>
         </div>
         <div id="trade_shop">
         </div>
