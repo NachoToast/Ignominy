@@ -844,17 +844,12 @@ function update_keybind_config() {
   function true_load(load_index, tooltip, data) {
     //show_header(0); (personal preference)
     MenuManager.showAttemptFeedback(load_index, 'Save loaded!', true, 1);
-    player.config.devmode.saveload_data =
-      player.config.devmode.saveload_data || data.config.devmode.saveload_data;
-    if (player.config.devmode.saveload_data)
-      console.log('Executed browser load.');
 
     if (version !== data.version || harsh_check) {
-      if (player.config.devmode.saveload_data)
-        console.warn(
-          `Save version mismatch: Currently on ${version} but save is ${data.version}!`
-        );
-      data = version_debugger(data, player.config.devmode.saveload_data);
+      console.warn(
+        `Save version mismatch: Currently on ${version} but save is ${data.version}!`
+      );
+      data = version_debugger(data);
     }
 
     player = data;
@@ -869,48 +864,72 @@ function update_keybind_config() {
     let r = confirm('Confirm game reset.');
     if (r == true) location.reload();
   }
-  function version_debugger(save, verbose) {
-    // use when introducing new object fields (for story [unlikely] and player objects) in future versions.
-    // if (verbose) console.log("%cVersion debugger has nothing to do... yet.", 'color: gray');
-    // to do: use the above 'past_versions' array for conditional checks instead of checking everything all the time.
-    // maybe procedural append it aswell?
+  function version_debugger(save) {
+    // use when introducing new object key value pairs (for story [unlikely] and player objects) in future versions
+    // TODO: use the above 'past_versions' array for conditional checks instead of checking everything all the time.
     save.version = version;
+    console.log('%cVersion debugger started.', 'color: gray');
     // 0.1.16
-    if (save?.random === undefined) {
-      save.random = defaults.random;
-      if (verbose) console.log('%cAdded random field.', 'color: gray');
-    }
-    if (save?.inns === undefined) {
-      save.inns = [];
-      if (verbose) console.log('%cAdded inns array.', 'color: gray');
-    }
-    if (save?.config.timestamps === undefined) {
-      save.config.timestamps = defaults.timestamps_config;
-      if (verbose)
-        console.log('%cAdded config.timestamps object.', 'color: gray');
-    }
-    if (save?.previous_scene === undefined) {
-      save.previous_scene = null;
-      if (verbose) console.log('%cAdded previous_scene field.', 'color: gray');
-    }
-    if (save?.config?.devmode?.scene_tracking === undefined) {
-      save.config.devmode.scene_tracking = defaults.devmode.scene_tracking;
-      if (verbose)
+    {
+      if (save?.random === undefined) {
+        save.random = defaults.random;
+        console.log('%c[0.1.16] Added random field.', 'color: gray');
+      }
+      if (save?.inns === undefined) {
+        save.inns = [];
+        console.log('%c[0.1.16] Added inns array.', 'color: gray');
+      }
+      if (save?.config.timestamps === undefined) {
+        save.config.timestamps = defaults.timestamps_config;
         console.log(
-          '%cAdded config.devmode.scene_tracking bool.',
+          '%c[0.1.16] Added config.timestamps object.',
           'color: gray'
         );
+      }
+      if (save?.previous_scene === undefined) {
+        save.previous_scene = null;
+        console.log('%c[0.1.16] Added previous_scene field.', 'color: gray');
+      }
+      if (save?.config?.devmode?.scene_tracking === undefined) {
+        save.config.devmode.scene_tracking = defaults.devmode.scene_tracking;
+        console.log(
+          '%c[0.1.16] Added config.devmode.scene_tracking bool.',
+          'color: gray'
+        );
+      }
     }
     // 0.1.17
-    if (save?.config?.devmode?.trade_info === undefined) {
-      save.config.devmode.trade_info = defaults.devmode.trade_info;
-      if (verbose)
-        console.log('%cAdded config.devmode.trade_info bool.', 'color: gray');
+    {
+      if (save?.config?.devmode?.trade_info === undefined) {
+        save.config.devmode.trade_info = defaults.devmode.trade_info;
+        console.log(
+          '%c[0.1.17] Added config.devmode.trade_info bool.',
+          'color: gray'
+        );
+      }
+      if (save?.inventory === undefined) {
+        save.inventory = [];
+        console.log('%c[0.1.17] Added inventory array.', 'color: gray');
+      }
     }
-    if (save?.inventory === undefined) {
-      save.inventory = [];
-      if (verbose) console.log('%cAdded inventory array.', 'color: gray');
+    // 0.1.21
+    {
+      if (save?.config?.chrono?.reversed === undefined) {
+        if (
+          save?.config?.chrono?.order !== undefined && // if obsolete 'order' field present
+          save.config.chrono.order === 1 // and is 1 (reversed)
+        ) {
+          save.config.chrono.reversed = true;
+        } else {
+          save.config.chrono.reversed = false;
+        }
+        console.log(
+          '%c[0.1.21] Added config.chrono.reversed bool.',
+          'color: gray'
+        );
+      }
     }
+    console.log('%cVersion debugger finished.', 'color: gray');
     return save;
   }
 }

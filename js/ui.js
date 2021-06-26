@@ -364,7 +364,6 @@ class DateTimeManager {
 
   // adds ordinals ('st', 'nd', 'rd', 'th') to the day number
   static addOrdinals(num) {
-    console.log(num);
     if ([11, 12, 13].indexOf(num) != -1) return 'th'; // 11, 12, 13 edge cases
 
     switch (num % 10) {
@@ -385,10 +384,10 @@ class DateTimeManager {
   // converts numerical date values (year, month, day) into player-specified format
   static convertDate(
     date = player.config.chrono.date_format, // date format string, e.g. 'dddd d mmmm, yyyy' could be 'Friday 18 June, 2021'
-    timeObj = player.time, // Date object
-    incOrdinals = player.config.chrono.ordinals // Whether to include the 'st', 'nd', 'rd', and 'th' at the end of the day number (if present)
+    timeObj = player.time, // date object
+    incOrdinals = player.config.chrono.ordinals // whether to include the 'st', 'nd', 'rd', and 'th' at the end of the day number (if present)
   ) {
-    let dayNum = timeObj.getDate(),
+    const dayNum = timeObj.getDate(),
       dayLong = this.convertToLongDay(timeObj.getDay()),
       monthNum = timeObj.getMonth(),
       monthLong = this.convertToLongMonth(monthNum),
@@ -402,18 +401,18 @@ class DateTimeManager {
     // this is done to avoid replacing > once, e.g. simply replacing 'm' with the month number doesn't work since 'September' has an 'm' in it
 
     // dateMap converts markers to formatted date components
-    let dateMap = {
+    const dateMap = {
       // day
-      f00: dayLong, // 'dddd' full day e.g. Friday
+      f00: dayLong,
       f01: dayLong.substring(0, 3), // 'ddd' abbreviated day e.g. Fri
-      f02: dayNum < 10 ? '0' + dayNum : dayNum, // 'dd' 2 digit day e.g. 18
+      f02: dayNum < 10 ? '0' + dayNum : dayNum,
       f03: dayNum + ordinals, // 'd' single digit day e.g. 18
 
       // month
-      f10: monthLong, // 'mmmm' full month e.g. June
+      f10: monthLong,
       f11: monthLong.substring(0, 3), // 'mmm' abbreviated month e.g. Jun
       f12: monthNum < 10 ? '0' + monthNum : monthNum, // 'mm' 2 digit month e.g. 06
-      f13: monthNum, // 'm' single digit month (+1 for 1-based index) e.g. 6
+      f13: monthNum, // 'm' single digit month, e.g. 6
 
       // year
       f20: year, // 'yyyy' full year e.g. 2021
@@ -433,6 +432,46 @@ class DateTimeManager {
     );
 
     return date;
+  }
+
+  // converts numerical time values (hour, minute, second) into player-specified format
+  static convertTime(
+    time = player.config.chrono.time_format, // time format string, e.g. 'h:mm' could be '10:11am'
+    timeObj = player.time, // date object
+    hour24Time = player.config.chrono.time === 24 // whether to use 24 hour time, removing the 'am' and 'pm' suffixes
+  ) {
+    let hour = timeObj.getHours();
+
+    const second = timeObj.getSeconds(),
+      minute = timeObj.getMinutes(),
+      period = hour >= 12 ? 'pm' : 'am';
+
+    if (!hour24Time && hour > 12) {
+      // 12 hour time format should take modulus 12 of the hour if > 12, e.g. 13 becomes 1
+      hour -= 12;
+    }
+    if (hour === 0 && !hour24Time) {
+      // 12 hour time format should display the 0th hour as 12
+      hour = 12;
+    }
+
+    const timeConfigMap = {
+      ss: second < 10 ? '0' + second : second,
+      s: second,
+      mm: minute < 10 ? '0' + minute : minute,
+      m: minute,
+      hh: hour < 10 ? '0' + hour : hour,
+      h: hour,
+    };
+
+    time = time.replace(/ss|s|mm|m|hh|h/g, (char) => timeConfigMap[char]);
+
+    if (!hour24Time) {
+      // 12 hour time format should show 'am' and 'pm' suffixes
+      time += ' ' + period;
+    }
+
+    return time;
   }
 }
 
@@ -506,7 +545,7 @@ class DateTimeManager {
   } */
 
   // private
-  function update_time() {
+  /*   function update_time() {
     (hour = player.time.getHours()),
       (minute = player.time.getMinutes()),
       (second = player.time.getSeconds()),
@@ -551,26 +590,21 @@ class DateTimeManager {
       time = time.replace(/f21/g, local_second);
     }
     return time + a;
-  }
+  } */
 
   // public - updates UI so called on config changes, time incrementation, and game starts/loads
-  function update_chrono() {
+  function update_chrono(reversed = player.config.chrono.reversed) {
     let date = DateTimeManager.convertDate(),
-      time = update_time();
+      time = DateTimeManager.convertTime();
 
-    if (player.config.chrono.order == 0)
-      header_options[3].innerText = date + ' ' + time;
+    if (reversed) header_options[3].innerText = date + ' ' + time;
     else header_options[3].innerText = time + ' ' + date;
-
-    if (player.config.chrono.order == 0)
-      config_example.innerText = 'Example Output: ' + date + ' ' + time;
-    else config_example.innerText = 'Example Output: ' + time + ' ' + date;
 
     HeaderManager.updateHeaderBorders();
   }
 
   // private
-  function convert_month(num) {
+  /*   function convert_month(num) {
     if (num == 0) return 'January';
     else if (num == 1) return 'February';
     else if (num == 2) return 'March';
@@ -584,10 +618,10 @@ class DateTimeManager {
     else if (num == 10) return 'November';
     else if (num == 11) return 'December';
     else return 'Invalid month!';
-  }
+  } */
 
   // private
-  function convert_day(num) {
+  /*   function convert_day(num) {
     if (num == 0) return 'Sunday';
     if (num == 1) return 'Monday';
     if (num == 2) return 'Tuesday';
@@ -596,10 +630,10 @@ class DateTimeManager {
     if (num == 5) return 'Friday';
     if (num == 6) return 'Saturday';
     else return 'Invalid day!';
-  }
+  } */
 
   // private
-  function random_date() {
+  /*   function random_date() {
     let random_year = Math.floor(Math.random() * (3052 - 2000) + 2000),
       random_month = Math.floor(Math.random() * 12),
       random_day = Math.floor(Math.random() * (29 - 1) + 1),
@@ -617,7 +651,7 @@ class DateTimeManager {
     );
     update_chrono();
     console.log(header_options[3].innerHTML);
-  }
+  } */
 }
 
 function update_stats() {
@@ -730,9 +764,9 @@ class UIManager extends GameManager {
 
   // meta element positioning
   // TODO: Fix div position bugs for this.
-  // FIXME: Meta enabled before next scene press = do resize event but meta element doesn't exist yet = error
   static calibrateMetaElements(metaElement = undefined) {
     if (metaElement === undefined) {
+      // BUG: Meta enabled before next scene press = do resize event but meta element doesn't exist yet = error
       console.warn("Tried to resize meta element which doens't yet exist!");
       return;
     }
@@ -796,12 +830,13 @@ class UIManager extends GameManager {
 
 // HeaderManager handles header page opening and closing
 class HeaderManager extends UIManager {
+  // headActions states what each header does when opened
   static headerActions = [
-    () => MenuManager.updateSaveLoadElements(),
-    () => update_stats,
-    () => null,
-    () => null,
-    () => InventoryManager.open(),
+    () => MenuManager.updateSaveLoadElements(), // menu
+    () => update_stats, // stats
+    () => null, // map
+    () => null, // date/time
+    () => InventoryManager.open(), // inventory
   ];
 
   // displays header page (or hides if already open)

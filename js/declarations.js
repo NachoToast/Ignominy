@@ -1,4 +1,4 @@
-const version = '0.1.20',
+const version = '0.1.21',
   harsh_check = true,
   game_window = document.getElementById('game');
 
@@ -19,7 +19,8 @@ const version = '0.1.20',
       random: global_random(),
       chrono: {
         time: 12, // 12 or 24
-        order: 0, // 0 = Date Time, 1 = Time Date
+        //order: 0, // 0 = Date Time, 1 = Time Date /// OBSOLETE as of 0.1.21, use config.chrono.reversed instead
+        reversed: false,
         ordinals: true,
         date_format: 'dddd d mmmm yyyy',
         time_format: 'h:mm',
@@ -200,8 +201,7 @@ const version = '0.1.20',
         config_date_ordinals = document.getElementById('date_ordinals'),
         config_time_format = document.getElementById('config_time_format'),
         config_time_hours = document.getElementById('time_hours'),
-        config_reverse = document.getElementById('chrono_reverse'),
-        config_example = document.getElementById('config_example');
+        config_reverse = document.getElementById('chrono_reverse');
 
       // Event Listeners
       config_date_format.addEventListener('input', function () {
@@ -229,11 +229,7 @@ const version = '0.1.20',
         update_chrono();
       });
       config_reverse.addEventListener('change', function () {
-        if (this.checked) {
-          player.config.chrono.order = 1;
-        } else {
-          player.config.chrono.order = 0;
-        }
+        player.config.chrono.reversed = this.checked;
         update_chrono();
       });
     }
