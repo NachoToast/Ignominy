@@ -320,6 +320,7 @@
   } */
 }
 
+// DateTimeManager handles displaying and incrementation of game date and time
 class DateTimeManager {
   static dayNames = [
     'Sunday',
@@ -399,6 +400,7 @@ class DateTimeManager {
     // second X: 0 = full, 1 = 3-letter, 2 = full numerical, 3 = short numerical
     // this is done to avoid replacing > once, e.g. simply replacing 'm' with the month number doesn't work since 'September' has an 'm' in it
 
+    // dateMap converts markers to formatted date components
     let dateMap = {
       // day
       f00: dayLong, // 'dddd' full day e.g. Friday
