@@ -364,6 +364,7 @@ class DateTimeManager {
 
   // adds ordinals ('st', 'nd', 'rd', 'th') to the day number
   static addOrdinals(num) {
+    console.log(num);
     if ([11, 12, 13].indexOf(num) != -1) return 'th'; // 11, 12, 13 edge cases
 
     switch (num % 10) {
@@ -388,7 +389,7 @@ class DateTimeManager {
     incOrdinals = player.config.chrono.ordinals // Whether to include the 'st', 'nd', 'rd', and 'th' at the end of the day number (if present)
   ) {
     let dayNum = timeObj.getDate(),
-      dayLong = this.convertToLongDay(dayNum),
+      dayLong = this.convertToLongDay(timeObj.getDay()),
       monthNum = timeObj.getMonth(),
       monthLong = this.convertToLongMonth(monthNum),
       year = timeObj.getFullYear(),
@@ -405,14 +406,14 @@ class DateTimeManager {
       // day
       f00: dayLong, // 'dddd' full day e.g. Friday
       f01: dayLong.substring(0, 3), // 'ddd' abbreviated day e.g. Fri
-      f02: dayNum + 1 < 10 ? '0' + (dayNum + 1) : dayNum + 1, // 'dd' 2 digit day e.g. 18
-      f03: dayNum + 1 + ordinals, // 'd' single digit day e.g. 18
+      f02: dayNum < 10 ? '0' + dayNum : dayNum, // 'dd' 2 digit day e.g. 18
+      f03: dayNum + ordinals, // 'd' single digit day e.g. 18
 
       // month
       f10: monthLong, // 'mmmm' full month e.g. June
       f11: monthLong.substring(0, 3), // 'mmm' abbreviated month e.g. Jun
-      f12: monthNum + 1 < 10 ? '0' + (monthNum + 1) : monthNum + 1, // 'mm' 2 digit month e.g. 06
-      f13: monthNum + 1, // 'm' single digit month (+1 for 1-based index) e.g. 6
+      f12: monthNum < 10 ? '0' + monthNum : monthNum, // 'mm' 2 digit month e.g. 06
+      f13: monthNum, // 'm' single digit month (+1 for 1-based index) e.g. 6
 
       // year
       f20: year, // 'yyyy' full year e.g. 2021
@@ -437,7 +438,7 @@ class DateTimeManager {
 
 {
   // private
-  function update_date() {
+  /*   function update_date() {
     let year = player.time.getFullYear(),
       month = player.time.getMonth(),
       day = player.time.getDate(),
@@ -502,7 +503,7 @@ class DateTimeManager {
       date = date.replace(/f21/g, year.toString().substring(2));
 
     return date;
-  }
+  } */
 
   // private
   function update_time() {
@@ -554,7 +555,7 @@ class DateTimeManager {
 
   // public - updates UI so called on config changes, time incrementation, and game starts/loads
   function update_chrono() {
-    let date = update_date(),
+    let date = DateTimeManager.convertDate(),
       time = update_time();
 
     if (player.config.chrono.order == 0)
