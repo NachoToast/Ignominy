@@ -1,0 +1,80 @@
+.fullPageOverlay {
+  background-color: #272727;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.loadMenu {
+  cursor: wait;
+  justify-content: center;
+  font-size: min(5vw, 24px);
+  z-index: 1000;
+}
+
+
+/* Main Menu */
+.mainMenu {
+  font-size: min(10vw, 60px);
+}
+.mainMenu > h1 {
+  padding: 20px 0 5px 0;
+  letter-spacing: 4px;
+  color: gold; 
+}
+.mainMenu > p {
+  font-size: min(6vw, 22px);
+  width: 80%;
+  text-align: center;
+  color: gray;
+  padding: 0;
+  font-style: italic;
+  padding: 5px 0;
+}
+.mainMenu > button {
+  font-size: min(8vw, 36px);
+  width: 100%;
+  background-color: transparent;
+  border: solid 1px transparent;
+  color: white;
+  padding: 10px 0;
+  cursor: pointer;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  transition: background-color 0.1s linear;
+}
+.mainMenu > button:hover {
+  background-color: #333;
+  animation-name: mainMenuButton;
+}
+.mainMenu > button:active {
+  animation-play-state: paused;
+}
+@keyframes mainMenuButton {
+  from {color: magenta}
+  to {color: gold}
+}
+
+.mainMenu > a {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  font-size: 18px;
+  padding: 0 5px 5px 0;
+  color: darkgray;
+  text-decoration: none;
+  transition: color 0.1s linear;
+}
+
+.mainMenu > a:hover {
+  cursor: pointer;
+  color: lightgray;
+}
+
+.mainMenu > a:active {
+  color: lightgreen;
+}

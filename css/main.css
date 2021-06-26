@@ -1,23 +1,23 @@
-@import "fonts/stylesheet.css";
+@import 'fonts/stylesheet.css';
 
-@import "header.css";
-@import "game.css";
-@import "lore.css";
-@import "trade.css";
+@import 'menu.css';
 
 * {
-    margin: 0;
-    padding: 0;
-    max-width: 100%;
-    color: white;
     font-family: "Roboto", sans-serif;
 }
 
 body {
+    margin: 0;
     display: flex;
     flex-flow: column nowrap;
-    background-color: #272727;
-    min-height: 100vh;
+    /* min-height: 2000px; */
+    color: white;
+    font-family: 'Roboto', sans-serif, Calibri, 'Trebuchet MS';
+}
+
+h1, h2, h3, h4, h5, p {
+    margin: 0;
+    padding: 0;
 }
 
 .noselect {
@@ -26,26 +26,22 @@ body {
        -khtml-user-select: none; /* Konqueror HTML */
          -moz-user-select: none; /* Old versions of Firefox */
           -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
-                                    supported by Chrome, Edge, Opera and Firefox */
+              user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
-body::-webkit-scrollbar {
+.specialScroll::-webkit-scrollbar {
     background-color: #272727;
     width: 1em;
-    border-left: solid 1px gray;
 }
 
-body::-webkit-scrollbar-thumb {
+.specialScroll::-webkit-scrollbar-thumb {
     background-color: gray;
-    border: solid 1px gray;
-    border-right: none;
 }
 
-body::-webkit-scrollbar-thumb:hover {
+.specialScroll::-webkit-scrollbar-thumb:hover {
     background-color: #B5B5B5;
 }
 
-body::-webkit-scrollbar-thumb:active {
+.specialScroll::-webkit-scrollbar-thumb:active {
     background-color: pink;
 }
