@@ -1,4 +1,4 @@
-const version = '0.1.21',
+const version = '0.1.22',
   harsh_check = true,
   game_window = document.getElementById('game');
 
@@ -19,7 +19,6 @@ const version = '0.1.21',
       random: global_random(),
       chrono: {
         time: 12, // 12 or 24
-        //order: 0, // 0 = Date Time, 1 = Time Date /// OBSOLETE as of 0.1.21, use config.chrono.reversed instead
         reversed: false,
         ordinals: true,
         date_format: 'dddd d mmmm yyyy',

@@ -4,6 +4,7 @@
 @import "game.css";
 @import "lore.css";
 @import "trade.css";
+@import "main_menu.css";
 
 * {
     margin: 0;
@@ -20,7 +21,7 @@ body {
     min-height: 100vh;
 }
 
-.noselect {
+.noselect, label {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
        -khtml-user-select: none; /* Konqueror HTML */
@@ -30,22 +31,19 @@ body {
                                     supported by Chrome, Edge, Opera and Firefox */
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar, .specialScroll::-webkit-scrollbar {
     background-color: #272727;
     width: 1em;
-    border-left: solid 1px gray;
 }
 
-body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb, .specialScroll::-webkit-scrollbar-thumb {
     background-color: gray;
-    border: solid 1px gray;
-    border-right: none;
 }
 
-body::-webkit-scrollbar-thumb:hover {
+body::-webkit-scrollbar-thumb:hover, .specialScroll::-webkit-scrollbar-thumb:hover {
     background-color: #B5B5B5;
 }
 
-body::-webkit-scrollbar-thumb:active {
+body::-webkit-scrollbar-thumb:active, .specialScroll::-webkit-scrollbar-thumb:active {
     background-color: pink;
 }

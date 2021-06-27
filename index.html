@@ -41,12 +41,61 @@
   <script defer src="js/post_declarations.js"></script>
 </head>
 <body>
+  <div id='mainMenu' class='specialScroll'>
+    <h1 class='noselect'>Ignominy</h1>
+    <div>
+      <h2>Saves</h2>
+      <div>
+        <p>1</p>
+        <p>27/04 [9 Days Ago]</p>
+        <p>NachoToast</p>
+        <p>Ebonfront - Ignoma</p>
+        <p>You stand on the streets of Ebonf...</p>
+        <button>Save</button>
+        <button>Load</button>
+      </div>
+    </div>
+    <div>
+      <h2>Config</h2>
+      <div>
+        <div>
+          <h3>Date & Time</h3>
+          <input value='dddd d mmmm yyyy h:mm' id='dateFormat'>
+          <label for='dateFormat'>Format</label>
+          <input type='checkbox' id='ordinals' checked title='Time ordinals are the "st", "nd", "rd", and "th" suffixes that come after the day number.'>
+          <label for='ordinals' title='Time ordinals are the "st", "nd", "rd", and "th" suffixes that come after the day number.'>Show Time Ordinals</label>
+          <input type='checkbox' id='timeHour'>
+          <label for='timeHour'>24 Hour Time</label>
+        </div>
+        <div>
+          <h3>Scenes</h3>
+          <input type='checkbox' id='hotkeys' checked>
+          <label for='hotkeys'>Enable Hotkeys</label>
+          <input type='checkbox' id='timestamps' checked>
+          <label for='timestamps'>Show Timestamps</label>
+          <input type='checkbox' id='metaAuthors'>
+          <label for='metaAuthors'>Show Scene Authors</label>
+          <input type='checkbox' id='metaVersion'>
+          <label for='metaVersion'>Show Scene Version</label>
+          <input type='checkbox' id='metaVersionLegacy'>
+          <label for='metaVersionLegacy'>Show Legacy Scene Version</label>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Links</h2>
+      <p>Github</p>
+      <p>Website</p>
+      <p>Discord</p>
+    </div>
+    <p>Ignominy 0.1.20</p>
+  </div>
   <div id="header">
-    <div class="header_options header_title" onclick="HeaderManager.showHeader(0)">Menu</div>
-    <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(1)">Stats</div>
-    <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(2)">Map</div>
-    <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(3)">Date Time</div>
-    <div class="header_options hidden header_title" onclick="HeaderManager.showHeader(4)">Inventory</div>
+    <div class="header_options header_title noselect" onclick="HeaderManager.showHeader(0)">Menu</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(1)">Stats</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(2)">Map</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(3)">Date Time</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(4)">Inventory</div>
   </div>
   <div id="global">
     <div id="header_0" class="header_pages hidden">

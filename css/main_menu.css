@@ -1,0 +1,31 @@
+#mainMenu {
+  background-color: #272727;
+  border: solid 1px gray;
+  position: fixed;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+#mainMenu > * {
+  width: 100%;
+  transition: background-color 0.1s linear;
+  padding: 5px 0;
+}
+
+#mainMenu > h1 {
+  font-size: min(12vw, 60px);
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+#mainMenu > div {
+  border-bottom: solid 1px gray;
+  padding: 5px 0;
+}
+
+#mainMenu > *:hover {
+  background-color: #333;
+}
