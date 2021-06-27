@@ -1,327 +1,10 @@
-// old general UI functions, obsolete 0.1.20
-{
-  // General Functions
-  /*   function recheck_ui_elements() {
-    HeaderManager.updateHeaderBorders();
-    //calibrate_trade_menu();
-    if (Object.values(player.config.meta).indexOf(true) !== -1)
-      UIManager.calibrateMetaElements(
-        document.getElementsByClassName('std_meta_window')[0]
-      );
-  } */
-  /*   function calibrate_meta(meta_element) {
-    meta_element.style.marginTop =
-      window.innerHeight - header.offsetHeight + 'px';
-  } */
-  /*   function change_debug_mode() {
-    player.config.debug = config_debug.value;
-    if (player.config.debug == 0) config_debug_out.innerText = 'Off';
-    else config_debug_out.innerText = player.config.debug;
-  } */
-  /*   function color_gradient(min, max, current, color_a, color_b, color_c) {
-    // returns an rgb value in the format "r, g, b"
-    let color_progression;
-    if (current >= max) color_progression = 1;
-    else color_progression = (current - min) / (max - min); // Standardize as decimal [0-1 (inc)].
-    if (color_c) {
-      color_progression *= 2;
-      if (color_progression >= 1) {
-        color_progression -= 1;
-        color_a = color_b;
-        color_b = color_c;
-      }
-    }
-
-    let new_red = color_a.red + color_progression * (color_b.red - color_a.red),
-      new_green =
-        color_a.green + color_progression * (color_b.green - color_a.green),
-      new_blue =
-        color_a.blue + color_progression * (color_b.blue - color_a.blue);
-
-    let output_red = parseInt(Math.floor(new_red), 10),
-      output_green = parseInt(Math.floor(new_green), 10),
-      output_blue = parseInt(Math.floor(new_blue), 10);
-
-    return `${output_red}, ${output_green}, ${output_blue}`;
-    // final r = x (final red - initial red) + inital red
-    // where x is how far along u are (1 = done, 0 = none)
-  } */
-}
-
-// old header-related functions, obsolete 0.1.20
-{
-  // Headers
-  /*   function show_header(option) {
-    if (option == current_header) {
-      header_pages[option].classList.add('hidden');
-      current_header = -1;
-      return;
-    }
-    if (option == 0) {
-      // Menu
-      update_menu();
-    } else if (option == 1) {
-      // Stats
-      update_stats();
-    } else if (option == 2) {
-      // Map
-      console.log('Map');
-    } else if (option == 3) {
-      // Date & Time
-      console.log('Date');
-    } else if (option == 4) {
-      // Inventory
-      open_inventory();
-    }
-    header_pages[current_header]?.classList.add('hidden');
-    header_pages[option].classList.remove('hidden');
-    current_header = option;
-    header_pages[option].style.height =
-      document.body.offsetHeight - header.offsetHeight + 'px';
-  } */
-  /*   function unhide_headers() {
-    for (let i = 0, len = player.config.headers.length; i < len; i++) {
-      if (player.config.debug > 3)
-        console.log(
-          `Unhiding header ${player.config.headers[i]} (${
-            header_options[player.config.headers[i]].innerHTML
-          }).`
-        );
-      header_options[player.config.headers[i]].classList.remove('hidden');
-    }
-    update_header_borders();
-  } */
-  /*   function update_header_borders() {
-    let header_width = header.getBoundingClientRect().width;
-    for (let i = 0, len = header_options.length; i < len; i++) {
-      let my_right = header_options[i].getBoundingClientRect().right;
-      if (Math.floor(my_right) >= header_width - 1)
-        header_options[i].style.borderRight = 'none';
-      else header_options[i].style.borderRight = 'solid 1px gray';
-    }
-  } */
-}
-
-// old trade menu functions, obsolete 0.1.20
-{
-  // Trade
-  // function calibrate_trade_menu() {
-  //trade_menu.style.minHeight = window.innerHeight - header.offsetHeight - 40 + "px";
-  // }
-  /*   function toggle_trade_menu(currently_open) {
-    if (currently_open) {
-      trade_menu.style.display = 'none';
-      doing_trade = false;
-      game_window.style.display = 'flex';
-      document.removeEventListener('keydown', function (e) {
-        if (e.key !== 'x') return;
-        toggle_trade_menu(true);
-      });
-      return;
-    }
-    trade_menu.style.display = 'flex';
-    document.addEventListener('keydown', function (e) {
-      if (e.key !== 'x') return;
-      toggle_trade_menu(true);
-    });
-    doing_trade = true;
-    game_window.style.display = 'none';
-    recheck_ui_elements(); // holy shit it works as intended
-  } */
-}
-
-// old inventory functions, obsolete 0.1.20
-{
-  // Inventory
-  /*   function open_inventory() {
-    let unique_item_count = player.inventory.length,
-      full_item_count = 0;
-    inv_items = [];
-    inventory_container.innerHTML = '';
-
-    if (unique_item_count != 0) {
-      for (let i = 0; i < unique_item_count; i++) {
-        // find the item in global items array
-        let item_index = item_map.indexOf(player.inventory[i].name);
-        if (item_index == -1) {
-          console.warn(
-            `Couldn't find item ${
-              i + 1
-            } from players inventory in global items array! (${
-              player.inventory[i].name
-            })`
-          );
-          continue;
-        }
-        let item = items[item_index],
-          item_element = inventory_generate_item_card(item, i);
-        inventory_container.appendChild(item_element);
-        inv_items.push(item_element);
-        full_item_count += player.inventory[i].count;
-      }
-    }
-    inventory_title.innerHTML = `${player.name}'s Inventory (<span title="Unique item count" class="hover_gray">${unique_item_count}</span> <span title="Total item count" class="hover_gray">[${full_item_count}]</span>)`;
-  }
-  function inventory_generate_item_card(item, index) {
-    // item div
-    let d = document.createElement('div');
-    d.classList.add('inv_item');
-    // item image
-    let img = document.createElement('img');
-    img.src = `img/item/${item.src}`;
-    d.appendChild(img);
-    // div with the rest
-    let d2 = document.createElement('div');
-    d.appendChild(d2);
-    // item name + count
-    let h1 = document.createElement('h1');
-    var count = player.inventory[index].count;
-    h1.innerHTML = `${item.name} (${count})`;
-    d2.appendChild(h1);
-    // item description
-    let desc = document.createElement('p');
-    desc.innerHTML = item.desc;
-    d2.appendChild(desc);
-    // use/discard div
-    var d3 = document.createElement('div');
-    d2.appendChild(d3);
-    // (use) div [not yet sure if should implement this feature]
-
-    let d4 = document.createElement('div');
-    d2.appendChild(d4);
-    let p = document.createElement('p');
-    p.innerHTML = 'Discard:';
-    d4.appendChild(p);
-    let p1 = document.createElement('p');
-    p1.classList.add('id');
-    p1.innerHTML = '1';
-    p1.onclick = function () {
-      inventory_discard(index, 1);
-    };
-    d4.appendChild(p1);
-    if (count >= 50) {
-      let p = document.createElement('p');
-      p.innerHTML = '10';
-      p.classList.add('id');
-      p.onclick = function () {
-        inventory_discard(index, 10);
-      };
-      d4.appendChild(p);
-    } else if (count >= 10) {
-      let p = document.createElement('p');
-      p.innerHTML = '5';
-      p.classList.add('id');
-      p.onclick = function () {
-        inventory_discard(index, 5);
-      };
-      d4.appendChild(p);
-    }
-    if (count > 1) {
-      let p = document.createElement('p');
-      p.classList.add('id');
-      p.innerHTML = 'All';
-      p.onclick = function () {
-        inventory_discard(index, count);
-      };
-      d4.appendChild(p);
-    }
-    return d;
-  } */
-}
-
-// Menu handling functions, obsolete 0.1.20
-{
-  // Menu
-  /*   function update_menu() {
-    // generate save/load html
-
-    let save_elements = 0;
-    for (
-      let i = 0, len = saveload_defaults['save'].length;
-      i < len;
-      i++, save_elements++
-    ) {
-      let o = saveload_defaults['save'][i];
-      saveload_options[
-        i
-      ].innerHTML = `<span title="${o.title}">${o.text} (<span style="color: ${o.inline_color}">${o.inline}</span>)</span>`;
-    }
-
-    if (player.config.debug > 3)
-      console.log(`Found ${save_elements} save elements in menu.`);
-
-    for (
-      let i = 0, len = saveload_defaults['load'].length - save_elements;
-      i < len;
-      i++
-    ) {
-      let o = saveload_defaults['load'][2 * i],
-        o2 = saveload_defaults['load'][2 * i + 1];
-      saveload_options[
-        save_elements + i
-      ].innerHTML = `<span title="${o2}">${o}</span>`;
-    }
-
-    // split because save/load functions feedbacks shouldn't be overwritten on load.
-    update_menu_elements();
-  } */
-  /*   function update_menu_elements() {
-    config_date_format.value = player.config.chrono.date_format;
-    config_time_format.value = player.config.chrono.time_format;
-
-    if (player.config.chrono.time == 12) config_time_hours.checked = false;
-    else config_time_hours.checked = true;
-
-    if (player.config.chrono.order == 0) config_reverse.checked = false;
-    else config_reverse.checked = true;
-
-    config_date_ordinals.checked = player.config.chrono.ordinals;
-    config_authors.checked = player.config.meta.authors;
-    config_versions.checked = player.config.meta.version;
-    config_legacy_version.checked = player.config.meta.legacy_version;
-
-    update_chrono();
-
-    if (player.config.debug == 0) config_debug_out.innerText = 'Off';
-    else config_debug_out.innerText = player.config.debug;
-    config_debug.value = player.config.debug;
-
-    if (player.homekingdom == 'Default') {
-      for (let i = 0, len = main_menu_cards.length; i < len; i++) {
-        if (i == 1) continue;
-        //console.log("hiding card " + i);
-        main_menu_cards[i].classList.add('hidden');
-      }
-    } else {
-      for (let i = 0, len = main_menu_cards.length; i < len; i++) {
-        main_menu_cards[i].classList.remove('hidden');
-      }
-    }
-
-    config_hotkeys.checked = player.config.keybinds;
-    config_dead_links.checked = player.config.devmode.dead_links;
-    config_saveload_data.checked = player.config.devmode.saveload_data;
-    config_timestamps_enable.checked = player.config.timestamps.enabled;
-    config_scene_tracking.checked = player.config.devmode.scene_tracking;
-  } */
-  /*   function change_save_option(index, message, color, title) {
-    saveload_options[
-      index
-    ].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
-  } */
-  /*   function change_load_option(index, message, color, title) {
-    if (index == 1) {
-      special_load_option.innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
-      return;
-    }
-    saveload_options[
-      index + saveload_defaults['save'].length
-    ].innerHTML = `<span style="color: ${color}" title="${title}">${message}</span>`;
-  } */
-}
-
 // DateTimeManager handles displaying and incrementation of game date and time
 class DateTimeManager {
+  static tracking = true;
+  static trackingColor = 'rgb(255, 238, 139)';
+
+  static dateOutputElement = header_options[3];
+
   static dayNames = [
     'Sunday',
     'Monday',
@@ -473,185 +156,30 @@ class DateTimeManager {
 
     return time;
   }
-}
 
-{
-  // private
-  /*   function update_date() {
-    let year = player.time.getFullYear(),
-      month = player.time.getMonth(),
-      day = player.time.getDate(),
-      long_day = player.time.getDay(),
-      ordinals = '',
-      date = player.config.chrono.date_format;
-
-    // Selector Conversion
-    // f = Marker
-    // 0 = Day, 1 = Month, 2 = Year
-    // 0 = Full, 1 = 3-Letter, 2 = Full Numerical, 3 = Short Numerical
-    // Days
-    date = date.replace(/dddd/g, 'f00');
-    date = date.replace(/ddd/g, 'f01');
-    date = date.replace(/dd/g, 'f02');
-    date = date.replace(/d/g, 'f03');
-    // Months
-    date = date.replace(/mmmm/g, 'f10');
-    date = date.replace(/mmm/g, 'f11');
-    date = date.replace(/mm/g, 'f12');
-    date = date.replace(/m/g, 'f13');
-    // Years
-    date = date.replace(/yyyy/g, 'f20');
-    date = date.replace(/yy/g, 'f21');
-
-    // Long Day
-    if (date.includes('f00'))
-      date = date.replace(/f00/g, convert_day(long_day));
-    if (date.includes('f01'))
-      date = date.replace(/f01/g, convert_day(long_day).substring(0, 3));
-    // Short Day
-    if (date.includes('f02')) {
-      let local_day = day;
-      if (player.config.chrono.ordinals == true) {
-        ordinals = DateTimeManager.addOrdinals(day);
-      }
-      if (day < 10) local_day = '0' + local_day;
-      date = date.replace(/f02/g, local_day + ordinals);
+  // displays a formatted date to HTML element
+  static display(
+    outputElement = this.dateOutputElement, // the HTML element to write the date and time to
+    reversed = player.config.chrono.reversed, // whether the date and time should be in reversed order
+    updateHeaders = true // whether to call the update header borders method once the date is written
+  ) {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Displaying date`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
     }
-    if (date.includes('f03')) {
-      if (player.config.chrono.ordinals == true) {
-        ordinals = DateTimeManager.addOrdinals(day);
-      }
-      date = date.replace(/f03/g, day + ordinals);
+    if (reversed) {
+      outputElement.innerHTML = this.convertTime() + ' ' + this.convertDate();
+    } else {
+      outputElement.innerHTML = this.convertDate() + ' ' + this.convertTime();
     }
 
-    // Long Month
-    if (date.includes('f10')) date = date.replace(/f10/g, convert_month(month));
-    if (date.includes('f11'))
-      date = date.replace(/f11/g, convert_month(month).substring(0, 3));
-    // Short Month
-    if (date.includes('f12')) {
-      let local_month = month + 1;
-      if (month < 10) local_month = '0' + local_month;
-      date = date.replace(/f12/g, local_month);
+    if (updateHeaders) {
+      HeaderManager.updateHeaderBorders();
     }
-    if (date.includes('f13')) date = date.replace(/f13/g, month + 1);
-
-    // Year
-    if (date.includes('f20')) date = date.replace(/f20/g, year);
-    if (date.includes('f21'))
-      date = date.replace(/f21/g, year.toString().substring(2));
-
-    return date;
-  } */
-
-  // private
-  /*   function update_time() {
-    (hour = player.time.getHours()),
-      (minute = player.time.getMinutes()),
-      (second = player.time.getSeconds()),
-      (a = ''),
-      (time = player.config.chrono.time_format);
-    // Selector Conversion
-    // f = Marker
-    // 0 = Hour, 1 = Minute, 2 = Second
-    // 0 = Full, 1 = Short
-    time = time.replace(/hh/g, 'f00');
-    time = time.replace(/h/g, 'f01');
-    time = time.replace(/mm/g, 'f10');
-    time = time.replace(/m/g, 'f11');
-    time = time.replace(/ss/g, 'f21');
-    time = time.replace(/s/g, 'f20');
-
-    if (player.config.chrono.time == 12) {
-      // 12hr Conversion
-      if (hour >= 12) a = 'pm';
-      else a = 'am';
-
-      if (hour > 12) hour -= 12;
-      if (hour == 0) hour = 12;
-    }
-
-    if (time.includes('f00')) {
-      let local_hour = hour;
-      if (hour < 10) local_hour = '0' + local_hour;
-      time = time.replace(/f00/g, local_hour);
-    }
-    if (time.includes('f01')) time = time.replace(/f01/g, hour);
-    if (time.includes('f10')) {
-      let local_minute = minute;
-      if (minute < 10) local_minute = '0' + local_minute;
-      time = time.replace(/f10/g, local_minute);
-    }
-    if (time.includes('f11')) time = time.replace(/f11/g, minute);
-    if (time.includes('f20')) time = time.replace(/f20/g, second);
-    if (time.includes('f21')) {
-      let local_second = second;
-      if (second < 10) local_second = '0' + local_second;
-      time = time.replace(/f21/g, local_second);
-    }
-    return time + a;
-  } */
-
-  // public - updates UI so called on config changes, time incrementation, and game starts/loads
-  function update_chrono(reversed = player.config.chrono.reversed) {
-    let date = DateTimeManager.convertDate(),
-      time = DateTimeManager.convertTime();
-
-    if (reversed) header_options[3].innerText = date + ' ' + time;
-    else header_options[3].innerText = time + ' ' + date;
-
-    HeaderManager.updateHeaderBorders();
   }
-
-  // private
-  /*   function convert_month(num) {
-    if (num == 0) return 'January';
-    else if (num == 1) return 'February';
-    else if (num == 2) return 'March';
-    else if (num == 3) return 'April';
-    else if (num == 4) return 'May';
-    else if (num == 5) return 'June';
-    else if (num == 6) return 'July';
-    else if ((num = 7)) return 'August';
-    else if (num == 8) return 'September';
-    else if (num == 9) return 'October';
-    else if (num == 10) return 'November';
-    else if (num == 11) return 'December';
-    else return 'Invalid month!';
-  } */
-
-  // private
-  /*   function convert_day(num) {
-    if (num == 0) return 'Sunday';
-    if (num == 1) return 'Monday';
-    if (num == 2) return 'Tuesday';
-    if (num == 3) return 'Wednesday';
-    if (num == 4) return 'Thursday';
-    if (num == 5) return 'Friday';
-    if (num == 6) return 'Saturday';
-    else return 'Invalid day!';
-  } */
-
-  // private
-  /*   function random_date() {
-    let random_year = Math.floor(Math.random() * (3052 - 2000) + 2000),
-      random_month = Math.floor(Math.random() * 12),
-      random_day = Math.floor(Math.random() * (29 - 1) + 1),
-      random_hour = Math.floor(Math.random() * 61),
-      random_minute = Math.floor(Math.random() * 61);
-
-    player.time = new Date(
-      random_year,
-      random_month,
-      random_day,
-      random_hour,
-      random_minute,
-      0,
-      0
-    );
-    update_chrono();
-    console.log(header_options[3].innerHTML);
-  } */
 }
 
 function update_stats() {
@@ -739,19 +267,21 @@ function update_stats() {
   }
 }
 
-// GameManager encapsulates the whole game instance
-class GameManager {
-  constructor(initial = false) {
-    if (initial) {
-      console.log(`GameManager instantiated on version ${version}`);
-    } else console.log(this.name);
-  }
-}
-
 // UIManager handles headers, header pages, page resizing, and the trade menu
-class UIManager extends GameManager {
+class UIManager {
+  static tracking = true;
+  static trackingColor = 'rgb(255, 238, 139)';
+
   // page resize handling
-  static resizeHandler() {
+  static resize() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Resizing headers`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
     HeaderManager.updateHeaderBorders();
 
     // call to refresh meta if enabled
@@ -798,9 +328,11 @@ class UIManager extends GameManager {
 
     if (min == max) {
       console.warn(
-        'Color gradient function cannot have identical minimum and maximum values!'
+        `%c[${this.name}]%c Color gradient function cannot have identical minimum and maximum values! (min: ${min}, max: ${max})`,
+        `color: ${this.trackingColor}`,
+        `color: white;`
       );
-      return `0, 0, 0`;
+      return `255, 255, 255`;
     }
     colorProgression = (current - min) / (max - min); // standardize progression to 0-1 (inc)
     colorProgression = Math.max(colorProgression, 0); // lowest progression possible = 0
@@ -820,7 +352,7 @@ class UIManager extends GameManager {
       greenProgress =
         colorA.green + colorProgression * (colorB.green - colorA.green),
       blueProgress =
-        colorA.blue + colorProgression * (colorB.green - colorA.green);
+        colorA.blue + colorProgression * (colorB.blue - colorA.blue);
 
     return `${parseInt(redProgress)}, ${parseInt(greenProgress)}, ${parseInt(
       blueProgress
@@ -829,7 +361,7 @@ class UIManager extends GameManager {
 }
 
 // HeaderManager handles header page opening and closing
-class HeaderManager extends UIManager {
+class HeaderManager {
   // headActions states what each header does when opened
   static headerActions = [
     () => MenuManager.updateSaveLoadElements(), // menu
@@ -879,42 +411,63 @@ class HeaderManager extends UIManager {
   }
 }
 
-// TradeManager controls hiding/showing of trade menu
-class TradeManager extends UIManager {
+// TradeMenu controls hiding/showing of trade menu, keydown listening, and generation of new trades
+class TradeMenu {
+  static tracking = true;
+  static trackingColor = 'rgb(255, 238, 139)';
+
+  static menuElement = document.getElementById('trade');
   static isOpen = false;
 
-  static menuCloseKey = (e) => {
-    if (e.key === 'x') TradeManager.toggleMenu();
+  // keydown listener
+  static checkMenuClose = (e) => {
+    if (e.key === 'x') {
+      this.toggle();
+    }
   };
 
-  static get open() {
-    return this.isOpen;
-  }
-
-  static toggleMenu() {
+  static toggle() {
     if (this.isOpen) {
-      this.closeMenu();
+      this.close();
     } else {
-      this.openMenu();
+      this.open();
     }
     this.isOpen = !this.isOpen;
   }
 
-  static openMenu() {
-    trade_menu.style.display = 'flex';
-    document.addEventListener('keydown', this.menuCloseKey);
+  static open() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Opening trade menu`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    this.menuElement.style.display = 'flex';
+    game_window.style.display = 'none';
+    document.addEventListener('keydown', this.checkMenuClose);
+    doing_trade = true;
   }
 
-  static closeMenu() {
-    trade_menu.style.display = 'none';
-    doing_trade = false;
+  static close() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Closing trade menu`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    this.menuElement.style.display = 'none';
     game_window.style.display = 'flex';
-    document.removeEventListener('keydown', this.menuCloseKey);
+    document.removeEventListener('keydown', this.checkMenuClose);
+    doing_trade = false;
   }
 }
 
 // MenuManager handles updates to save/load buttons (for feedback) and config control
-class MenuManager extends UIManager {
+class MenuManager {
   static saveLoadOptions = [
     {
       text: 'Browser Storage',
@@ -944,12 +497,14 @@ class MenuManager extends UIManager {
 
   // called on every click on the 'Menu' header (if not open already)
   static updateSaveLoadElements() {
+    // TODO: overhaul, instead of regenerating every time just have the menu hidden
     // generate save and load button elements
     for (let i = 0, len = this.saveLoadOptions.length; i < len; i++) {
       let text = this.saveLoadOptions[i].text,
         comment = this.saveLoadOptions[i].comment,
         color = this.saveLoadOptions[i].color,
         tooltip = this.saveLoadOptions[i].tooltip;
+
       // save element
       saveload_options[
         i
@@ -966,6 +521,7 @@ class MenuManager extends UIManager {
 
   // called (indirectly) on every click of the 'Menu' header, and on save/load
   static updateMenuWidgets() {
+    //console.log('updating menu widgets');
     /// displaying config changes
     // date/time format
     config_date_format.value = player.config.chrono.date_format;
@@ -974,7 +530,7 @@ class MenuManager extends UIManager {
     config_time_hours.checked = !player.config.chrono.time == 12;
     config_date_ordinals.checked = player.config.chrono.ordinals;
 
-    update_chrono();
+    //DateTimeManager.display();
 
     // meta
     config_authors.checked = player.config.meta.authors;
@@ -1160,4 +716,4 @@ class InventoryManager extends UIManager {
   }
 }
 
-var CurrentGame = new GameManager(true);
+// var CurrentGame = new GameManager(true);

@@ -1,6 +1,6 @@
 function generate_game(scene, fromload) {
   HeaderManager.unhideAllHeaders();
-  update_chrono();
+  DateTimeManager.display();
   if (player.config.debug > 0)
     console.log(
       `%cStarting game%c\nLoaded Scene: ${scene}\nPlayer Hometown: ${player.hometown}, ${player.homekingdom}`,
@@ -259,7 +259,7 @@ function update_keybind_config() {
     );
     player.latest_time_increment = (new_time - player.time) / 1000;
     player.time = new_time;
-    update_chrono();
+    DateTimeManager.display();
 
     if (player.inns.length > 0) track_inns(player.latest_time_increment / 3600);
   }
@@ -849,88 +849,158 @@ function update_keybind_config() {
       console.warn(
         `Save version mismatch: Currently on ${version} but save is ${data.version}!`
       );
-      data = version_debugger(data);
+      data = VersionDebugger.fixMismatch(version, data.version, data);
     }
 
     player = data;
     player.time = new Date(data.time);
     MenuManager.updateMenuWidgets();
     generate_game(data.scene, true);
-    if (TradeManager.open) {
-      TradeManager.toggleMenu();
+    if (TradeMenu.isOpen) {
+      TradeMenu.toggle();
     }
   }
   function reset_game() {
     let r = confirm('Confirm game reset.');
     if (r == true) location.reload();
   }
-  function version_debugger(save) {
-    // use when introducing new object key value pairs (for story [unlikely] and player objects) in future versions
-    // TODO: use the above 'past_versions' array for conditional checks instead of checking everything all the time.
-    save.version = version;
-    console.log('%cVersion debugger started.', 'color: gray');
-    // 0.1.16
-    {
-      if (save?.random === undefined) {
-        save.random = defaults.random;
-        console.log('%c[0.1.16] Added random field.', 'color: gray');
-      }
-      if (save?.inns === undefined) {
-        save.inns = [];
-        console.log('%c[0.1.16] Added inns array.', 'color: gray');
-      }
-      if (save?.config.timestamps === undefined) {
-        save.config.timestamps = defaults.timestamps_config;
-        console.log(
-          '%c[0.1.16] Added config.timestamps object.',
-          'color: gray'
+}
+
+class VersionDebugger {
+  static trackingColor = 'aquamarine';
+
+  static versions = {
+    0: {
+      1: {
+        16: (saveData) => {
+          if (saveData?.random === undefined) {
+            saveData.random = defaults.random;
+            console.log(
+              `%c[${this.name}]%c Added 'random' int [0.1.16]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+          if (saveData?.inns === undefined) {
+            saveData.inns = [];
+            console.log(
+              `%c[${this.name}]%c Added 'inns' array [0.1.16]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+          if (saveData?.config?.timestamps === undefined) {
+            saveData.config.timestamps = defaults.timestamps_config;
+            console.log(
+              `%c[${this.name}]%c Added 'config.timestamps' object [0.1.16]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+          if (saveData?.previous_scene === undefined) {
+            saveData.previous_scene = null;
+            console.log(
+              `%c[${this.name}]%c Added 'previous_scene' int [0.1.16]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+          if (saveData?.config?.devmode?.scene_tracking === undefined) {
+            saveData.config.devmode.scene_tracking =
+              defaults.devmode.scene_tracking;
+            console.log(
+              `%c[${this.name}]%c Added 'config.devmode.scene_tracking' bool [0.1.16]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+        },
+        17: (saveData) => {
+          if (saveData?.config?.devmode?.trade_info === undefined) {
+            saveData.config.devmode.trade_info = defaults.devmode.trade_info;
+            console.log(
+              `%c[${this.name}]%c Added 'config.devmode.trade_info' bool [0.1.17]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+          if (saveData?.inventory === undefined) {
+            saveData.inventory = [];
+            console.log(
+              `%c[${this.name}]%c Added 'inventory' array [0.1.17]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+        },
+        21: (saveData) => {
+          if (saveData?.config?.chrono?.reversed === undefined) {
+            if (
+              saveData?.config?.chrono?.order !== undefined && // if obsolete 'order' field present
+              saveData.config.chrono.order === 1 // and is 1 (reversed)
+            ) {
+              saveData.config.chrono.reversed = true;
+            } else {
+              saveData.config.chrono.reversed = false;
+            }
+            console.log(
+              `%c[${this.name}]%c Added 'config.chrono.reversed' bool [0.1.21]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+        },
+      },
+    },
+  };
+
+  static fixMismatch(currentVersion, saveVersion, saveData) {
+    const current = currentVersion.split('.');
+    const save = saveVersion.split('.');
+
+    const releaseVersionsToCheck = Object.keys(this.versions).filter(
+      (e) => parseInt(e) >= parseInt(save[0])
+    );
+    const majorVersionsToCheck = [];
+    for (let i = 0, len = releaseVersionsToCheck.length; i < len; i++) {
+      let majorCandidates = Object.keys(
+        this.versions[releaseVersionsToCheck[i]]
+      );
+      if (releaseVersionsToCheck[i] == save[0]) {
+        majorCandidates = majorCandidates.filter(
+          (e) => parseInt(e) >= parseInt(save[1])
         );
       }
-      if (save?.previous_scene === undefined) {
-        save.previous_scene = null;
-        console.log('%c[0.1.16] Added previous_scene field.', 'color: gray');
-      }
-      if (save?.config?.devmode?.scene_tracking === undefined) {
-        save.config.devmode.scene_tracking = defaults.devmode.scene_tracking;
-        console.log(
-          '%c[0.1.16] Added config.devmode.scene_tracking bool.',
-          'color: gray'
-        );
-      }
+      majorCandidates.forEach((e) =>
+        majorVersionsToCheck.push(`${releaseVersionsToCheck[i]}.${e}`)
+      );
     }
-    // 0.1.17
-    {
-      if (save?.config?.devmode?.trade_info === undefined) {
-        save.config.devmode.trade_info = defaults.devmode.trade_info;
-        console.log(
-          '%c[0.1.17] Added config.devmode.trade_info bool.',
-          'color: gray'
+    const minorVersionsToCheck = [];
+    for (let i = 0, len = majorVersionsToCheck.length; i < len; i++) {
+      const version = majorVersionsToCheck[i].split('.');
+      let minorCandidates = Object.keys(this.versions[version[0]][version[1]]);
+      if (version[1] == save[1] && version[0] == save[0]) {
+        minorCandidates = minorCandidates.filter(
+          (e) => parseInt(e) > parseInt(save[2])
         );
       }
-      if (save?.inventory === undefined) {
-        save.inventory = [];
-        console.log('%c[0.1.17] Added inventory array.', 'color: gray');
-      }
+      minorCandidates.forEach((e) =>
+        minorVersionsToCheck.push(`${version[0]}.${version[1]}.${e}`)
+      );
     }
-    // 0.1.21
-    {
-      if (save?.config?.chrono?.reversed === undefined) {
-        if (
-          save?.config?.chrono?.order !== undefined && // if obsolete 'order' field present
-          save.config.chrono.order === 1 // and is 1 (reversed)
-        ) {
-          save.config.chrono.reversed = true;
-        } else {
-          save.config.chrono.reversed = false;
-        }
-        console.log(
-          '%c[0.1.21] Added config.chrono.reversed bool.',
-          'color: gray'
-        );
-      }
+
+    console.log(
+      `%c[${this.name}]%c Apply fixes for versions: ${minorVersionsToCheck}`,
+      `color: ${this.trackingColor}`,
+      `color: white`
+    );
+
+    for (let i = 0, len = minorVersionsToCheck.length; i < len; i++) {
+      const [a, b, c] = minorVersionsToCheck[i].split('.');
+      this.versions[a][b][c](saveData);
     }
-    console.log('%cVersion debugger finished.', 'color: gray');
-    return save;
+
+    return saveData;
   }
 }
 
@@ -1139,7 +1209,7 @@ function update_keybind_config() {
       };
     }
 
-    if (!TradeManager.open) TradeManager.toggleMenu();
+    TradeMenu.open();
   }
   function attempt_buy_item(item, cost, el_index) {
     let inventory_map = player.inventory.map((e) => e.name);

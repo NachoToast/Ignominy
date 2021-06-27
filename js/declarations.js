@@ -131,6 +131,7 @@ const version = '0.1.21',
       inventory: [],
     },
     doing_trade = false,
+    // TODO: doing_trade isn't necessary, instead check for TradeMenu.isOpen
     past_versions = ['0.1.16'];
 }
 
@@ -206,11 +207,11 @@ const version = '0.1.21',
       // Event Listeners
       config_date_format.addEventListener('input', function () {
         player.config.chrono.date_format = config_date_format.value;
-        update_chrono();
+        DateTimeManager.display();
       });
       config_time_format.addEventListener('input', function () {
         player.config.chrono.time_format = config_time_format.value;
-        update_chrono();
+        DateTimeManager.display();
       });
       config_date_ordinals.addEventListener('change', function () {
         if (this.checked) {
@@ -218,7 +219,7 @@ const version = '0.1.21',
         } else {
           player.config.chrono.ordinals = false;
         }
-        update_chrono();
+        DateTimeManager.display();
       });
       config_time_hours.addEventListener('change', function () {
         if (this.checked) {
@@ -226,11 +227,11 @@ const version = '0.1.21',
         } else {
           player.config.chrono.time = 12;
         }
-        update_chrono();
+        DateTimeManager.display();
       });
       config_reverse.addEventListener('change', function () {
         player.config.chrono.reversed = this.checked;
-        update_chrono();
+        DateTimeManager.display();
       });
     }
 
@@ -345,8 +346,8 @@ const version = '0.1.21',
 
   {
     // Trade
-    var trade_menu = document.getElementById('trade'),
-      trade_shop = document.getElementById('trade_shop'),
+    //var trade_menu = document.getElementById('trade'),
+    var trade_shop = document.getElementById('trade_shop'),
       trademenu_goldcount = document.getElementById('trade_gold');
   }
 

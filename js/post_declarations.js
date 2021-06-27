@@ -12,6 +12,10 @@
 
 {
   // UI
-  window.addEventListener('resize', UIManager.resizeHandler);
-  setTimeout(UIManager.resizeHandler, 600);
+  window.addEventListener('resize', () => {
+    if (player.homekingdom !== 'Default') {
+      UIManager.resize();
+    }
+  });
+  setTimeout(UIManager.resize(), 600);
 }
