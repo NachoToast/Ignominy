@@ -39,56 +39,75 @@
   <script defer src="items/core.js"></script>
   <!-- Post -->
   <script defer src="js/post_declarations.js"></script>
+  <!-- New -->
+  <script defer src="js/main_menu.js"></script>
 </head>
 <body>
-  <div id='mainMenu' class='specialScroll'>
+  <div id='mainMenu' class='specialScroll' style='display: none'>
     <h1 class='noselect'>Ignominy</h1>
-    <div>
-      <h2>Saves</h2>
+    <h2 class='noselect'>Manage Saves</h2>
+    <div class='single saves specialScroll'>
+      <table id='mainMenuSaveTable'>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>Version</th>
+        </tr>
+      </table>
       <div>
-        <p>1</p>
-        <p>27/04 [9 Days Ago]</p>
-        <p>NachoToast</p>
-        <p>Ebonfront - Ignoma</p>
-        <p>You stand on the streets of Ebonf...</p>
-        <button>Save</button>
-        <button>Load</button>
+        <button>Export</button>
+        <button>Import</button>
+        <button onclick='SaveLoadManager.browserSave()'>New</button>
       </div>
     </div>
-    <div>
-      <h2>Config</h2>
-      <div>
+    <h2 class='noselect'>Config</h2>
+    <div class='double'>
+      <div class='single'>
+        <h3 class='noselect'>Date & Time</h3>
         <div>
-          <h3>Date & Time</h3>
-          <input value='dddd d mmmm yyyy h:mm' id='dateFormat'>
-          <label for='dateFormat'>Format</label>
-          <input type='checkbox' id='ordinals' checked title='Time ordinals are the "st", "nd", "rd", and "th" suffixes that come after the day number.'>
-          <label for='ordinals' title='Time ordinals are the "st", "nd", "rd", and "th" suffixes that come after the day number.'>Show Time Ordinals</label>
+          <input value='dddd d mmmm yyyy h:mm' id='dateFormat' type='text'>
+        </div>
+        <div>
+          <input type='checkbox' id='ordinals' checked>
+          <label for='ordinals'>Show Time Ordinals</label>
+        </div>
+        <div>
           <input type='checkbox' id='timeHour'>
           <label for='timeHour'>24 Hour Time</label>
         </div>
+      </div>
+      <div class='single'>
+        <h3 class='noselect'>Scenes</h3>
         <div>
-          <h3>Scenes</h3>
           <input type='checkbox' id='hotkeys' checked>
           <label for='hotkeys'>Enable Hotkeys</label>
+        </div>
+        <div>
           <input type='checkbox' id='timestamps' checked>
           <label for='timestamps'>Show Timestamps</label>
+        </div>
+        <div>
           <input type='checkbox' id='metaAuthors'>
           <label for='metaAuthors'>Show Scene Authors</label>
+        </div>
+        <div>
           <input type='checkbox' id='metaVersion'>
           <label for='metaVersion'>Show Scene Version</label>
+        </div>
+        <div>
           <input type='checkbox' id='metaVersionLegacy'>
           <label for='metaVersionLegacy'>Show Legacy Scene Version</label>
         </div>
       </div>
     </div>
-    <div>
-      <h2>Links</h2>
-      <p>Github</p>
-      <p>Website</p>
-      <p>Discord</p>
+    <h2 class='noselect'>Links</h2>
+    <div class='double'>
+      <a class='noselect' target='_blank' href='https://github.com/NachoToast/Ignominy'>Github</a>
+      <a class='noselect' target='_blank' href='https://nachotoast.com/'>Website</a>
+      <!--a class='noselect' target='_blank'>Discord</a-->
     </div>
-    <p>Ignominy 0.1.20</p>
+    <p class='noselect' id='mainMenuVersionNumber'>0.1.20</p>
   </div>
   <div id="header">
     <div class="header_options header_title noselect" onclick="HeaderManager.showHeader(0)">Menu</div>

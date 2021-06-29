@@ -21,6 +21,14 @@ body {
     min-height: 100vh;
 }
 
+/* Config */
+
+.hidden {
+    display: none;
+}
+
+/* Text Highlighting */
+
 .noselect, label {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
@@ -30,6 +38,8 @@ body {
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
 }
+
+/* Scrolling */
 
 body::-webkit-scrollbar, .specialScroll::-webkit-scrollbar {
     background-color: #272727;

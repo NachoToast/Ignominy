@@ -2,30 +2,275 @@
   background-color: #272727;
   border: solid 1px gray;
   position: fixed;
+  overflow-y: auto;
   width: calc(100% - 2px);
   height: calc(100% - 2px);
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
-}
-
-#mainMenu > * {
-  width: 100%;
-  transition: background-color 0.1s linear;
-  padding: 5px 0;
+  align-items: stretch;
 }
 
 #mainMenu > h1 {
   font-size: min(12vw, 60px);
   text-align: center;
-  padding-bottom: 10px;
+  padding: 10px 0;
+}
+
+#mainMenu > h2 {
+  font-weight: lighter;
+  transition: color 0.1s linear, background-color 0.1s linear;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+#mainMenu > h2:hover {
+  color: pink;
+  background-color: #333;
 }
 
 #mainMenu > div {
   border-bottom: solid 1px gray;
-  padding: 5px 0;
+  display: none;
+  position: relative;
+  transition: top 1s linear;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+  display: flex;
 }
 
-#mainMenu > *:hover {
+/* Single Column Divs */
+
+#mainMenu div.single {
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  padding-bottom: 10px;
+}
+
+#mainMenu div.single > * {
+  width: calc(90% - 10px);
+  margin: 0 5%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  transition: background-color 0.1s linear;
+  padding: 5px;
+}
+
+#mainMenu div.single > h3 {
+  font-weight: lighter;
+  color: gray;
+}
+
+#mainMenu div.single > div:hover {
+  background-color: #333
+}
+
+#mainMenu div.single > div:hover > label {
+  color: pink;
+}
+
+#mainMenu div.single > div > input[type='text'] {
+  outline: none;
+  color: black;
+  font-size: 16px;
+  padding: 0 3px;
+  min-width: 200px;
+}
+
+#mainMenu div.single > div > input[type='checkbox'] {
+  margin-right: 5px; 
+}
+
+#mainMenu div.single > div > label {
+  flex-grow: 1;
+  transition: color 0.1s linear;
+}
+
+/* Double Column Divs */
+
+#mainMenu div.double {
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+#mainMenu div.double > * {
+  flex-grow: 1;
+}
+
+#mainMenu div.double > div {
+  display: flex;
+}
+
+#mainMenu div.double > a {
+  text-align: center;
+  transition: color 0.1s linear, background-color 0.1s linear;
+  cursor: pointer;
+  padding: 5px;
+  text-decoration: none;
+}
+
+#mainMenu div.double > a:hover {
+  color: aquamarine;
   background-color: #333;
+  text-decoration: underline solid 1px;
+}
+
+#mainMenu div.double > a:active {
+  color: gold;
+}
+
+/* Saves List */
+
+#mainMenu > div.saves {
+  /* align-items: center; */
+  overflow-x: auto;
+}
+
+#mainMenu > div.saves > table {
+  min-width: 470px;
+/*   width: 80%; */
+/*   margin: 0 10%; */
+  padding: 0;
+  border-collapse: collapse;
+  display: table;
+  text-align: center;
+}
+
+#mainMenu > div.saves > table * {
+  border: solid 2px #383838;
+}
+
+#mainMenu > div.saves > table th {
+  font-weight: lighter;
+  color: gray;
+}
+
+#mainMenu > div.saves > table tr {
+  transition: background-color 0.1s linear, opacity 0.25s linear;
+}
+
+#mainMenu > div.saves > table tr:hover {
+  background-color: #333;
+}
+
+#mainMenu > div.saves > table td {
+  transition: color 0.1s linear, background-color 0.1s linear;
+  padding: 3px 0;
+  cursor: default;
+}
+
+#mainMenu > div.saves > table tr:hover > td {
+  color: aquamarine;
+}
+
+#mainMenu > div.saves > table tr:hover > td.saveActionButton {
+  color: lightgreen;
+}
+
+#mainMenu > div.saves > table tr:hover > td.loadActionButton {
+  color: rgb(255, 238, 139);
+}
+
+#mainMenu > div.saves > table tr:hover > td.deleteActionButton {
+  color: lightcoral;
+}
+
+#mainMenu > div.saves > table tr:hover > td.exportActionButton {
+  color: pink;
+}
+
+#mainMenu > div.saves > table td.pad {
+  padding: 0 1px;
+}
+
+#mainMenu > div.saves > table td.actionButton {
+  cursor: pointer;
+}
+
+#mainMenu > div.saves > table td.actionButton:hover {
+  color: black !important;
+}
+
+#mainMenu > div.saves > table td.saveActionButton:hover {
+  background-color: lightgreen;
+}
+
+#mainMenu > div.saves > table td.loadActionButton:hover {
+  background-color: rgb(255, 238, 139);
+}
+
+#mainMenu > div.saves > table td.deleteActionButton:hover {
+  background-color: lightcoral;
+}
+
+/* Saves List Buttons (New, Import, Export) */
+
+#mainMenu > div.saves > div {
+  width: 80%;
+  margin: 10px 10% 0 10%;
+  padding: 5px 0;
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  align-items: center;
+}
+
+#mainMenu > div.saves > div:hover {
+  background-color: #272727;
+}
+
+#mainMenu > div.saves > div > button {
+  background-color: #272727;
+  border: solid 1px gray;
+  flex-grow: unset;
+  font-size: 16px;
+  padding: 5px;
+  margin: 0 7px;
+  cursor: pointer;
+  transition: color 0.1s linear, background-color 0.1s linear;
+  width: 90px;
+}
+
+#mainMenu > div.saves > div > button:first-child {
+  margin-right: 0;
+}
+
+#mainMenu > div.saves > div > button:hover {
+  background-color: #333;
+  color: aquamarine;
+}
+
+/* Dynamic Stuff */
+
+#mainMenu > div.saves > table tr.deleting {
+  opacity: 0;
+}
+
+#mainMenu > div.saves > table tr.creating {
+  animation-name: menuRowFadeIn;
+  animation-fill-mode: forwards;
+  animation-duration: 0.25s;
+  animation-timing-function: linear;
+}
+
+@keyframes menuRowFadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+/* Version Number */
+
+#mainMenu > p {
+  position: absolute;
+  top: 0px;
+  padding: 5px;
+  align-self: flex-end;
+  width: auto;
+  color: gray;
+  transition: color 0.1s linear
+}
+
+#mainMenu > p:hover {
+  color: lightgray;
 }

@@ -1,4 +1,4 @@
-const version = '0.1.22',
+const version = '0.1.23',
   harsh_check = true,
   game_window = document.getElementById('game');
 
