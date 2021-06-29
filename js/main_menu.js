@@ -6,11 +6,20 @@ class MainMenu {
   static savesTableElement = document.getElementById('mainMenuSaveTable');
 
   static show() {
+    this.menuElement.classList.add('mainMenuFadeIn');
     this.menuElement.style.display = 'flex';
+    setTimeout(() => {
+      this.menuElement.classList.remove('mainMenuFadeIn');
+    }, 250);
+    this.updateAutosaveRow();
   }
 
   static hide() {
-    this.menuElement.style.display = 'none';
+    this.menuElement.classList.add('mainMenuFadeOut');
+    setTimeout(() => {
+      this.menuElement.style.display = 'none';
+      this.menuElement.classList.remove('mainMenuFadeOut');
+    }, 250);
   }
 
   // generates the save table rows from the array of save ID's in local storage
@@ -20,6 +29,8 @@ class MainMenu {
         .getItem('Ignominy Save IDs')
         ?.split(',')
         .map((e) => parseInt(e)) ?? [];
+
+    saveIDs.sort((a, b) => a - b);
 
     for (let i = 0, len = saveIDs.length; i < len; i++) {
       const saveData = JSON.parse(
@@ -68,7 +79,7 @@ class MainMenu {
       const saveVersionElement = document.createElement('td');
       if (saveVersion !== version) {
         saveVersionElement.style.color = 'rgb(255, 238, 139)';
-        saveVersionElement.title = 'Outdated game version';
+        saveVersionElement.title = 'Outdated save version';
       }
       saveVersionElement.innerHTML = saveVersion;
       saveRowElement.appendChild(saveVersionElement);
@@ -77,15 +88,18 @@ class MainMenu {
     // save button
     {
       const saveButton = document.createElement('td');
-      saveButton.innerHTML = 'Save';
-      saveButton.classList.add(
-        'pad',
-        'noselect',
-        'actionButton',
-        'saveActionButton'
-      );
-      saveButton.onclick = () =>
-        SaveLoadManager.browserSave(saveID, saveRowElement);
+      saveButton.classList.add('pad', 'noselect');
+      if (saveID !== 0) {
+        saveButton.innerHTML = 'Save';
+        saveButton.classList.add('actionButton', 'saveActionButton');
+        saveButton.onclick = () => {
+          SaveLoadManager.browserSave(saveID, saveRowElement);
+        };
+      } else {
+        saveButton.innerHTML = 'Autosave';
+        saveButton.style.color = 'gray';
+        saveButton.title = 'This slot is saved automatically';
+      }
       saveRowElement.appendChild(saveButton);
     }
 
@@ -99,13 +113,14 @@ class MainMenu {
         'actionButton',
         'loadActionButton'
       );
-      loadButton.onclick = () =>
+      loadButton.onclick = () => {
         SaveLoadManager.browserLoad(saveID, loadButton);
+      };
       saveRowElement.appendChild(loadButton);
     }
 
     // delete button
-    {
+    if (saveID !== 0) {
       const deleteButton = document.createElement('td');
       deleteButton.innerHTML = 'Delete';
       deleteButton.classList.add(
@@ -114,12 +129,28 @@ class MainMenu {
         'actionButton',
         'deleteActionButton'
       );
-      deleteButton.onclick = () =>
+      deleteButton.onclick = () => {
         SaveLoadManager.deleteSave(saveID, saveRowElement);
+      };
       saveRowElement.appendChild(deleteButton);
     }
 
     return saveRowElement;
+  }
+
+  // updates the autosave row of the table, called everytime the table is open
+  static updateAutosaveRow() {
+    const autosaveData = JSON.parse(localStorage.getItem(`Ignominy Save 0`));
+
+    MainMenu.savesTableElement.replaceChild(
+      MainMenu.makeRowElement(
+        0,
+        autosaveData.date,
+        autosaveData.version,
+        autosaveData.data
+      ),
+      this.savesTableElement.childNodes[2]
+    );
   }
 }
 
@@ -143,7 +174,7 @@ class SaveLoadManager {
           .getItem('Ignominy Save IDs')
           ?.split(',')
           .map((e) => parseInt(e)) ?? [];
-      id = 0;
+      id = 1;
       while (usedIDs.indexOf(id) !== -1) {
         id++;
       }
@@ -156,7 +187,7 @@ class SaveLoadManager {
       MainMenu.savesTableElement.appendChild(newRow);
       setTimeout(() => newRow.classList.remove('creating'), 250);
     } else {
-      // if an id is specified, update the table row information;
+      // otherwise if another id is specified, update the table row information;
       MainMenu.savesTableElement.replaceChild(
         MainMenu.makeRowElement(id, Date.now(), version, player),
         saveRowElement
@@ -202,7 +233,7 @@ class SaveLoadManager {
     );
   }
 
-  static browserLoad(id = null, loadElement = null) {
+  static browserLoad(id = null) {
     if (this.tracking) {
       console.log(
         `%c[${this.name}]%c Loading save ${id}`,
@@ -233,8 +264,147 @@ class SaveLoadManager {
 
     // TODO: add visual feedback for loading
   }
+
+  static export() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Exporting save`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+    const file = new Blob(
+      [
+        JSON.stringify({
+          date: Date.now(),
+          version: version,
+          data: player,
+        }),
+      ],
+      {
+        type: 'application/json',
+      }
+    );
+
+    const elem = document.createElement('a');
+    elem.href = window.URL.createObjectURL(file);
+    elem.download = `${player.name}_${version}.ignosave`;
+    document.body.appendChild(elem);
+    elem.click();
+    document.body.removeChild(elem);
+  }
+
+  static import(element) {
+    if (element.files[0] === undefined) {
+      return;
+    }
+
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Importing save`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    if (typeof window.FileReader !== 'function') {
+      console.log(
+        `%c[${this.name}]%c FileReader not supported on browser, aborting import`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+      window.alert('Your browser does not support importing saves.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(element.files[0], 'UTF-8');
+    reader.onload = (contents) => {
+      const data = JSON.parse(contents.target.result);
+      player = data.data;
+      SaveLoadManager.browserSave();
+    };
+    reader.onerror = () => {
+      console.log(
+        `%c[${this.name}]%c Save file read error`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+      window.alert('Error occured reading the imported save file.');
+    };
+  }
+
+  // checks if an autosave exists already
+  static checkInitialAutosave() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Checking for previous autosave...`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    // see if 0 (autosave ID) is in saves list
+    const usedIDs =
+      localStorage
+        .getItem('Ignominy Save IDs')
+        ?.split(',')
+        .map((e) => parseInt(e)) ?? [];
+
+    if (usedIDs.indexOf(0) == -1) {
+      // 0 not in saves list
+
+      if (this.tracking) {
+        console.log(
+          `%c[${this.name}]%c No previous autosave found, making new one`,
+          `color: ${this.trackingColor}`,
+          `color: white`
+        );
+      }
+      usedIDs.push(0);
+      localStorage.setItem('Ignominy Save IDs', usedIDs);
+      localStorage.setItem(
+        `Ignominy Save 0`,
+        JSON.stringify({
+          date: Date.now(),
+          version: version,
+          data: player,
+        })
+      );
+    } else if (this.tracking) {
+      // 0 in saves list
+      console.log(
+        `%c[${this.name}]%c Found previous autosave`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+  }
+
+  static autosave() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Autosaving`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    localStorage.setItem(
+      `Ignominy Save 0`,
+      JSON.stringify({
+        date: Date.now(),
+        version: version,
+        data: player,
+      })
+    );
+  }
 }
 
 document.getElementById('mainMenuVersionNumber').innerText = version;
 
+SaveLoadManager.checkInitialAutosave();
 MainMenu.generateTable();
+MainMenu.show();
+
+// TODO: config manager

@@ -364,7 +364,7 @@ class UIManager {
 class HeaderManager {
   // headActions states what each header does when opened
   static headerActions = [
-    () => MenuManager.updateSaveLoadElements(), // menu
+    () => MainMenu.show(), // menu
     () => update_stats, // stats
     () => null, // map
     () => null, // date/time
@@ -583,7 +583,7 @@ class MenuManager {
 }
 
 // InventoryManager handles UI related activities in player inventory
-class InventoryManager extends UIManager {
+class InventoryManager {
   // open the inventory
   static open() {
     let uniqueCount = player.inventory.length,
@@ -715,5 +715,3 @@ class InventoryManager extends UIManager {
     return infoDiv;
   }
 }
-
-// var CurrentGame = new GameManager(true);

@@ -56,9 +56,10 @@
         </tr>
       </table>
       <div>
-        <button>Export</button>
-        <button>Import</button>
-        <button onclick='SaveLoadManager.browserSave()'>New</button>
+        <button onclick='SaveLoadManager.export()' class='actionButtons'>Export</button>
+        <input type='file' style='display: none' id='mainMenuImportSave' accept='.ignosave' onchange='SaveLoadManager.import(this)'>
+        <label class='actionButtons' for='mainMenuImportSave'>Import</label>
+        <button onclick='SaveLoadManager.browserSave()' class='actionButtons'>New</button>
       </div>
     </div>
     <h2 class='noselect'>Config</h2>
@@ -108,9 +109,10 @@
       <!--a class='noselect' target='_blank'>Discord</a-->
     </div>
     <p class='noselect' id='mainMenuVersionNumber'>0.1.20</p>
+    <button onclick='MainMenu.hide()'>Close</button>
   </div>
   <div id="header">
-    <div class="header_options header_title noselect" onclick="HeaderManager.showHeader(0)">Menu</div>
+    <div class="header_options header_title noselect" onclick="MainMenu.show()">Menu</div>
     <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(1)">Stats</div>
     <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(2)">Map</div>
     <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(3)">Date Time</div>
