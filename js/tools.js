@@ -1,3 +1,6 @@
+//
+'use strict';
+
 function what_points_to(scene_id) {
   // finds scenes which have options to progress to specified scene id
   let start = Date.now(),

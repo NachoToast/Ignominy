@@ -22,7 +22,6 @@
   <link href="css/main.css" rel="stylesheet" type="text/css">
   <!-- Main -->
   <script defer src="js/main.js"></script>
-  <script defer src="js/declarations.js"></script>
   <script defer src="js/ui.js"></script>
   <script defer src="js/tools.js"></script>
   <!-- Story -->
@@ -40,6 +39,7 @@
   <script defer src="js/post_declarations.js"></script>
   <!-- New -->
   <script defer src="js/main_menu.js"></script>
+  <script defer src="js/declarations.js"></script>
   <script defer src="js/start.js"></script>
   <!-- 
     Order:
@@ -140,7 +140,7 @@
     <div class="header_title noselect" onclick="MainMenu.show()">Menu</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(0)">Stats</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(1)">Map</div>
-    <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(2)">Date Time</div>
+    <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(2)" id='dateTimeOutput'>Date Time</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(3)">Inventory</div>
   </div>
   <div id="global">

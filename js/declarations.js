@@ -36,18 +36,6 @@ const IGNOMINY_DEFAULT_CONFIG = {
         trade_info: false,
       },
       random: global_random(),
-      chrono: {
-        time: 12, // 12 or 24
-        reversed: false,
-        ordinals: true,
-        date_format: 'dddd d mmmm yyyy',
-        time_format: 'h:mm',
-      },
-      meta: {
-        authors: true,
-        version: true,
-        legacy_version: true,
-      },
     },
     scene_presets = {
       default: { fatigue: 0.3, time: { second: 5 } },
@@ -134,7 +122,6 @@ const IGNOMINY_DEFAULT_CONFIG = {
       config: {
         debug: 0,
         devmode: defaults.devmode,
-        meta: defaults.meta,
         keybinds: true,
         timestamps: defaults.timestamps_config,
       },
@@ -146,9 +133,7 @@ const IGNOMINY_DEFAULT_CONFIG = {
       latest_time_increment: 0,
       inventory: [],
     },
-    doing_trade = false,
-    // TODO: doing_trade isn't necessary, instead check for TradeMenu.isOpen
-    past_versions = ['0.1.16'];
+    doing_trade = false; // TODO: doing_trade isn't necessary, instead check for TradeMenu.isOpen
 }
 
 {

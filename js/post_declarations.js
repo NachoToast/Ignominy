@@ -9,13 +9,3 @@
   // Story
   var story_map = story.map((e) => e.id);
 }
-
-{
-  // UI
-  window.addEventListener('resize', () => {
-    if (player.homekingdom !== 'Default') {
-      UIManager.resize();
-    }
-  });
-  setTimeout(UIManager.resize(), 600);
-}

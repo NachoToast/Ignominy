@@ -1,9 +1,11 @@
 // DateTimeManager handles displaying and incrementation of game date and time
+'use strict';
+
 class DateTimeManager {
   static tracking = true;
   static trackingColor = 'rgb(255, 238, 139)';
 
-  static dateOutputElement = header_options[3];
+  static dateOutputElement = document.getElementById('dateTimeOutput');
 
   static dayNames = [
     'Sunday',
@@ -243,36 +245,6 @@ function update_stats() {
 class UIManager {
   static tracking = true;
   static trackingColor = 'rgb(255, 238, 139)';
-
-  // page resize handling
-  static resize() {
-    if (this.tracking) {
-      console.log(
-        `%c[${this.name}]%c Resizing headers`,
-        `color: ${this.trackingColor}`,
-        `color: white`
-      );
-    }
-
-    // call to refresh meta if enabled
-    if (Object.values(player.config.meta).some((e) => e)) {
-      UIManager.calibrateMetaElements(
-        document.getElementsByClassName('std_meta_window')[0]
-      );
-    }
-  }
-
-  // meta element positioning
-  // TODO: Fix div position bugs for this.
-  static calibrateMetaElements(metaElement = undefined) {
-    if (metaElement === undefined) {
-      // BUG: Meta enabled before next scene press = do resize event but meta element doesn't exist yet = error
-      console.warn("Tried to resize meta element which doens't yet exist!");
-      return;
-    }
-    metaElement.style.marginTop =
-      window.innerHeight - header.offsetHeight + 'px';
-  }
 
   // returns CSS-friendly RGB value as a progression from colorA to colorB (option third color), input color {r: 255, g: 255, b: 255}
   static colorGradient(

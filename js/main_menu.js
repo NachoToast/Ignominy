@@ -1,4 +1,5 @@
 // MainMenu handles save table generation, main menu showing/hiding, and updating the autosave row
+'use strict';
 class MainMenu {
   static tracking = false;
   static trackingColor = 'rgb(255, 238, 139)';
