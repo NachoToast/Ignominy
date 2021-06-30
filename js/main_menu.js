@@ -77,7 +77,13 @@ class MainMenu {
   }
 
   // makes a single table row for a save slot
-  static makeRowElement(saveID, saveDate, saveVersion, saveData) {
+  static makeRowElement(
+    saveID,
+    saveDate,
+    saveVersion,
+    saveData,
+    fromSave = false
+  ) {
     const saveRowElement = document.createElement('tr');
 
     // id
@@ -118,11 +124,25 @@ class MainMenu {
       const saveButton = document.createElement('td');
       saveButton.classList.add('pad', 'noselect');
       if (saveID !== 0) {
-        saveButton.innerHTML = 'Save';
-        saveButton.classList.add('actionButton', 'saveActionButton');
-        saveButton.onclick = () => {
-          SaveLoadManager.browserSave(saveID, saveRowElement);
-        };
+        // if updating row from save, the button shows feedback
+        if (fromSave) {
+          saveButton.innerHTML = 'Saved!';
+          saveButton.style.color = 'gray';
+          setTimeout(() => {
+            saveButton.innerHTML = 'Save';
+            saveButton.style.color = 'white';
+            saveButton.classList.add('actionButton', 'saveActionButton');
+            saveButton.onclick = () => {
+              SaveLoadManager.browserSave(saveID, saveRowElement);
+            };
+          }, 1000);
+        } else {
+          saveButton.innerHTML = 'Save';
+          saveButton.classList.add('actionButton', 'saveActionButton');
+          saveButton.onclick = () => {
+            SaveLoadManager.browserSave(saveID, saveRowElement);
+          };
+        }
       } else {
         saveButton.innerHTML = 'Autosave';
         saveButton.style.color = 'gray';
@@ -219,7 +239,7 @@ class SaveLoadManager {
     } else {
       // otherwise if another id is specified, update the table row information;
       MainMenu.savesTableElement.replaceChild(
-        MainMenu.makeRowElement(id, Date.now(), version, player),
+        MainMenu.makeRowElement(id, Date.now(), version, player, true),
         saveRowElement
       );
     }

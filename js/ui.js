@@ -361,20 +361,6 @@ class HeaderManager {
       header_options[i].classList.remove('hidden');
     }
   }
-
-  // hides/shows right border of header options if touching right side of window
-  // TODO: Better border display method (maybe permanent?) so this isn't called every resize event.
-  static updateHeaderBorders() {
-    let headerWidth = header.getBoundingClientRect().width;
-    for (let i = 0, len = header_options.length; i < len; i++) {
-      let myRight = header_options[i].getBoundingClientRect().right;
-      if (Math.floor(myRight) >= headerWidth - 1) {
-        header_options[i].style.borderRight = 'none';
-      } else {
-        header_options[i].style.borderRight = 'solid 1px gray';
-      }
-    }
-  }
 }
 
 // TradeMenu controls hiding/showing of trade menu, keydown listening, and generation of new trades

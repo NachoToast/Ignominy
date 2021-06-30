@@ -129,8 +129,8 @@
 /* Saves List */
 
 #mainMenu > div.saves {
-  /* align-items: center; */
   overflow-x: auto;
+  min-height: 200px;
 }
 
 #mainMenu > div.saves > table {
@@ -170,6 +170,8 @@
   color: aquamarine;
 }
 
+/* Action Buttons */
+
 #mainMenu > div.saves > table tr:hover > td.saveActionButton {
   color: lightgreen;
 }
@@ -193,6 +195,8 @@
 #mainMenu > div.saves > table td.actionButton {
   cursor: pointer;
 }
+
+/* Action Buttons - Events */
 
 #mainMenu > div.saves > table td.actionButton:hover {
   color: black !important;
