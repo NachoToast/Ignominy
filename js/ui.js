@@ -31,18 +31,25 @@ class DateTimeManager {
     'December',
   ];
 
-  // helps convertDate method with replacements from config values ('yyyy', 'mmm', 'd', etc) to markers ('f20', 'f11', 'f03', etc)
-  static dateConfigMap = {
+  // map for conversion from config letter placeholders to markers
+  static dateMap = {
     dddd: 'f00',
     ddd: 'f01',
     dd: 'f02',
     d: 'f03',
-    mmmm: 'f10',
-    mmm: 'f11',
-    mm: 'f12',
-    m: 'f13',
+    MMMM: 'f10',
+    MMM: 'f11',
+    MM: 'f12',
+    M: 'f13',
     yyyy: 'f20',
     yy: 'f21',
+    hh: 'f30',
+    h: 'f31',
+    mm: 'f40',
+    m: 'f41',
+    ss: 'f50',
+    s: 'f51',
+    p: 'f60',
   };
 
   // adds ordinals ('st', 'nd', 'rd', 'th') to the day number
@@ -64,103 +71,81 @@ class DateTimeManager {
   static convertToLongDay = (numDay) => this.dayNames[numDay];
   static convertToLongMonth = (numMonth) => this.monthNames[numMonth];
 
-  // converts numerical date values (year, month, day) into player-specified format
-  static convertDate(
-    date = player.config.chrono.date_format, // date format string, e.g. 'dddd d mmmm, yyyy' could be 'Friday 18 June, 2021'
-    timeObj = player.time, // date object
-    incOrdinals = player.config.chrono.ordinals // whether to include the 'st', 'nd', 'rd', and 'th' at the end of the day number (if present)
-  ) {
-    const dayNum = timeObj.getDate(),
-      dayLong = this.convertToLongDay(timeObj.getDay()),
-      monthNum = timeObj.getMonth(),
+  // formats date object in player-specified format
+  static formatDate(inputDate = player.time) {
+    // get more detailed information about the date object
+    const dayNum = inputDate.getDate(),
+      dayLong = this.convertToLongDay(inputDate.getDay()),
+      monthNum = inputDate.getMonth(),
       monthLong = this.convertToLongMonth(monthNum),
-      year = timeObj.getFullYear(),
-      ordinals = incOrdinals ? this.addOrdinals(dayNum) : '';
+      year = inputDate.getFullYear(),
+      second = inputDate.getSeconds(),
+      minute = inputDate.getMinutes();
+    let hour = inputDate.getHours();
+    const period = hour >= 12 ? 'pm' : 'am';
 
-    // selector conversion: format is fXX
-    // f = marker
-    // first X: 0 = day, 1 = month, 2 = year
-    // second X: 0 = full, 1 = 3-letter, 2 = full numerical, 3 = short numerical
-    // this is done to avoid replacing > once, e.g. simply replacing 'm' with the month number doesn't work since 'September' has an 'm' in it
+    // replace config letter placeholders with markers
+    // markers are a necessary intermediate for conversion, since direct conversion, e.g. from MMMM to 'September' causes issues since 'September' has an 'm' in it.
+    let formattedDate = IGNOMINY_CONFIG.datetime.format.replace(
+      /d+|M+|y+|s+|m+|h+|p/g,
+      (char) => this.dateMap[char]
+    );
 
-    // dateMap converts markers to formatted date components
+    // 12hr time stuff
+    if (!IGNOMINY_CONFIG.datetime.twentyFourHourTime) {
+      if (hour > 12) {
+        // 12hr time displays hours > 12 as modulus 12, e.g. 13 -> 1pm
+        hour -= 12;
+      } else if (hour === 0) {
+        // 12hr time displays the 0th hour as 12am
+        hour = 12;
+      }
+    }
+
+    // map for conversion from markers to date values
     const dateMap = {
       // day
       f00: dayLong,
-      f01: dayLong.substring(0, 3), // 'ddd' abbreviated day e.g. Fri
+      f01: dayLong.substring(0, 3),
       f02: dayNum < 10 ? '0' + dayNum : dayNum,
-      f03: dayNum + ordinals, // 'd' single digit day e.g. 18
-
+      f03: dayNum,
       // month
       f10: monthLong,
-      f11: monthLong.substring(0, 3), // 'mmm' abbreviated month e.g. Jun
-      f12: monthNum < 10 ? '0' + monthNum : monthNum, // 'mm' 2 digit month e.g. 06
-      f13: monthNum, // 'm' single digit month, e.g. 6
-
+      f11: monthLong.substring(0, 3),
+      f12: monthNum < 10 ? '0' + monthNum : monthNum,
+      f13: monthNum,
       // year
-      f20: year, // 'yyyy' full year e.g. 2021
-      f21: year.toString().substring(2), // 'yy' short numeric year e.g. 21
+      f20: year,
+      f21: year.toString().substring(2),
+      // hour
+      f30: hour < 10 ? '0' + hour : hour,
+      f31: hour,
+      // minute
+      f40: minute < 10 ? '0' + minute : minute,
+      f41: minute,
+      // second
+      f50: second < 10 ? '0' + second : second,
+      f51: second,
+      // period
+      f60: period,
     };
 
-    // replace config with markers
-    date = date.replace(
-      /dddd|ddd|dd|d|mmmm|mmm|mm|m|yyyy|yy/g,
-      (char) => this.dateConfigMap[char]
-    );
+    // if ordinals enabled, day number (without leading 0's) should have them
+    if (IGNOMINY_CONFIG.datetime.showTimeOrdinals) {
+      dateMap.f03 += this.addOrdinals(dayNum);
+    }
 
-    // replace markers with real date
-    date = date.replace(
-      /f00|f01|f02|f03|f10|f11|f12|f13|f20|f21/g,
+    // replace markers with actual date values
+    formattedDate = formattedDate.replace(
+      /f[0-6][0-3]/g,
       (char) => dateMap[char]
     );
 
-    return date;
-  }
-
-  // converts numerical time values (hour, minute, second) into player-specified format
-  static convertTime(
-    time = player.config.chrono.time_format, // time format string, e.g. 'h:mm' could be '10:11am'
-    timeObj = player.time, // date object
-    hour24Time = player.config.chrono.time === 24 // whether to use 24 hour time, removing the 'am' and 'pm' suffixes
-  ) {
-    let hour = timeObj.getHours();
-
-    const second = timeObj.getSeconds(),
-      minute = timeObj.getMinutes(),
-      period = hour >= 12 ? 'pm' : 'am';
-
-    if (!hour24Time && hour > 12) {
-      // 12 hour time format should take modulus 12 of the hour if > 12, e.g. 13 becomes 1
-      hour -= 12;
-    }
-    if (hour === 0 && !hour24Time) {
-      // 12 hour time format should display the 0th hour as 12
-      hour = 12;
-    }
-
-    const timeConfigMap = {
-      ss: second < 10 ? '0' + second : second,
-      s: second,
-      mm: minute < 10 ? '0' + minute : minute,
-      m: minute,
-      hh: hour < 10 ? '0' + hour : hour,
-      h: hour,
-    };
-
-    time = time.replace(/ss|s|mm|m|hh|h/g, (char) => timeConfigMap[char]);
-
-    if (!hour24Time) {
-      // 12 hour time format should show 'am' and 'pm' suffixes
-      time += ' ' + period;
-    }
-
-    return time;
+    return formattedDate;
   }
 
   // displays a formatted date to HTML element
   static display(
-    outputElement = this.dateOutputElement, // the HTML element to write the date and time to
-    reversed = player.config.chrono.reversed, // whether the date and time should be in reversed order
     updateHeaders = true // whether to call the update header borders method once the date is written
   ) {
     if (this.tracking) {
@@ -170,11 +155,7 @@ class DateTimeManager {
         `color: white`
       );
     }
-    if (reversed) {
-      outputElement.innerHTML = this.convertTime() + ' ' + this.convertDate();
-    } else {
-      outputElement.innerHTML = this.convertDate() + ' ' + this.convertTime();
-    }
+    this.dateOutputElement.innerHTML = this.formatDate();
 
     if (updateHeaders) {
       HeaderManager.updateHeaderBorders();
@@ -432,10 +413,10 @@ class TradeMenu {
     } else {
       this.open();
     }
-    this.isOpen = !this.isOpen;
   }
 
   static open() {
+    this.isOpen = true;
     if (this.tracking) {
       console.log(
         `%c[${this.name}]%c Opening trade menu`,
@@ -451,6 +432,7 @@ class TradeMenu {
   }
 
   static close() {
+    this.isOpen = false;
     if (this.tracking) {
       console.log(
         `%c[${this.name}]%c Closing trade menu`,

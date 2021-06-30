@@ -186,6 +186,10 @@ function update_keybind_config() {
 
     //if (player.config.debug > 0) console.log("Going to next scene: ", option.scene);
     next_scene(option.scene);
+
+    if (IGNOMINY_CONFIG.saveload.autosave) {
+      SaveLoadManager.autosave();
+    }
   }
   function add_to_history(scene_id) {
     // initialisation
@@ -772,7 +776,7 @@ function update_keybind_config() {
 
 {
   // Save, Load, & Reset
-  function save_game(type) {
+  /*   function save_game(type) {
     if (type == 'browser') {
       localStorage.setItem('Ignominy Save', JSON.stringify(player));
       if (player.config.debug > 0) console.log('Executed browser save.');
@@ -863,10 +867,10 @@ function update_keybind_config() {
   function reset_game() {
     let r = confirm('Confirm game reset.');
     if (r == true) location.reload();
-  }
+  } */
 }
 
-class VersionDebugger {
+class VersionChecker {
   static trackingColor = 'aquamarine';
 
   static versions = {
@@ -954,13 +958,16 @@ class VersionDebugger {
     },
   };
 
+  // fixMismatch figures out which version changes need to be applied
   static fixMismatch(currentVersion, saveVersion, saveData) {
-    const current = currentVersion.split('.');
     const save = saveVersion.split('.');
 
+    /// version finding
+    // release
     const releaseVersionsToCheck = Object.keys(this.versions).filter(
       (e) => parseInt(e) >= parseInt(save[0])
     );
+    // major
     const majorVersionsToCheck = [];
     for (let i = 0, len = releaseVersionsToCheck.length; i < len; i++) {
       let majorCandidates = Object.keys(
@@ -975,6 +982,7 @@ class VersionDebugger {
         majorVersionsToCheck.push(`${releaseVersionsToCheck[i]}.${e}`)
       );
     }
+    // minor
     const minorVersionsToCheck = [];
     for (let i = 0, len = majorVersionsToCheck.length; i < len; i++) {
       const version = majorVersionsToCheck[i].split('.');
@@ -989,11 +997,20 @@ class VersionDebugger {
       );
     }
 
-    console.log(
-      `%c[${this.name}]%c Apply fixes for versions: ${minorVersionsToCheck}`,
-      `color: ${this.trackingColor}`,
-      `color: white`
-    );
+    // logging
+    if (minorVersionsToCheck.length < 1) {
+      console.log(
+        `%c[${this.name}]%c No updates necessary`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    } else {
+      console.log(
+        `%c[${this.name}]%c Applying updates for versions: ${minorVersionsToCheck}`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
 
     for (let i = 0, len = minorVersionsToCheck.length; i < len; i++) {
       const [a, b, c] = minorVersionsToCheck[i].split('.');

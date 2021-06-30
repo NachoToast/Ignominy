@@ -100,7 +100,7 @@
 }
 
 #mainMenu div.double > * {
-  flex-grow: 1;
+  min-width: 50%;
 }
 
 #mainMenu div.double > div {
@@ -266,6 +266,14 @@
 @keyframes menuRowFadeIn {
   from {opacity: 0}
   to {opacity: 1}
+}
+
+/* Config Stuff */
+
+#mainMenu .mainMenuExampleDate, #mainMenu .mainMenuExampleDate * {
+  color: gray;
+  cursor: default;
+  width: 300px;
 }
 
 /* Version Number */

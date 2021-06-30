@@ -215,3 +215,15 @@ function submit_name() {
   form.parentNode.removeChild(form);
   generate_map_menu();
 }
+
+// new config (independent of saves)
+
+// new stuff
+console.log(`%c[Ignominy]%c Starting game`, `color: gold`, `color: lightgreen`);
+
+const IGNOMINY_CONFIG = ConfigManager.loadConfig(); // get config set up
+ConfigManager.showConfig(); // display any config changes in main menu
+
+SaveLoadManager.checkInitialAutosave(); // generate autosave element
+MainMenu.generateTable();
+// MainMenu.show();

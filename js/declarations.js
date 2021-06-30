@@ -2,6 +2,26 @@ const version = '0.1.23',
   harsh_check = true,
   game_window = document.getElementById('game');
 
+// default config
+const IGNOMINY_DEFAULT_CONFIG = {
+  datetime: {
+    format: 'dddd d MMMM yyyy h:mmp',
+    twentyFourHourTime: false,
+    showTimeOrdinals: true,
+  },
+  scenes: {
+    enableHotkeys: true,
+    showTimestamps: true,
+    showAuthors: false,
+    showVersion: false,
+    showVersionLegacy: false,
+  },
+  saveload: {
+    autoload: false,
+    autosave: true,
+  },
+};
+
 {
   // Configuration Objects
   var defaults = {

@@ -24,7 +24,6 @@
   <script defer src="js/main.js"></script>
   <script defer src="js/declarations.js"></script>
   <script defer src="js/ui.js"></script>
-  <script defer src="js/start.js"></script>
   <script defer src="js/tools.js"></script>
   <!-- Story -->
   <script defer src="story/base.js"></script>
@@ -41,6 +40,14 @@
   <script defer src="js/post_declarations.js"></script>
   <!-- New -->
   <script defer src="js/main_menu.js"></script>
+  <script defer src="js/start.js"></script>
+  <!-- 
+    Order:
+    load defaults
+    load config
+    load everything else
+    load game
+   -->
 </head>
 <body>
   <div id='mainMenu' class='specialScroll' style='display: none'>
@@ -67,38 +74,52 @@
       <div class='single'>
         <h3 class='noselect'>Date & Time</h3>
         <div>
-          <input value='dddd d mmmm yyyy h:mm' id='dateFormat' type='text'>
+          <input value='dddd d mmmm yyyy h:mm' id='dateFormat' type='text' oninput='ConfigManager.changeDateFormat()'>
         </div>
         <div>
-          <input type='checkbox' id='ordinals' checked>
+          <input type='checkbox' id='ordinals' checked oninput='ConfigManager.toggleTimeOrdinals()'>
           <label for='ordinals'>Show Time Ordinals</label>
         </div>
         <div>
-          <input type='checkbox' id='timeHour'>
+          <input type='checkbox' id='timeHour' oninput='ConfigManager.toggle24HourTime()'>
           <label for='timeHour'>24 Hour Time</label>
+        </div>
+        <div>
+          <p class='mainMenuExampleDate'>e.g. <span id='mainMenuExampleDate'>Wednesday 27th September 3051 7:19pm</span></p>
         </div>
       </div>
       <div class='single'>
         <h3 class='noselect'>Scenes</h3>
         <div>
-          <input type='checkbox' id='hotkeys' checked>
+          <input type='checkbox' id='hotkeys' checked oninput='ConfigManager.toggleHotkeys()'>
           <label for='hotkeys'>Enable Hotkeys</label>
         </div>
         <div>
-          <input type='checkbox' id='timestamps' checked>
+          <input type='checkbox' id='timestamps' checked oninput='ConfigManager.toggleTimestamps()'>
           <label for='timestamps'>Show Timestamps</label>
         </div>
         <div>
-          <input type='checkbox' id='metaAuthors'>
+          <input type='checkbox' id='metaAuthors' oninput='ConfigManager.toggleAuthors()'>
           <label for='metaAuthors'>Show Scene Authors</label>
         </div>
         <div>
-          <input type='checkbox' id='metaVersion'>
+          <input type='checkbox' id='metaVersion' oninput='ConfigManager.toggleVersion()'>
           <label for='metaVersion'>Show Scene Version</label>
         </div>
         <div>
-          <input type='checkbox' id='metaVersionLegacy'>
+          <input type='checkbox' id='metaVersionLegacy' oninput='ConfigManager.toggleLegacyVersion()'>
           <label for='metaVersionLegacy'>Show Legacy Scene Version</label>
+        </div>
+      </div>
+      <div class='single'>
+        <h3 class='noselect'>Save/Load</h3>
+        <div>
+          <input type='checkbox' id='autosave' checked oninput='ConfigManager.toggleAutosave()'>
+          <label for='autosave'>Autosave</label>
+        </div>
+        <div>
+          <input type='checkbox' id='autoload' checked oninput='ConfigManager.toggleAutoload()'>
+          <label for='autoload'>Autoload</label>
         </div>
       </div>
     </div>
@@ -108,7 +129,7 @@
       <a class='noselect' target='_blank' href='https://nachotoast.com/'>Website</a>
       <!--a class='noselect' target='_blank'>Discord</a-->
     </div>
-    <p class='noselect' id='mainMenuVersionNumber'>0.1.20</p>
+    <p class='noselect' id='mainMenuVersionNumber'>Unknown Version</p>
     <button onclick='MainMenu.hide()'>Close</button>
   </div>
   <div id="header">
