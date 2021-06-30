@@ -165,7 +165,6 @@ class MainMenu {
 }
 
 // SaveLoadManager handles saving, loading, exporting, and importing player data as well as autosaving and autoloading
-// TODO: autoloading
 class SaveLoadManager {
   static tracking = true;
   static trackingColor = 'pink';
@@ -257,15 +256,12 @@ class SaveLoadManager {
     player = load.data;
     player.time = new Date(load.data.time);
 
-    // TODO: check if below operations are necessary
-    // TODO: MenuManager.updateMenuWidgets(); - shows headers and updates config displays
+    // TODO: MenuManager.updateMenuWidgets(); - shows headers and updates config displays, basically update header things, stats page, date, etc.
     generate_game(player.scene, true);
     if (TradeMenu.isOpen) {
       TradeMenu.close();
     }
     MainMenu.hide(fastFade);
-
-    // TODO: add visual feedback for loading?
   }
 
   static export() {
