@@ -111,7 +111,8 @@
   text-align: center;
   transition: color 0.1s linear, background-color 0.1s linear;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px 0;
+  font-size: 18px;
   text-decoration: none;
 }
 

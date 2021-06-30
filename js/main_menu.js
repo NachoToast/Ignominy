@@ -17,7 +17,6 @@ class MainMenu {
   }
 
   static hide(fastFade = false) {
-    console.log(fastFade);
     if (fastFade) {
       this.menuElement.style.display = 'none';
     } else {
@@ -27,6 +26,12 @@ class MainMenu {
         this.menuElement.classList.remove('mainMenuFadeOut');
       }, 250);
     }
+  }
+
+  // handles initial auto save making (and creation if it doesn't exist), and table generation
+  static init() {
+    SaveLoadManager.checkInitialAutosave();
+    this.generateTable();
   }
 
   // generates the save table rows from the array of save ID's in local storage
@@ -117,15 +122,16 @@ class MainMenu {
     {
       const loadButton = document.createElement('td');
       loadButton.innerHTML = 'Load';
-      loadButton.classList.add(
-        'pad',
-        'noselect',
-        'actionButton',
-        'loadActionButton'
-      );
-      loadButton.onclick = () => {
-        SaveLoadManager.browserLoad(saveID, false);
-      };
+      loadButton.classList.add('pad', 'noselect');
+      if (saveData.homekingdom === 'Default') {
+        loadButton.style.color = 'gray';
+        loadButton.title = 'Too early in game to be a valid save';
+      } else {
+        loadButton.classList.add('actionButton', 'loadActionButton');
+        loadButton.onclick = () => {
+          SaveLoadManager.browserLoad(saveID, false);
+        };
+      }
       saveRowElement.appendChild(loadButton);
     }
 
@@ -251,7 +257,16 @@ class SaveLoadManager {
 
     const load = JSON.parse(localStorage.getItem(`Ignominy Save ${id}`));
 
-    load.data = VersionChecker.fixMismatch(version, load.version, load.data);
+    if (load.data.homekingdom === 'Default') {
+      console.log(
+        `%c[${this.name}]%c Aborted load ${id}, not in-game`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+      return;
+    }
+
+    load.data = VersionChecker.fixMismatch(load.version, load.data);
 
     player = load.data;
     player.time = new Date(load.data.time);
@@ -388,9 +403,8 @@ class SaveLoadManager {
           `color: ${this.trackingColor}`,
           `color: white`
         );
-
-        this.browserLoad(0, true);
       }
+      this.browserLoad(0, true);
     }
   }
 

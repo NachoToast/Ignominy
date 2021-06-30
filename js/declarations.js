@@ -17,7 +17,7 @@ const IGNOMINY_DEFAULT_CONFIG = {
     showVersionLegacy: false,
   },
   saveload: {
-    autoload: false,
+    autoload: true,
     autosave: true,
   },
 };

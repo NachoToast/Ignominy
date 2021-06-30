@@ -959,7 +959,7 @@ class VersionChecker {
   };
 
   // fixMismatch figures out which version changes need to be applied
-  static fixMismatch(currentVersion, saveVersion, saveData) {
+  static fixMismatch(saveVersion, saveData) {
     const save = saveVersion.split('.');
 
     /// version finding

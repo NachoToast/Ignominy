@@ -127,7 +127,7 @@ class DateTimeManager {
       f50: second < 10 ? '0' + second : second,
       f51: second,
       // period
-      f60: period,
+      f60: IGNOMINY_CONFIG.datetime.twentyFourHourTime ? '' : period,
     };
 
     // if ordinals enabled, day number (without leading 0's) should have them

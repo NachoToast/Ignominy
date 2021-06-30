@@ -220,10 +220,9 @@ function submit_name() {
 
 // new stuff
 console.log(`%c[Ignominy]%c Starting game`, `color: gold`, `color: lightgreen`);
-
 const IGNOMINY_CONFIG = ConfigManager.loadConfig(); // get config set up
 ConfigManager.showConfig(); // display any config changes in main menu
 
-SaveLoadManager.checkInitialAutosave(); // generate autosave element
-MainMenu.generateTable();
-// MainMenu.show();
+MainMenu.init(); // initialise autosave and saves table
+
+MainMenu.show();
