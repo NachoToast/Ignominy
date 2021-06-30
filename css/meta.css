@@ -1,0 +1,21 @@
+#meta {
+  border-top: solid 1px #333;
+  margin-top: 30px;
+  font-size: 18px;
+  padding: 3px 0;
+}
+
+#meta > p {
+  color: rgb(88, 88, 88);
+  width: 98%;
+  margin-left: 2%;
+}
+
+#meta > p > span {
+  color: gray;
+  transition: color 0.1s linear;
+}
+
+#meta > p > span:hover {
+  color: #E5E5E5;
+}

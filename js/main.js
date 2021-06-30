@@ -380,8 +380,7 @@ function update_keybind_config() {
 
     display_options(scene);
 
-    if (Object.values(player.config.meta).indexOf(true) !== -1)
-      display_meta(scene);
+    MetaManager.update(scene.meta);
   }
   function display_options(scene) {
     let d = document.createElement('div');
@@ -529,54 +528,6 @@ function update_keybind_config() {
     //if (player.config.keybinds == true) display_keybinds();
 
     DateTimeManager.display();
-  }
-  function display_meta(scene) {
-    if (player.config.debug > 1)
-      console.log(`Attempting display metadata for scene ${scene.id}`);
-
-    if (scene.meta === undefined) {
-      if (player.config.debug > 1)
-        console.warn(`Scene ${scene.id} has no metadata!`);
-      return;
-    }
-    // TODO: Add spans (maybe span detection for authors names?)
-    let d = document.createElement('div');
-    d.classList.add('std_window', 'std_meta_window');
-    game_window.appendChild(d);
-    if (player.config.meta.authors == true) {
-      // authors
-      let authors = document.createElement('p');
-      authors.classList.add('meta_authors');
-      authors.innerHTML = "Authors: <span style='color: lightgray'>";
-      for (let i = 0, len = scene.meta.authors.length; i < len; i++) {
-        authors.innerHTML +=
-          "<span style='color: lightgray'>" + scene.meta.authors[i] + '</span>';
-        if (i == len - 2) authors.innerHTML += ', & ';
-        else if (i !== len - 1) authors.innerHTML += ', ';
-        else authors.innerHTML += '.';
-      }
-      d.appendChild(authors);
-    }
-    if (player.config.meta.version == true) {
-      // version
-      let version = document.createElement('p');
-      version.classList.add('meta_version');
-      version.innerHTML =
-        "Added: <span style='color: lightgray'>" +
-        scene.meta.version +
-        '</span>';
-      if (
-        player.config.meta.legacy_version == true &&
-        scene.meta.legacy_version !== undefined
-      )
-        version.innerHTML +=
-          " [<span style='color: lightgray'>" +
-          scene.meta.legacy_version +
-          '</span>]';
-      d.appendChild(version);
-    }
-
-    UIManager.calibrateMetaElements(d);
   }
 }
 
@@ -957,10 +908,10 @@ class VersionChecker {
               `color: white`
             );
           }
-          if (saveData?.config?.chrono?.reversed !== undefined) {
-            delete saveData.config.chrono.reversed;
+          if (saveData?.config?.chrono !== undefined) {
+            delete saveData.config.chrono;
             console.log(
-              `%c[${this.name}]%c Removed 'config.chrono.reversed' bool [0.1.24]`,
+              `%c[${this.name}]%c Removed 'config.chrono' object [0.1.24]`,
               `color: ${this.trackingColor}`,
               `color: white`
             );

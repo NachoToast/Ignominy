@@ -16,7 +16,7 @@ class MainMenu {
     this.updateAutosaveRow();
   }
 
-  static hide(fromAutosave = false, fromSave = false) {
+  static hide(fromAutosave = false) {
     // if loading from an autosave, menu should hide itself instantly
     if (fromAutosave) {
       this.menuElement.style.display = 'none';
@@ -26,11 +26,6 @@ class MainMenu {
         this.menuElement.style.display = 'none';
         this.menuElement.classList.remove('mainMenuFadeOut');
       }, 250);
-    }
-
-    // if loading from a save, date will be updated by scene generation
-    if (!fromSave) {
-      DateTimeManager.display();
     }
   }
 
@@ -316,7 +311,7 @@ class SaveLoadManager {
       TradeMenu.close();
     }
 
-    MainMenu.hide(fromAutoSave, true);
+    MainMenu.hide(fromAutoSave);
   }
 
   static export() {
@@ -483,20 +478,23 @@ class ConfigManager {
 
   static changeDateFormat = () => {
     IGNOMINY_CONFIG.datetime.format = this.dateFormatElement.value;
-    this.exampleElement.innerHTML = DateTimeManager.formatDate(new Date());
-    this.saveConfig();
+    this.changeAnyTimeConfig();
   };
 
   static toggleTimeOrdinals = () => {
     IGNOMINY_CONFIG.datetime.showTimeOrdinals = this.ordinalElement.checked;
-    this.exampleElement.innerHTML = DateTimeManager.formatDate(new Date());
-    this.saveConfig();
+    this.changeAnyTimeConfig();
   };
 
   static toggle24HourTime = () => {
     IGNOMINY_CONFIG.datetime.twentyFourHourTime = this.timeHourElement.checked;
-    this.exampleElement.innerHTML = DateTimeManager.formatDate(new Date());
+    this.changeAnyTimeConfig();
+  };
+
+  static changeAnyTimeConfig = () => {
     this.saveConfig();
+    this.exampleElement.innerHTML = DateTimeManager.formatDate(new Date());
+    DateTimeManager.display();
   };
 
   // Scenes
@@ -518,18 +516,34 @@ class ConfigManager {
 
   static toggleAuthors = () => {
     IGNOMINY_CONFIG.scenes.showAuthors = this.authorsElement.checked;
-    this.saveConfig();
+    this.changeAnyMetaConfig();
   };
 
   static toggleVersion = () => {
     IGNOMINY_CONFIG.scenes.showVersion = this.versionElement.checked;
-    this.saveConfig();
+
+    if (!IGNOMINY_CONFIG.scenes.showVersion) {
+      IGNOMINY_CONFIG.scenes.showVersionLegacy = false;
+      this.legacyVersionElement.checked = false;
+    }
+
+    this.changeAnyMetaConfig();
   };
 
   static toggleLegacyVersion = () => {
     IGNOMINY_CONFIG.scenes.showVersionLegacy =
       this.legacyVersionElement.checked;
+
+    if (IGNOMINY_CONFIG.scenes.showVersionLegacy) {
+      this.versionElement.checked = true;
+      IGNOMINY_CONFIG.scenes.showVersion = true;
+    }
+    this.changeAnyMetaConfig();
+  };
+
+  static changeAnyMetaConfig = () => {
     this.saveConfig();
+    MetaManager.update();
   };
 
   // Save/Load
@@ -634,7 +648,10 @@ class GeneralPurpose {
     for (let i = 0, len = keysA.length; i < len; i++) {
       if (keysB.indexOf(keysA[i]) !== -1) {
         // for each shared key
-        if (typeof obj2[keysA[i]] !== 'object') {
+        if (
+          typeof obj2[keysA[i]] !== 'object' ||
+          Array.isArray(obj2[keysA[i]])
+        ) {
           // overwrite obj1 to obj2 value if value is not an object
           obj1[keysA[i]] = obj2[keysA[i]];
         } else {

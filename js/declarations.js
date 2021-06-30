@@ -44,9 +44,9 @@ const IGNOMINY_DEFAULT_CONFIG = {
         time_format: 'h:mm',
       },
       meta: {
-        authors: false,
-        version: false,
-        legacy_version: false,
+        authors: true,
+        version: true,
+        legacy_version: true,
       },
     },
     scene_presets = {
@@ -132,10 +132,8 @@ const IGNOMINY_DEFAULT_CONFIG = {
       scene: -1,
       previous_scene: null,
       config: {
-        headers: [0, 1, 2, 3, 4],
         debug: 0,
         devmode: defaults.devmode,
-        chrono: defaults.chrono,
         meta: defaults.meta,
         keybinds: true,
         timestamps: defaults.timestamps_config,

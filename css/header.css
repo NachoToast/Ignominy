@@ -9,6 +9,7 @@
     font-size: 30px;
     justify-content: space-evenly;
     border-top: solid 1px gray;
+    width: 100%;
 }
 
 #header > div {

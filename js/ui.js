@@ -419,122 +419,6 @@ class TradeMenu {
   }
 }
 
-// MenuManager handles updates to save/load buttons (for feedback) and config control
-class MenuManager {
-  static saveLoadOptions = [
-    {
-      text: 'Browser Storage',
-      comment: 'Recommended',
-      color: '#90EE90',
-      tooltip: 'Saves to browsers cache (local storage).',
-    },
-    {
-      text: 'File',
-      comment: 'Safest',
-      color: '#FFD700',
-      tooltip: 'Saves to downloads folder of local machine.',
-    },
-    {
-      text: 'Server',
-      comment: 'Cross-Platform',
-      color: '#FFC0CB',
-      tooltip:
-        'Saves to online server, requires playing from official website.',
-    },
-  ];
-
-  static feedbackColors = {
-    true: '#90EE90',
-    false: '#F08080',
-  };
-
-  // called on every click on the 'Menu' header (if not open already)
-  static updateSaveLoadElements() {
-    // TODO: overhaul, instead of regenerating every time just have the menu hidden
-    // generate save and load button elements
-    for (let i = 0, len = this.saveLoadOptions.length; i < len; i++) {
-      let text = this.saveLoadOptions[i].text,
-        comment = this.saveLoadOptions[i].comment,
-        color = this.saveLoadOptions[i].color,
-        tooltip = this.saveLoadOptions[i].tooltip;
-
-      // save element
-      saveload_options[
-        i
-      ].innerHTML = `<span title='${tooltip}'>${text} (<span style='color: ${color}'>${comment}</span>)</span>`;
-
-      // load element
-      saveload_options[len + i].innerHTML = `<span title='${tooltip
-        .replace(/Saves /g, 'Loads ')
-        .replace(/ to /g, ' from ')}'>${text}</span>`;
-    }
-
-    MenuManager.updateMenuWidgets();
-  }
-
-  // called (indirectly) on every click of the 'Menu' header, and on save/load
-  static updateMenuWidgets() {
-    //console.log('updating menu widgets');
-    /// displaying config changes
-    // date/time format
-    config_date_format.value = player.config.chrono.date_format;
-    config_time_format.value = player.config.chrono.time_format;
-
-    config_time_hours.checked = !player.config.chrono.time == 12;
-    config_date_ordinals.checked = player.config.chrono.ordinals;
-
-    //DateTimeManager.display();
-
-    // meta
-    config_authors.checked = player.config.meta.authors;
-    config_versions.checked = player.config.meta.version;
-    config_legacy_version.checked = player.config.meta.legacy_version;
-
-    // debug
-    config_debug.value = player.config.debug; // slider
-    if (player.config.debug == 0) {
-      // slider text
-      config_debug_out.innerText = 'Off';
-    } else {
-      config_debug_out.innerText = player.config.debug;
-    }
-
-    // misc config options
-    config_hotkeys.checked = player.config.keybinds;
-    config_dead_links.checked = player.config.devmode.dead_links;
-    config_saveload_data.checked = player.config.devmode.saveload_data;
-    config_timestamps_enable.checked = player.config.timestamps.enabled;
-    config_scene_tracking.checked = player.config.devmode.scene_tracking;
-
-    /// hide headers if not in game
-    if (player.homekingdom == 'Default') {
-      for (let i = 0, len = main_menu_cards.length; i < len; i++) {
-        if (i == 1) continue; // never hide main menu header
-        main_menu_cards[i].classList.add('hidden');
-      }
-    } else {
-      for (let i = 0, len = main_menu_cards.length; i < len; i++) {
-        main_menu_cards[i].classList.remove('hidden');
-      }
-    }
-  }
-
-  // called on save/load attempts, updates relevant button to show feedback (success/failure)
-  // TODO: More descriptive feedback somewhere along the chain?
-  static showAttemptFeedback(
-    index = 0,
-    message = 'Unable to save!',
-    success = false,
-    type = 0
-  ) {
-    // type 0 = save, type 1 = load
-    if (type === 1) index += this.saveLoadOptions.length;
-    saveload_options[
-      index
-    ].innerHTML = `<span style='color: ${this.feedbackColors[success]}'>${message}</span>`;
-  }
-}
-
 // InventoryManager handles UI related activities in player inventory
 class InventoryManager {
   // open the inventory
@@ -666,5 +550,101 @@ class InventoryManager {
     }
 
     return infoDiv;
+  }
+}
+
+class MetaManager {
+  static tracking = true;
+  static trackingColor = 'rgb(255, 238, 139)';
+
+  static metaElement = document.getElementById('meta');
+  static currentMeta = {
+    authors: ['NachoToast'],
+    version: '0.1.14',
+    legacy_version: '0.0.1',
+  };
+
+  static update(inputMeta) {
+    // overwrite stored meta with input if it exists and is different
+    if (inputMeta !== undefined && inputMeta !== this.currentMeta) {
+      this.currentMeta = inputMeta;
+    }
+
+    // if no meta is supposed to be shown
+    if (
+      !IGNOMINY_CONFIG.scenes.showAuthors &&
+      !IGNOMINY_CONFIG.scenes.showVersion
+    ) {
+      // if meta is currently being shown
+      if (this.metaElement.style.display !== 'none') {
+        if (this.tracking) {
+          console.log(
+            `%c[${this.name}]%c Hiding meta`,
+            `color: ${this.trackingColor}`,
+            `color: white`
+          );
+        }
+        this.metaElement.style.display = 'none';
+      }
+      return;
+    }
+
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Updating meta`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    // show element
+    this.metaElement.style.display = 'block';
+
+    // update element
+    if (IGNOMINY_CONFIG.scenes.showAuthors) {
+      let authorsList = 'Author';
+
+      if (this.currentMeta.authors === undefined) {
+        // no authors
+        authorsList += `: <span>Unknown</span>.`;
+      } else {
+        const numAuthors = this.currentMeta.authors.length;
+
+        if (numAuthors == 1) {
+          // 1 author
+          authorsList += `: <span>${this.currentMeta.authors[0]}</span>.`;
+        } else {
+          // multiple authors should be separated by commas
+          authorsList += `s (${numAuthors}): <span>${this.currentMeta.authors[0]}</span>`;
+          for (let i = 1, len = this.currentMeta.authors.length; i < len; i++) {
+            authorsList += `, <span> ${this.currentMeta.authors[i]}</span>`;
+          }
+          authorsList += `.`;
+        }
+      }
+
+      this.metaElement.children[0].style.display = 'block';
+      this.metaElement.children[0].innerHTML = authorsList;
+    } else {
+      this.metaElement.children[0].style.display = 'none';
+    }
+
+    if (IGNOMINY_CONFIG.scenes.showVersion) {
+      this.metaElement.children[1].style.display = 'block';
+
+      this.metaElement.children[1].innerHTML = `Added: <span>${
+        this.currentMeta.version ?? 'Unknown'
+      }</span>`;
+
+      // legacy version
+      if (
+        IGNOMINY_CONFIG.scenes.showVersionLegacy &&
+        this.currentMeta.legacy_version !== undefined
+      ) {
+        this.metaElement.children[1].innerHTML += ` [<span>${this.currentMeta.legacy_version}</span>]`;
+      }
+    } else {
+      this.metaElement.children[1].style.display = 'none';
+    }
   }
 }
