@@ -324,11 +324,15 @@ class SaveLoadManager {
 
     const file = new Blob(
       [
-        JSON.stringify({
-          date: Date.now(),
-          version: version,
-          data: player,
-        }),
+        JSON.stringify(
+          {
+            date: Date.now(),
+            version: version,
+            data: player,
+          },
+          null,
+          4
+        ),
       ],
       {
         type: 'application/json',
