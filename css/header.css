@@ -1,4 +1,3 @@
-@import "headers/menu.css";
 @import "headers/map.css";
 @import "headers/stats.css";
 @import "headers/inventory.css";
@@ -8,10 +7,22 @@
     display: flex;
     flex-flow: row wrap;
     font-size: 30px;
-    justify-content: center;
-    height: fit-content;
+    justify-content: space-evenly;
 }
 
+#header > div {
+    text-align: center;
+    flex-grow: 1;
+    padding: 5px 10px;
+    border: solid 1px gray;
+    margin-top: -1px;
+    margin-left: -1px;
+}
+
+#header > div:first-child {
+    margin-left: 0px;
+}
+/* 
 #header > div {
     flex-grow: 1;
     border-right: solid 1px gray;
@@ -46,4 +57,4 @@
     position: absolute;
     display: flex;
     flex-flow: row wrap;
-}
+} */

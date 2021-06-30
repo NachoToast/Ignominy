@@ -1,6 +1,5 @@
 function generate_game(scene, fromload) {
   HeaderManager.unhideAllHeaders();
-  DateTimeManager.display();
   if (player.config.debug > 0)
     console.log(
       `%cStarting game%c\nLoaded Scene: ${scene}\nPlayer Hometown: ${player.hometown}, ${player.homekingdom}`,
@@ -263,7 +262,6 @@ function update_keybind_config() {
     );
     player.latest_time_increment = (new_time - player.time) / 1000;
     player.time = new_time;
-    DateTimeManager.display();
 
     if (player.inns.length > 0) track_inns(player.latest_time_increment / 3600);
   }
@@ -529,6 +527,8 @@ function update_keybind_config() {
     // key binding
     //options = document.getElementsByClassName("std_options");
     //if (player.config.keybinds == true) display_keybinds();
+
+    DateTimeManager.display();
   }
   function display_meta(scene) {
     if (player.config.debug > 1)
@@ -871,6 +871,7 @@ function update_keybind_config() {
 }
 
 class VersionChecker {
+  static tracking = false;
   static trackingColor = 'aquamarine';
 
   static versions = {
@@ -938,17 +939,28 @@ class VersionChecker {
           }
         },
         21: (saveData) => {
-          if (saveData?.config?.chrono?.reversed === undefined) {
-            if (
-              saveData?.config?.chrono?.order !== undefined && // if obsolete 'order' field present
-              saveData.config.chrono.order === 1 // and is 1 (reversed)
-            ) {
-              saveData.config.chrono.reversed = true;
-            } else {
-              saveData.config.chrono.reversed = false;
-            }
+          if (saveData?.config?.chrono?.order !== undefined) {
+            delete saveData.config.chrono.order;
             console.log(
-              `%c[${this.name}]%c Added 'config.chrono.reversed' bool [0.1.21]`,
+              `%c[${this.name}]%c Removed 'config.chrono.order' int [0.1.21]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+        },
+        24: (saveData) => {
+          if (saveData?.config?.headers !== undefined) {
+            delete saveData.config.headers;
+            console.log(
+              `%c[${this.name}]%c Removed 'config.headers' array [0.1.24]`,
+              `color: ${this.trackingColor}`,
+              `color: white`
+            );
+          }
+          if (saveData?.config?.chrono?.reversed !== undefined) {
+            delete saveData.config.chrono.reversed;
+            console.log(
+              `%c[${this.name}]%c Removed 'config.chrono.reversed' bool [0.1.24]`,
               `color: ${this.trackingColor}`,
               `color: white`
             );
@@ -998,13 +1010,13 @@ class VersionChecker {
     }
 
     // logging
-    if (minorVersionsToCheck.length < 1) {
+    if (minorVersionsToCheck.length < 1 && this.tracking) {
       console.log(
         `%c[${this.name}]%c No updates necessary`,
         `color: ${this.trackingColor}`,
         `color: white`
       );
-    } else {
+    } else if (this.tracking) {
       console.log(
         `%c[${this.name}]%c Applying updates for versions: ${minorVersionsToCheck}`,
         `color: ${this.trackingColor}`,

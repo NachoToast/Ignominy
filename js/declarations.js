@@ -1,11 +1,10 @@
-const version = '0.1.23',
-  harsh_check = true,
+const version = '0.1.24',
   game_window = document.getElementById('game');
 
 // default config
 const IGNOMINY_DEFAULT_CONFIG = {
   datetime: {
-    format: 'dddd d MMMM yyyy h:mmp',
+    format: 'dd/MM//yy h:mmp',
     twentyFourHourTime: false,
     showTimeOrdinals: true,
   },
@@ -162,159 +161,6 @@ const IGNOMINY_DEFAULT_CONFIG = {
       header_pages = document.getElementsByClassName('header_pages'),
       current_header = -1,
       header = document.getElementById('header');
-  }
-
-  {
-    // Menu
-    // Header & General Elements
-    var main_menu = document.getElementById('header_0_main'),
-      main_menu_cards = document.getElementsByClassName('mmc');
-    main_menu.innerHTML =
-      `<span title='Playing Ignominy on version ${version}'>` +
-      'Ignominy ' +
-      version +
-      '</span>';
-
-    // Save + Load
-    {
-      var saveload_defaults = {
-          save: [
-            {
-              text: 'Browser Storage',
-              inline: 'Recommended',
-              inline_color: '#90EE90',
-              title:
-                'Save is stored in selected browsers cache (local storage).',
-            },
-            {
-              text: 'File',
-              inline: 'Safest',
-              inline_color: '#FFD700',
-              title: 'Saves to downloads folder of local machine.',
-            },
-            {
-              text: 'Server',
-              inline: 'Cross-Platform',
-              inline_color: '#FFC0CB',
-              title:
-                'Saves to online server, requires playing from official website.',
-            },
-          ],
-          load: [
-            'Browser Storage',
-            'Load from browser cache.',
-            'File',
-            'Load file from computer.',
-            'Server',
-            'Load file from server, requires playing from official website.',
-          ],
-        },
-        saveload_current_changed = [-1, false],
-        saveload_options = document.getElementsByClassName('saveload_option'),
-        special_load_option = document.getElementById('load_file_label'),
-        file_holder = document.getElementById('load_file');
-    }
-
-    // Date & Time
-    {
-      var config_date_format = document.getElementById('config_date_format'),
-        config_date_ordinals = document.getElementById('date_ordinals'),
-        config_time_format = document.getElementById('config_time_format'),
-        config_time_hours = document.getElementById('time_hours'),
-        config_reverse = document.getElementById('chrono_reverse');
-
-      // Event Listeners
-      config_date_format.addEventListener('input', function () {
-        player.config.chrono.date_format = config_date_format.value;
-        DateTimeManager.display();
-      });
-      config_time_format.addEventListener('input', function () {
-        player.config.chrono.time_format = config_time_format.value;
-        DateTimeManager.display();
-      });
-      config_date_ordinals.addEventListener('change', function () {
-        if (this.checked) {
-          player.config.chrono.ordinals = true;
-        } else {
-          player.config.chrono.ordinals = false;
-        }
-        DateTimeManager.display();
-      });
-      config_time_hours.addEventListener('change', function () {
-        if (this.checked) {
-          player.config.chrono.time = 24;
-        } else {
-          player.config.chrono.time = 12;
-        }
-        DateTimeManager.display();
-      });
-      config_reverse.addEventListener('change', function () {
-        player.config.chrono.reversed = this.checked;
-        DateTimeManager.display();
-      });
-    }
-
-    // Dev
-    {
-      var config_debug = document.getElementById('debug_set'),
-        config_debug_out = document.getElementById('debug_out'),
-        config_dead_links = document.getElementById('config_dead_links'),
-        config_saveload_data = document.getElementById('config_saveload_data'),
-        config_scene_tracking = document.getElementById(
-          'config_scene_tracking'
-        );
-
-      // Event Listeners
-      config_dead_links.addEventListener('change', function () {
-        if (this.checked) player.config.devmode.dead_links = true;
-        else player.config.devmode.dead_links = false;
-      });
-      config_saveload_data.addEventListener('change', function () {
-        if (this.checked) player.config.devmode.saveload_data = true;
-        else player.config.devmode.saveload_data = false;
-      });
-      config_scene_tracking.addEventListener('input', function () {
-        player.config.devmode.scene_tracking = this.checked;
-      });
-    }
-
-    // Misc
-    {
-      var config_hotkeys = document.getElementById('hotkey_set'),
-        config_timestamps_enable = document.getElementById('timestamps_set'),
-        config_authors = document.getElementById('meta_authors'),
-        config_versions = document.getElementById('meta_versions'),
-        config_legacy_version = document.getElementById('meta_versions_legacy');
-
-      // Event Listeners
-      config_hotkeys.addEventListener('change', function () {
-        if (this.checked) player.config.keybinds = true;
-        else player.config.keybinds = false;
-        update_keybind_config();
-      });
-      config_authors.addEventListener('change', function () {
-        if (this.checked) player.config.meta.authors = true;
-        else player.config.meta.authors = false;
-      });
-      config_versions.addEventListener('change', function () {
-        if (this.checked) player.config.meta.version = true;
-        else {
-          player.config.meta.version = false;
-          player.config.meta.legacy_version = false;
-          config_legacy_version.checked = false;
-        }
-      });
-      config_legacy_version.addEventListener('change', function () {
-        if (this.checked) {
-          config_versions.checked = true;
-          player.config.meta.legacy_version = true;
-          player.config.meta.version = true;
-        } else player.config.meta.legacy_version = false;
-      });
-      config_timestamps_enable.addEventListener('input', function () {
-        player.config.timestamps.enabled = this.checked;
-      });
-    }
   }
 
   {

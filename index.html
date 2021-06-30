@@ -122,6 +122,10 @@
           <label for='autoload'>Autoload</label>
         </div>
       </div>
+      <div class='single'>
+        <h3 class='noselect'>Advanced</h3>
+        <p style='color: rgb(88, 88, 88)'>Coming Soon...</p>
+      </div>
     </div>
     <h2 class='noselect'>Links</h2>
     <div class='double'>
@@ -133,121 +137,13 @@
     <button onclick='MainMenu.hide()'>Close</button>
   </div>
   <div id="header">
-    <div class="header_options header_title noselect" onclick="MainMenu.show()">Menu</div>
-    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(1)">Stats</div>
-    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(2)">Map</div>
-    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(3)">Date Time</div>
-    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(4)">Inventory</div>
+    <div class="header_title noselect" onclick="MainMenu.show()">Menu</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(0)">Stats</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(1)">Map</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(2)">Date Time</div>
+    <div class="header_options hidden header_title noselect" onclick="HeaderManager.showHeader(3)">Inventory</div>
   </div>
   <div id="global">
-    <div id="header_0" class="header_pages hidden">
-      <h1 id="header_0_main">Ignominy Version Missing?</span></h1>
-      <div class="saveload mmc">
-        <h2>Save</h2>
-        <div>
-          <p class="saveload_option noselect" onclick="save_game('browser')"></p>
-        </div>
-        <div>
-          <p class="saveload_option noselect" onclick="save_game('file')"></p>
-        </div>
-        <div>
-          <p class="saveload_option noselect"></p>
-        </div>
-      </div>
-      <div class="saveload mmc">
-        <h2>Load</h2>
-        <div>
-          <p class="saveload_option noselect" onclick="load_game('browser')"></p>
-        </div>
-        <div>
-          <label for="load_file" id="load_file_label" class="saveload_option noselect">File</label>
-          <input id="load_file" type="file" style="display:none" onchange="load_game('file')" accept=".ignosave">
-        </div>
-        <div>
-          <p class="saveload_option noselect"></p>
-        </div>
-      </div>
-      <div class="config mmc">
-        <h2>Date & Time</h2>
-        <div>
-          <input placeholder="Date Format" minlength=1 maxlength=20 id="config_date_format">
-          <input type="checkbox" id="date_ordinals" class="config_check">
-          <label for="date_ordinals" class="noselect">Ordinals</label>
-        </div>
-        <div>
-          <input placeholder="Time Format" minlength=1 maxlength=20 id="config_time_format">
-          <input type="checkbox" id="time_hours" class="config_check">
-          <label for="time_hours" class="noselect">24 Hour</label>
-        </div>
-        <div id="config_example_div">
-          <div>
-            <input type="checkbox" id="chrono_reverse">
-            <label for="chrono_reverse" id="chrono_reverse_label" class="noselect">Reverse</label>
-          </div>
-        </div>
-      </div>
-      <div class="config mmc">
-        <h2>Dev</h2>
-        <div id="config_devmode">
-          <label for="devmode_set">Debug Mode</label>
-          <input type="range" id="debug_set" min=0 max=5 value="100" list="debugmarks" oninput="UIManager.changeDebugMode()">
-          <datalist id="debugmarks">
-            <option value="0"></option>
-            <option value="1"></option>
-            <option value="2"></option>
-            <option value="3"></option>
-            <option value="4"></option>
-            <option value="5"></option>
-          </datalist>
-          <p id="debug_out">Off</p>
-        </div>
-        <div>
-          <input type="checkbox" id="config_dead_links">
-          <label for="config_dead_links">Dead Link Highlighting</label>
-        </div>
-        <div>
-          <input type="checkbox" id="config_saveload_data">
-          <label for="config_saveload_data">Log Save/Load Data</label>
-        </div>
-        <div>
-          <input type="checkbox" id="config_scene_tracking">
-          <label for="config_scene_tracking">Scene Tracking</label>
-        </div>
-      </div>
-      <div class="config mmc" id="config_misc">
-        <h2>Misc</h2>
-        <div>
-          <input type="checkbox" id="hotkey_set">
-          <label for="hotkey_set" class="noselect">Hotkeys</label>
-          <input type="checkbox" id="timestamps_set" style="margin-left: 5px">
-          <label for="timestamps_set" class="noselect">Timestamps</label>
-        </div>
-        <div id="config_meta">
-          <p>Scene Metadata:</p>
-          <div>
-            <input type="checkbox" id="meta_authors">
-            <label for="meta_authors" class="noselect">Authors</label>
-          </div>
-          <div>
-            <input type="checkbox" id="meta_versions">
-            <label for="meta_versions" class="noselect">Version</label>
-          </div>
-          <div>
-            <input type="checkbox" id="meta_versions_legacy">
-            <label for="meta_versions_legacy" class="noselect">Version [Legacy]</label>
-          </div>
-        </div>
-        <div id="reset" onclick=reset_game()>Reset Game</div>
-      </div>
-      <div class="config links">
-        <h2>Links</h2>
-        <div>
-          <a href="https://github.com/NachoToast/Ignominy" target="_blank"><img src="img/ui/github.png"></a>
-          <a href="https://discord.gg/PEGUcb4" target="_blank"><img src="img/ui/discord.png"></a>
-          <a href="https://nachotoast.com/Ignominy" target="_blank"><img src="img/ui/website.png"></a>
-        </div>
-      </div>
-    </div>
     <div id="header_1" class="header_pages hidden">
       <h1 id="stats_name">Player Name</h1>
       <div id="header_1_1">

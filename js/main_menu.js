@@ -1,6 +1,6 @@
 // MainMenu handles save table generation, main menu showing/hiding, and updating the autosave row
 class MainMenu {
-  static tracking = true;
+  static tracking = false;
   static trackingColor = 'rgb(255, 238, 139)';
 
   static menuElement = document.getElementById('mainMenu');
@@ -16,8 +16,9 @@ class MainMenu {
     this.updateAutosaveRow();
   }
 
-  static hide(fastFade = false) {
-    if (fastFade) {
+  static hide(fromAutosave = false, fromSave = false) {
+    // if loading from an autosave, menu should hide itself instantly
+    if (fromAutosave) {
       this.menuElement.style.display = 'none';
     } else {
       this.menuElement.classList.add('mainMenuFadeOut');
@@ -26,10 +27,22 @@ class MainMenu {
         this.menuElement.classList.remove('mainMenuFadeOut');
       }, 250);
     }
+
+    // if loading from a save, date will be updated by scene generation
+    if (!fromSave) {
+      DateTimeManager.display();
+    }
   }
 
   // handles initial auto save making (and creation if it doesn't exist), and table generation
   static init() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Initialising main menu`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
     SaveLoadManager.checkInitialAutosave();
     this.generateTable();
   }
@@ -172,15 +185,17 @@ class MainMenu {
 
 // SaveLoadManager handles saving, loading, exporting, and importing player data as well as autosaving and autoloading
 class SaveLoadManager {
-  static tracking = true;
+  static tracking = false;
   static trackingColor = 'pink';
 
   static browserSave(id = null, saveRowElement = null) {
-    console.log(
-      `%c[${this.name}]%c Saving to browser`,
-      `color: ${this.trackingColor}`,
-      `color: white`
-    );
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Saving to browser`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
 
     // if no id specified (aka new save slot), generate new unique one
     if (id === null) {
@@ -218,15 +233,17 @@ class SaveLoadManager {
       })
     );
 
-    return { id: id, element: saveRowElement };
+    return id;
   }
 
   static deleteSave(id = null, saveRowElement = null) {
-    console.log(
-      `%c[${this.name}]%c Deleting save ${id}`,
-      `color: ${this.trackingColor}`,
-      `color: white`
-    );
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Deleting save ${id}`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
 
     saveRowElement.classList.add('deleting');
 
@@ -248,12 +265,14 @@ class SaveLoadManager {
     );
   }
 
-  static browserLoad(id = null, fastFade = false) {
-    console.log(
-      `%c[${this.name}]%c Loading save ${id}`,
-      `color: ${this.trackingColor}`,
-      `color: white`
-    );
+  static browserLoad(id = null, fromAutoSave = false) {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Loading save ${id}`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
 
     const load = JSON.parse(localStorage.getItem(`Ignominy Save ${id}`));
 
@@ -276,7 +295,8 @@ class SaveLoadManager {
     if (TradeMenu.isOpen) {
       TradeMenu.close();
     }
-    MainMenu.hide(fastFade);
+
+    MainMenu.hide(fromAutoSave, true);
   }
 
   static export() {
@@ -334,10 +354,10 @@ class SaveLoadManager {
       const data = JSON.parse(contents.target.result);
       player = data.data;
 
-      // save imported file to local storage, record id and element it saved to
-      const { id, element } = SaveLoadManager.browserSave();
+      // save imported file to local storage, record id it saved to
+      const id = SaveLoadManager.browserSave();
       // then load with reference to save id and element
-      SaveLoadManager.browserLoad(id, element);
+      SaveLoadManager.browserLoad(id, true);
     };
     reader.onerror = () => {
       console.log(
@@ -432,7 +452,7 @@ class SaveLoadManager {
 
 // ConfigManager handles config changes, and saving/getting config from browser local storage
 class ConfigManager {
-  static tracking = true;
+  static tracking = false;
   static trackingColor = 'yellow';
 
   // Date & Time
@@ -524,30 +544,36 @@ class ConfigManager {
 
   // loads and returns config from browser, or default config if it doesn't exist
   static loadConfig = () => {
-    console.log(
-      `%c[${this.name}]%c Checking for pre-existing config...`,
-      `color: ${this.trackingColor}`,
-      `color: white`
-    );
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Checking for pre-existing config...`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
 
     const storedConfig = localStorage.getItem(`Ignominy Config`);
     const currentConfig = IGNOMINY_DEFAULT_CONFIG;
 
     // if no stored config is found, use default config
     if (storedConfig === null) {
+      if (this.tracking) {
+        console.log(
+          `%c[${this.name}]%c No pre-existing config found, using default`,
+          `color: ${this.trackingColor}`,
+          `color: white`
+        );
+      }
       // no config stored
-      console.log(
-        `%c[${this.name}]%c No pre-existing config found, using default`,
-        `color: ${this.trackingColor}`,
-        `color: white`
-      );
     } else {
       // otherwise apply key value pairs of the stored config, but only if the key also exists in default (since keys may change in future)
-      console.log(
-        `%c[${this.name}]%c Pre-existing config found, applying`,
-        `color: ${this.trackingColor}`,
-        `color: white`
-      );
+      if (this.tracking) {
+        console.log(
+          `%c[${this.name}]%c Pre-existing config found, applying`,
+          `color: ${this.trackingColor}`,
+          `color: white`
+        );
+      }
 
       GeneralPurpose.updateSharedKeys(currentConfig, JSON.parse(storedConfig));
     }

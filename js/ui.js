@@ -68,16 +68,13 @@ class DateTimeManager {
     }
   }
 
-  static convertToLongDay = (numDay) => this.dayNames[numDay];
-  static convertToLongMonth = (numMonth) => this.monthNames[numMonth];
-
   // formats date object in player-specified format
   static formatDate(inputDate = player.time) {
     // get more detailed information about the date object
     const dayNum = inputDate.getDate(),
-      dayLong = this.convertToLongDay(inputDate.getDay()),
-      monthNum = inputDate.getMonth(),
-      monthLong = this.convertToLongMonth(monthNum),
+      dayLong = this.dayNames[inputDate.getDay()],
+      monthNum = inputDate.getMonth() + 1,
+      monthLong = this.monthNames[monthNum - 1],
       year = inputDate.getFullYear(),
       second = inputDate.getSeconds(),
       minute = inputDate.getMinutes();
@@ -145,9 +142,7 @@ class DateTimeManager {
   }
 
   // displays a formatted date to HTML element
-  static display(
-    updateHeaders = true // whether to call the update header borders method once the date is written
-  ) {
+  static display() {
     if (this.tracking) {
       console.log(
         `%c[${this.name}]%c Displaying date`,
@@ -156,10 +151,6 @@ class DateTimeManager {
       );
     }
     this.dateOutputElement.innerHTML = this.formatDate();
-
-    if (updateHeaders) {
-      HeaderManager.updateHeaderBorders();
-    }
   }
 }
 
@@ -263,8 +254,6 @@ class UIManager {
       );
     }
 
-    HeaderManager.updateHeaderBorders();
-
     // call to refresh meta if enabled
     if (Object.values(player.config.meta).some((e) => e)) {
       UIManager.calibrateMetaElements(
@@ -283,17 +272,6 @@ class UIManager {
     }
     metaElement.style.marginTop =
       window.innerHeight - header.offsetHeight + 'px';
-  }
-
-  // handles changing debugmode
-  // TODO: Overhaul debug/devmode
-  static changeDebugMode() {
-    player.config.debug = parseInt(config_debug.value);
-    if (player.config.debug == 0) {
-      config_debug_out.innerText = 'Off';
-    } else {
-      config_debug_out.innerText = player.config.debug;
-    }
   }
 
   // returns CSS-friendly RGB value as a progression from colorA to colorB (option third color), input color {r: 255, g: 255, b: 255}
@@ -343,10 +321,11 @@ class UIManager {
 
 // HeaderManager handles header page opening and closing
 class HeaderManager {
+  static currentHeader = null; // currentHeader stores which header is currently open
+
   // headActions states what each header does when opened
-  static headerActions = [
-    () => MainMenu.show(), // menu
-    () => update_stats, // stats
+  static headerOpenActions = [
+    () => update_stats(), // stats
     () => null, // map
     () => null, // date/time
     () => InventoryManager.open(), // inventory
@@ -354,26 +333,32 @@ class HeaderManager {
 
   // displays header page (or hides if already open)
   static showHeader(headerNumber = 0) {
-    if (headerNumber == current_header) {
+    // clicked on already open = close
+    if (headerNumber === this.currentHeader) {
+      this.currentHeader = null;
       header_pages[headerNumber].classList.add('hidden');
-      current_header = -1;
       return;
     }
 
-    if (current_header != -1) {
-      header_pages[current_header].classList.add('hidden');
+    // if another page is currently open
+    if (this.currentHeader !== null) {
+      // hide it
+      header_pages[this.currentHeader].classList.add('hidden');
     }
-    this.headerActions[headerNumber]();
+
+    // do the open function for the new page
+    this.headerOpenActions[headerNumber]();
     header_pages[headerNumber].classList.remove('hidden');
-    current_header = headerNumber;
-    header_pages[headerNumber].style.height =
-      document.body.offsetHeight - header.offsetHeight + 'px';
+
+    this.currentHeader = headerNumber;
+    // header_pages[headerNumber].style.height =
+    // document.body.offsetHeight - header.offsetHeight + 'px';
   }
 
   // unhides all headers specified in player config
   static unhideAllHeaders() {
-    for (let i = 0, len = player.config.headers.length; i < len; i++) {
-      header_options[player.config.headers[i]].classList.remove('hidden');
+    for (let i = 0, len = header_options.length; i < len; i++) {
+      header_options[i].classList.remove('hidden');
     }
   }
 
