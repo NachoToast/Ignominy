@@ -8,7 +8,6 @@ class Menu {
     setTimeout(() => {
       this.menuElement.classList.remove('menuFadeIn');
     }, 250);
-    this.updateAutosaveRow();
   }
 
   static hide() {

@@ -1,6 +1,6 @@
-// DateTimeManager handles displaying and incrementation of game date and time
 'use strict';
 
+// DateTimeManager handles displaying and incrementation of game date and time
 class DateTimeManager {
   static tracking = true;
   static trackingColor = 'rgb(255, 238, 139)';
