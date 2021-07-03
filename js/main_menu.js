@@ -653,8 +653,7 @@ class ConfigManager {
 
 // General purpose functions that can be useful in many places
 class GeneralPurpose {
-  // deep clones values from obj2 to obj1 for all shared keys
-  // used in loading config
+  // deep clones values from obj2 to obj1 for all shared keys - used in loading config
   static updateSharedKeys(
     obj1, // object to update
     obj2 // object to get values from
@@ -669,7 +668,7 @@ class GeneralPurpose {
           typeof obj2[keysA[i]] !== 'object' ||
           Array.isArray(obj2[keysA[i]])
         ) {
-          // overwrite obj1 to obj2 value if value is not an object
+          // overwrite obj1 with obj2 value if value is not an object (or an array)
           obj1[keysA[i]] = obj2[keysA[i]];
         } else {
           // else if value is an object, recursively compare its keys
@@ -680,4 +679,122 @@ class GeneralPurpose {
 
     // no return necessary
   }
+
+  // returns CSS-friendly RGB value as a progression from colorA to colorB (third color optional)
+  static colorGradient(
+    min = 0,
+    max = 100,
+    current = 50,
+    colorA = { r: 0, g: 255, b: 0 },
+    colorB = { r: 255, g: 0, b: 0 },
+    colorC = undefined
+  ) {
+    let colorProgression;
+
+    if (min == max) {
+      console.warn(
+        `Color gradient function cannot have identical minimum and maximum values! (min: ${min}, max: ${max})`
+      );
+      return `${colorA.r}, ${colorA.g}, ${colorA.b}`;
+    }
+    colorProgression = (current - min) / (max - min); // standardize progression to 0-1 (inc)
+    colorProgression = Math.max(colorProgression, 0); // lowest progression possible = 0
+    colorProgression = Math.min(colorProgression, 1); // highest progression possible = 1
+
+    if (colorC) {
+      colorProgression *= 2; // double scale if third colour present
+      if (colorProgression >= 1) {
+        // if more than halfway, set the 'min' color to colorB and the 'max' color to colorC
+        colorA = colorB;
+        colorB = colorC;
+        colorProgression -= 1;
+      }
+    }
+
+    const redProgress = colorA.r + colorProgression * (colorB.r - colorA.r);
+    const greenProgress = colorA.g + colorProgression * (colorB.g - colorA.g);
+    const blueProgress = colorA.b + colorProgression * (colorB.b - colorA.b);
+
+    return `${parseInt(redProgress)}, ${parseInt(greenProgress)}, ${parseInt(
+      blueProgress
+    )}`;
+  }
 }
+
+class StatsMenu extends Menu {
+  static tracking = true;
+  static trackingColor = 'rgb(255, 238, 139)';
+
+  static menuElement = document.getElementById('statsMenu');
+  static skillsTable = document.getElementById('skillsTable');
+  static abilitiesTable = document.getElementById('abilitiesTable');
+
+  static healthText = document.getElementById('healthText');
+  static healthImage = document.getElementById('healthImage');
+  static noHealthColor = { r: 240, g: 128, b: 128 };
+  static halfHealthColor = { r: 255, g: 238, b: 139 };
+  static fullHealthColor = { r: 144, g: 238, b: 144 };
+
+  static manaText = document.getElementById('manaText');
+  static manaImage = document.getElementById('manaImage');
+  static noManaColor = { r: 128, g: 128, b: 128 };
+  static halfManaColor = { r: 0, g: 139, b: 139 };
+  static fullManaColor = { r: 0, g: 255, b: 255 };
+
+  static show() {
+    super.show();
+    this.update();
+  }
+
+  static init() {
+    if (this.tracking) {
+      console.log(
+        `%c[${this.name}]%c Initializing new stats table`,
+        `color: ${this.trackingColor}`,
+        `color: white`
+      );
+    }
+
+    // new table gen
+    // this.skillsTable.innerHTML = ``;
+    // this.abilitiesTable.innerHTML = ``;
+  }
+
+  static update() {
+    this.healthText.style.color = `rgb(${GeneralPurpose.colorGradient(
+      0,
+      player.max_health,
+      player.health,
+      this.noHealthColor,
+      this.halfHealthColor,
+      this.fullHealthColor
+    )}`;
+    const proportionHealth = player.health / player.max_health;
+    this.healthText.innerText = `${player.health} / ${
+      player.max_health
+    } (${Math.floor(100 * proportionHealth)}%)`;
+    this.healthImage.style.clip = `rect(0, 64px, ${Math.floor(
+      11 + (1 - proportionHealth) * 45
+    )}px, 0)`;
+
+    this.manaText.style.color = `rgb(${GeneralPurpose.colorGradient(
+      0,
+      player.max_mana,
+      player.mana,
+      this.noManaColor,
+      this.halfManaColor,
+      this.fullManaColor
+    )}`;
+    const proportionMana = player.mana / player.max_mana;
+    this.manaText.innerText = `${player.mana} / ${
+      player.max_mana
+    } (${Math.floor(100 * proportionMana)}%)`;
+    this.manaImage.style.clip = `rect(0, 64px, ${Math.floor(
+      4 + (1 - proportionMana) * 56
+    )}px, 0)`;
+  }
+}
+
+// clear stats on LOAD
+// make new table on LOAD
+// update/modify stats on OPEN

@@ -143,28 +143,28 @@
       <div class='mainCard'>
         <div>
           <p>Health</p>
-          <p>100 / 100 (100%)</p>
+          <p id='healthText'>100 / 100 (100%)</p>
         </div>
         <div class='color'>
           <img src='img/ui/health.png'>
-          <img src='img/ui/health.png'>
+          <img src='img/ui/health.png' id='healthImage'>
         </div>
       </div>
       <div class='mainCard'>
         <div>
           <p>Mana</p>
-          <p>100 / 100 (100%)</p>
+          <p id='manaText'>100 / 100 (100%)</p>
         </div>
         <div class='color'>
           <img src='img/ui/mana.png'>
-          <img src='img/ui/mana.png'>
+          <img src='img/ui/mana.png' id='manaImage'>
         </div>
       </div>
     </div>
     <div class='double2 double noselect'>
       <div>
         <p>Skills</p>
-        <div class='thingList'>
+        <div class='thingList' id='skillsTable'>
           <div class='standard'>
             <p>Strength</p>
             <img src='img/ui/strength.png'>
@@ -189,7 +189,7 @@
       </div>
       <div>
         <p>Abilities</p>
-        <div class='thingList'>
+        <div class='thingList' id='abilitiesTable'>
           <div class='big'>
             <div>
               <div>
@@ -207,12 +207,12 @@
         </div>
       </div>
     </div>
-    <button>Close</button>
+    <button onclick='StatsMenu.hide()'>Close</button>
     <p>Fatigue: 777</p>
   </div>
   <div id="header">
     <div class="header_title noselect" onclick="MainMenu.show()">Menu</div>
-    <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(0)">Stats</div>
+    <div class="header_options hidden noselect" onclick="StatsMenu.show()">Stats</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(1)">Map</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(2)" id='dateTimeOutput'>Date Time</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(3)">Inventory</div>
