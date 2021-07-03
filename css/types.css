@@ -1,0 +1,46 @@
+
+.costMana {
+  color: darkcyan;
+}
+
+/* Effects */
+
+.effectStun {
+  color: lime;
+}
+
+.effectBlind {
+  color: brown;
+}
+
+/* Types */
+
+.typeMagic {
+  color: purple;
+  animation-name: typeMagic;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes typeMagic {
+  from {color: purple}
+  to {color: pink}
+}
+
+.typeFire {
+  color: crimson;
+  animation-name: typeFire;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes typeFire {
+  from {color: crimson}
+  to {color: orange}
+}

@@ -50,7 +50,8 @@
    -->
 </head>
 <body>
-  <div id='mainMenu' class='specialScroll' style='display: none'>
+  <!-- TODO: add titles for all main menu elements -->
+  <div id='mainMenu' class='specialScroll menu' style='display: none'>
     <h1 class='noselect'>Ignominy</h1>
     <h2 class='noselect'>Manage Saves</h2>
     <div class='single saves specialScroll'>
@@ -135,6 +136,79 @@
     </div>
     <p class='noselect' id='mainMenuVersionNumber'>Unknown Version</p>
     <button onclick='MainMenu.hide()'>Close</button>
+  </div>
+  <div id='statsMenu' class='specialScroll menu' style='display: none'>
+    <h1 class='noselect'>Stats</h1>
+    <div class='double noselect'>
+      <div class='mainCard'>
+        <div>
+          <p>Health</p>
+          <p>100 / 100 (100%)</p>
+        </div>
+        <div class='color'>
+          <img src='img/ui/health.png'>
+          <img src='img/ui/health.png'>
+        </div>
+      </div>
+      <div class='mainCard'>
+        <div>
+          <p>Mana</p>
+          <p>100 / 100 (100%)</p>
+        </div>
+        <div class='color'>
+          <img src='img/ui/mana.png'>
+          <img src='img/ui/mana.png'>
+        </div>
+      </div>
+    </div>
+    <div class='double2 double noselect'>
+      <div>
+        <p>Skills</p>
+        <div class='thingList'>
+          <div class='standard'>
+            <p>Strength</p>
+            <img src='img/ui/strength.png'>
+            <p>2</p>
+          </div>
+          <div class='standard'>
+            <p>Agility</p>
+            <img src='img/ui/agility.png'>
+            <p>2005</p>
+          </div>
+          <div class='standard'>
+            <p>Proficiency</p>
+            <img src='img/ui/proficiency.png'>
+            <p>2</p>
+          </div>
+          <div class='standard'>
+            <p>Perception</p>
+            <img src='img/ui/perception.png'>
+            <p>2</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>Abilities</p>
+        <div class='thingList'>
+          <div class='big'>
+            <div>
+              <div>
+                <p>Generic Ability Name <span>(Lvl 1)</span></p>
+                <p>A generic ability description, may be many characters long, maybe be only a few, who knows? (not me)</p>
+              </div>
+              <img src='img/ui/mana.png'>
+            </div>
+            <div>
+              <p><span class='effectStun'>Stun</span><span class='effectBlind'>Blind</span></p>
+              <p><span class='typeMagic'>Magic</span><span class='typeFire'>Fire</span></p>
+              <p><span class='costMana'>70 Mana</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button>Close</button>
+    <p>Fatigue: 777</p>
   </div>
   <div id="header">
     <div class="header_title noselect" onclick="MainMenu.show()">Menu</div>
@@ -269,6 +343,7 @@
     </div>
   </div>
   <div id='meta' class='noselect'>
+    <!-- TODO: Meta should only show once a game has started -->
     <p>Authors: <span>NachoToast</span></p>
     <p>Added: <span>0.1.14</span> [<span>0.0.4</span>]</p>
   </div>

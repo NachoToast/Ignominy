@@ -1,6 +1,27 @@
-// MainMenu handles save table generation, main menu showing/hiding, and updating the autosave row
 'use strict';
-class MainMenu {
+
+// menu does showing/hiding of menu pages like the main menu, stats, map, etc.
+class Menu {
+  static show() {
+    this.menuElement.classList.add('menuFadeIn');
+    this.menuElement.style.display = 'flex';
+    setTimeout(() => {
+      this.menuElement.classList.remove('menuFadeIn');
+    }, 250);
+    this.updateAutosaveRow();
+  }
+
+  static hide() {
+    this.menuElement.classList.add('menuFadeOut');
+    setTimeout(() => {
+      this.menuElement.style.display = 'none';
+      this.menuElement.classList.remove('menuFadeOut');
+    }, 250);
+  }
+}
+
+// MainMenu handles save table generation, and updating the autosave row
+class MainMenu extends Menu {
   static tracking = false;
   static trackingColor = 'rgb(255, 238, 139)';
 
@@ -9,11 +30,7 @@ class MainMenu {
   static versionElement = document.getElementById('mainMenuVersionNumber');
 
   static show() {
-    this.menuElement.classList.add('mainMenuFadeIn');
-    this.menuElement.style.display = 'flex';
-    setTimeout(() => {
-      this.menuElement.classList.remove('mainMenuFadeIn');
-    }, 250);
+    super.show();
     this.updateAutosaveRow();
   }
 
@@ -22,11 +39,7 @@ class MainMenu {
     if (fromAutosave) {
       this.menuElement.style.display = 'none';
     } else {
-      this.menuElement.classList.add('mainMenuFadeOut');
-      setTimeout(() => {
-        this.menuElement.style.display = 'none';
-        this.menuElement.classList.remove('mainMenuFadeOut');
-      }, 250);
+      super.hide();
     }
   }
 

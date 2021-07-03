@@ -5,8 +5,9 @@
 @import "lore.css";
 @import "trade.css";
 
-@import 'main_menu.css';
+@import 'menus/all.css';
 @import 'meta.css';
+@import 'types.css';
 
 * {
     margin: 0;

@@ -1,0 +1,271 @@
+#statsMenu > h1 {
+  padding-top: 20px;
+}
+
+#statsMenu > div.double {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: stretch;
+  text-align: center;
+}
+
+#statsMenu > div.double > div {
+  font-size: 24px;
+  width: calc(50% - 1px);
+  border: solid 1px transparent;
+}
+
+#statsMenu > div.double > div:first-child {
+  border-left: none;
+}
+
+#statsMenu > div.double > div:last-child {
+  border-right: none;
+}
+
+/* Health & Mana Cards */
+
+#statsMenu div.mainCard {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 5px 10px;
+  transition: background-color 0.1s linear, border 0.3s linear;
+}
+
+#statsMenu div.mainCard:hover {
+  background-color: #333;
+  border: solid 1px gray;
+}
+
+#statsMenu div.mainCard > div:last-child {
+  display: none;
+}
+
+#statsMenu div.mainCard > div.color:last-child > img:last-child {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  filter: grayscale();
+  clip: rect(0, 64px, 32px, 0);
+}
+
+@media screen and (min-width: 768px) {
+  #statsMenu div.mainCard > div:last-child {
+    display: flex;
+  }
+}
+
+/* Skills & Abilities */
+
+#statsMenu > div.double2 {
+  flex-flow: column nowrap;
+}
+
+#statsMenu > div.double2 > div {
+  width: calc(100% - 1px);
+  border-right: none;
+  border-left: none;
+}
+
+#statsMenu > div.double2 > div > p {
+  font-size: 28px;
+  /* color: aquamarine; */
+  border-bottom: solid 1px gray;
+  margin-top: 40px;
+}
+
+@media screen and (min-width: 600px) {
+  #statsMenu > div.double2 {
+    flex-flow: row nowrap;
+  }
+
+  #statsMenu div.thingList > div {
+    border-right: solid 1px gray;
+  }
+}
+
+/* Normal List Items */
+
+#statsMenu div.thingList {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#statsMenu div.thingList > div {
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: solid 1px gray;
+  transition: background-color 0.1s linear;
+  align-items: center;
+}
+
+#statsMenu div.thingList > div:hover {
+  background-color: #333;
+}
+
+@media screen and (min-width: 1440px) {
+  #statsMenu > div > div:first-child > div.thingList {
+    flex-flow: row wrap;
+  }
+
+  #statsMenu > div > div:first-child > div.thingList > div {
+    width: calc(50% - 1px);
+  }
+}
+
+#statsMenu div.thingList > div > p:first-child {
+  flex-grow: 10;
+  color: gray;
+  padding: 3px 0;
+  transition: color 0.1s linear;
+}
+
+#statsMenu div.thingList > div > img {
+  width: 32px;
+  height: 32px;
+}
+
+#statsMenu div.thingList > div > p:last-child {
+  min-width: 80px;
+  color: gray;
+  transition: color 0.2s linear;
+}
+
+#statsMenu div.thingList > div:hover > p:first-child {
+  color: lightgray;
+}
+
+#statsMenu div.thingList > div:hover > p:last-child {
+  color: gold;
+}
+
+/* Large List Items */
+
+#statsMenu div.thingList div.big {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  border: none;
+  border-left: solid 1px gray;
+  margin-left: -1px;
+  border-bottom: solid 1px gray;
+}
+
+/* Name, Description, Image */
+
+#statsMenu div.thingList div.big > div:first-child {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  padding: 5px;
+}
+
+#statsMenu div.thingList div.big > div:first-child > div {
+  display: flex;
+  flex-flow: column nowrap;
+  text-align: left;
+}
+
+#statsMenu div.thingList div.big > div:first-child > div > p:first-child {
+  color: gray;
+  padding-left: 5px;
+  transition: color 0.1s linear;
+}
+
+#statsMenu div.thingList div.big > div:first-child > div > p:first-child > span {
+  color: gray;
+  transition: color 0.1s linear;
+}
+
+#statsMenu div.thingList div.big > div:first-child > div > p:last-child {
+  color: rgb(110, 110, 110);
+  font-size: 18px;
+  padding: 2px 0 0px 10px;
+  transition: color 0.1s linear;
+}
+
+#statsMenu div.thingList div.big > div > img {
+  height: 64px;
+  width: 64px;
+  padding: 0 10px;
+}
+
+/* Efects, Type, Cost */
+
+#statsMenu div.thingList div.big > div:last-child {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  border-top: dashed 1px rgb(80, 80, 80);
+}
+
+#statsMenu div.thingList div.big > div:last-child > p {
+  border-right: dashed 1px rgb(80, 80, 80);
+  flex-grow: 1;
+  font-size: 20px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+#statsMenu div.thingList div.big > div:last-child > p > span {
+  filter: contrast(0);
+  transition: filter 0.3s linear, background-color 0.1s linear;
+  flex-grow: 1;
+  padding: 0 10px;
+  padding: 1px 5px 3px 5px;
+}
+
+#statsMenu div.thingList div.big > div:last-child > p:last-child {
+  border-right: none;
+}
+
+#statsMenu div.thingList div.big > div:last-child > p:last-child > span {
+  filter: none;
+}
+
+
+/* Large List Items Hover */
+
+
+#statsMenu div.thingList div.big:hover > div:first-child > div > p:first-child {
+  color: lightgray;
+}
+
+#statsMenu div.thingList div.big:hover > div:first-child > div > p:last-child {
+  color: gray;
+}
+
+#statsMenu div.thingList div.big:hover > div:first-child > div > p:first-child > span {
+  color: gold;
+}
+
+#statsMenu div.thingList div.big:hover > div:last-child > p > span {
+  filter: none;
+}
+
+#statsMenu div.thingList div.big > div:last-child > p > span:hover {
+  background-color: #272727;
+}
+
+/* Fatigue */
+
+#statsMenu > p {
+  position: absolute;
+  top: 0px;
+  padding: 5px;
+  right: 0px;
+  align-self: flex-start;
+  width: auto;
+  color: gray;
+  transition: color 0.1s linear;
+  cursor: default;
+  font-size: 22px;
+}
+
+#statsMenu > p:hover {
+  color: rgb(255, 238, 139);
+}

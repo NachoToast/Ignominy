@@ -1,23 +1,5 @@
 #mainMenu {
-  background-color: #272727;
-  border: solid 1px gray;
-  position: fixed;
-  overflow-y: auto;
-  width: calc(100% - 2px);
-  height: calc(100% - 2px);
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  z-index: 1000;
-  animation-fill-mode: forwards;
-
-  animation-duration: 0.25s;
-}
-
-#mainMenu > h1 {
-  font-size: min(12vw, 60px);
-  text-align: center;
-  padding: 10px 0;
+  z-index: 999;
 }
 
 #mainMenu > h2 {
@@ -296,43 +278,4 @@
 
 #mainMenu > p:hover {
   color: lightgray;
-}
-
-/* Close Menu */
-
-#mainMenu > button {
-  background-color: #272727;
-  border-top: none;
-  border-left: none;
-  border-right: solid 1px gray;
-  border-bottom: solid 1px gray;
-  font-size: 18px;
-  padding: 8px 5px;
-  width: clamp(70px, 15vw, 220px);
-  cursor: pointer;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  transition: color 0.1s linear, background-color 0.1s linear;
-}
-
-#mainMenu > button:hover {
-  background-color: #333;
-  color: lightcoral;
-}
-
-/* Menu Fade In/Out */
-
-#mainMenu.mainMenuFadeOut {
-  animation-name: mainMenuFade;
-  animation-direction: reverse;
-}
-
-#mainMenu.mainMenuFadeIn {
-  animation-name: mainMenuFade;
-}
-
-@keyframes mainMenuFade {
-  from {opacity: 0}
-  to {opacity: 1}
 }

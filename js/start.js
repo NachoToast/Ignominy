@@ -228,5 +228,3 @@ const IGNOMINY_CONFIG = ConfigManager.loadConfig(); // get config set up
 ConfigManager.showConfig(); // display any config changes in main menu
 
 MainMenu.init(); // initialise autosave and saves table
-
-MainMenu.show();
