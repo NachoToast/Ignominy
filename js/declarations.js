@@ -1,10 +1,10 @@
-const version = '0.1.24',
+const version = '0.1.25',
     game_window = document.getElementById('game');
 
 // default config
 const IGNOMINY_DEFAULT_CONFIG = {
     datetime: {
-        format: 'dd/MM//yy h:mmp',
+        format: 'dd/MM/yy h:mmp',
         twentyFourHourTime: false,
         showTimeOrdinals: true,
     },

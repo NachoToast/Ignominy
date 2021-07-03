@@ -51,6 +51,7 @@
 </head>
 <body>
   <!-- TODO: add titles for all main menu elements -->
+  <!-- TODO: make sure all titles have good punctuation (. at end, etc..) -->
   <div id='mainMenu' class='specialScroll menu' style='display: none'>
     <h1 class='noselect'>Ignominy</h1>
     <h2 class='noselect'>Manage Saves</h2>
@@ -64,10 +65,10 @@
         </tr>
       </table>
       <div>
-        <button onclick='SaveLoadManager.export()' class='actionButtons'>Export</button>
+        <button onclick='SaveLoadManager.export()' class='actionButtons' title='Export the current save to a file.'>Export</button>
         <input type='file' style='display: none' id='mainMenuImportSave' accept='.ignosave' onchange='SaveLoadManager.import(this)'>
-        <label class='actionButtons' for='mainMenuImportSave'>Import</label>
-        <button onclick='SaveLoadManager.browserSave()' class='actionButtons'>New</button>
+        <label class='actionButtons' for='mainMenuImportSave' title='Import a stored file to a new save slot.'>Import</label>
+        <button onclick='SaveLoadManager.browserSave()' class='actionButtons' title='Create a new save slot.'>New</button>
       </div>
     </div>
     <h2 class='noselect'>Config</h2>
@@ -75,15 +76,15 @@
       <div class='single'>
         <h3 class='noselect'>Date & Time</h3>
         <div>
-          <input value='dddd d mmmm yyyy h:mm' id='dateFormat' type='text' oninput='ConfigManager.changeDateFormat()'>
+          <input value='dddd d mmmm yyyy h:mm' id='dateFormat' type='text' oninput='ConfigManager.changeDateFormat()' title='Valid values: d, dd, ddd, dddd; M, MM, MMM, MMMM; yy, yyyy; h, hh; m, mm; s, ss; and p.'>
         </div>
         <div>
           <input type='checkbox' id='ordinals' checked oninput='ConfigManager.toggleTimeOrdinals()'>
-          <label for='ordinals'>Show Time Ordinals</label>
+          <label for='ordinals' title='Time ordinals are the &apos;st&apos;, &apos;nd&apos;, &apos;rd&apos;, and &apos;th&apos; suffixes that appear after the day number, e.g. &quot;1st&quot;, &quot;22nd&quot;, &quot;13th&quot;.'>Show Time Ordinals</label>
         </div>
         <div>
           <input type='checkbox' id='timeHour' oninput='ConfigManager.toggle24HourTime()'>
-          <label for='timeHour'>24 Hour Time</label>
+          <label for='timeHour' title='24 Hour time, also know as military time, doesn&apos;t convert dates above 12 into their PM equivalents, and starts at hour 0 instead of 12am.'>24 Hour Time</label>
         </div>
         <div>
           <p class='mainMenuExampleDate noselect'>e.g. <span id='mainMenuExampleDate'>Wednesday 27th September 3051 7:19pm</span></p>
@@ -91,47 +92,47 @@
       </div>
       <div class='single'>
         <h3 class='noselect'>Scenes</h3>
-        <div>
+        <div title='Allows pressing of number keys (1, 2, 3, etc...) to select options.'>
           <input type='checkbox' id='hotkeys' checked oninput='ConfigManager.toggleHotkeys()'>
           <label for='hotkeys'>Enable Hotkeys</label>
         </div>
-        <div>
+        <div title='Makes options that take more than a certain amount of time display how much time they will take.'>
           <input type='checkbox' id='timestamps' checked oninput='ConfigManager.toggleTimestamps()'>
           <label for='timestamps'>Show Timestamps</label>
         </div>
-        <div>
+        <div title='Shows a list of the authors for the current scene at the bottom of the page.'>
           <input type='checkbox' id='metaAuthors' oninput='ConfigManager.toggleAuthors()'>
           <label for='metaAuthors'>Show Scene Authors</label>
         </div>
-        <div>
+        <div title='Shows the version the current scene was added at the bottom of the page.'>
           <input type='checkbox' id='metaVersion' oninput='ConfigManager.toggleVersion()'>
           <label for='metaVersion'>Show Scene Version</label>
         </div>
-        <div>
+        <div title='Shows the alpha version the current scene was added at the bottom of the page, most scenes will not have this.'>
           <input type='checkbox' id='metaVersionLegacy' oninput='ConfigManager.toggleLegacyVersion()'>
           <label for='metaVersionLegacy'>Show Legacy Scene Version</label>
         </div>
       </div>
       <div class='single'>
         <h3 class='noselect'>Save/Load</h3>
-        <div>
+        <div title='Automatically saves the game to the autosave slot every time a scene progresses.'>
           <input type='checkbox' id='autosave' checked oninput='ConfigManager.toggleAutosave()'>
           <label for='autosave'>Autosave</label>
         </div>
-        <div>
+        <div title='Automatically loads the save from the autosave slot (ID 0) on game load.'>
           <input type='checkbox' id='autoload' checked oninput='ConfigManager.toggleAutoload()'>
           <label for='autoload'>Autoload</label>
         </div>
       </div>
       <div class='single'>
         <h3 class='noselect'>Advanced</h3>
-        <p style='color: rgb(88, 88, 88)'>Coming Soon...</p>
+        <p style='color: rgb(88, 88, 88); cursor: default' class='noselect' title='More advanced options coming soon.'>Coming Soon...</p>
       </div>
     </div>
-    <h2 class='noselect'>Links</h2>
+    <!-- <h2 class='noselect'>Links</h2> -->
     <div class='double'>
-      <a class='noselect' target='_blank' href='https://github.com/NachoToast/Ignominy'>Github</a>
-      <a class='noselect' target='_blank' href='https://nachotoast.com/'>Website</a>
+      <a class='noselect' target='_blank' href='https://github.com/NachoToast/Ignominy' title='GitHub repository for the game, here you can find latest updates and more.'>Github</a>
+      <!-- <a class='noselect' target='_blank' href='https://nachotoast.com/'>Website</a> -->
       <!--a class='noselect' target='_blank'>Discord</a-->
     </div>
     <p class='noselect' id='mainMenuVersionNumber'>Unknown Version</p>

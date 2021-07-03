@@ -221,7 +221,7 @@ class MainMenu extends Menu {
 
 // SaveLoadManager handles saving, loading, exporting, and importing player data as well as autosaving and autoloading
 class SaveLoadManager {
-    static tracking = true;
+    static tracking = false;
     static trackingColor = 'pink';
 
     static browserSave(id = null, saveRowElement = null) {
@@ -747,7 +747,7 @@ class GeneralPurpose {
 }
 
 class StatsMenu extends Menu {
-    static tracking = true;
+    static tracking = false;
     static trackingColor = 'rgb(255, 238, 139)';
 
     static menuElement = document.getElementById('statsMenu');
@@ -831,7 +831,6 @@ class StatsMenu extends Menu {
         }
 
         // this.abilitiesTable.innerHTML = ``;
-        // TODO: Replace innerHTML with innerText when possible
     }
 
     static update() {
@@ -913,6 +912,4 @@ class StatsMenu extends Menu {
     }
 }
 
-// clear stats on LOAD
-// make new table on LOAD
-// update/modify stats on OPEN
+// TODO: Replace innerHTML with innerText when possible
