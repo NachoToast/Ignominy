@@ -116,19 +116,19 @@
   }
 }
 
-#statsMenu div.thingList > div > p:first-child {
+#statsMenu div.thingList > div.standard > p:first-child {
   flex-grow: 10;
   color: gray;
   padding: 3px 0;
   transition: color 0.1s linear;
 }
 
-#statsMenu div.thingList > div > img {
+#statsMenu div.thingList > div.standard > *:nth-child(2) {
   width: 32px;
   height: 32px;
 }
 
-#statsMenu div.thingList > div > p:last-child {
+#statsMenu div.thingList > div.standard > p:last-child {
   min-width: 80px;
   color: gray;
   transition: color 0.2s linear;
@@ -138,8 +138,22 @@
   color: lightgray;
 }
 
-#statsMenu div.thingList > div:hover > p:last-child {
+#statsMenu div.thingList > div:hover > p:nth-child(3) {
   color: gold;
+}
+
+/* Not Found = No Hover Events */
+
+#statsMenu div.thingList > div.noneFound > p:last-child {
+  color: rgb(80, 80, 80);
+}
+
+#statsMenu div.thingList > div.noneFound:hover {
+  background-color: #272727;
+}
+
+#statsMenu div.thingList > div.noneFound:hover > p:last-child {
+  color: rgb(110, 110, 110);
 }
 
 /* Large List Items */
