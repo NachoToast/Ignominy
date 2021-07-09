@@ -339,6 +339,7 @@ class SaveLoadManager {
 
         MainMenu.hide(fromAutoSave);
         StatsMenu.init();
+        Inventory.init();
     }
 
     static export() {
@@ -917,6 +918,17 @@ class StatsMenu extends Menu {
 
         // update fatigue
         this.fatigueElement.innerText = `Fatigue: ${Math.ceil(player.fatigue)}`;
+    }
+}
+
+class Inventory extends Menu {
+    static menuElement = document.getElementById('inventoryMenu');
+    static itemGrid = document.getElementById('itemGrid');
+    static goldCount = document.getElementById('gold');
+
+    static init() {
+        this.goldCount.innerText = `${player.gold} Gold`;
+        // this.itemGrid.innerHTML = '';
     }
 }
 

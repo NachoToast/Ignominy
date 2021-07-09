@@ -219,12 +219,28 @@
     <img class='ignoma' src='img/map/ignoma.png'>
     <button onclick='Map.hide()'>Close</button>
   </div>
+  <div id='inventoryMenu' class='menu specialScroll'>
+    <h1 class='noselect'>Inventory</h1>
+    <!-- <div id='itemGrid'>
+      <div class='item'>
+        <img src='img/item/seafood_meal.png'>
+        <div>
+          <p>Seafood Meal (4)</p>
+          <p>An average seafood meal.</p>
+          <div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <button onclick='Inventory.hide()'>Close</button>
+    <p class='noselect' id='gold'>1265 Gold</p>
+  </div>
   <div id="header">
     <div class="header_title noselect" onclick="MainMenu.show()">Menu</div>
     <div class="header_options hidden noselect" onclick="StatsMenu.show()">Stats</div>
     <div class="header_options hidden noselect" onclick="Map.show()">Map</div>
-    <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(2)" id='dateTimeOutput'>Date Time</div>
-    <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(3)">Inventory</div>
+    <div class="header_options hidden noselect" id='dateTimeOutput'>Date Time</div>
+    <div class="header_options hidden noselect" onclick="Inventory.show()">Inventory</div>
   </div>
   <div id="global">
     <div id="header_1" class="header_pages hidden">

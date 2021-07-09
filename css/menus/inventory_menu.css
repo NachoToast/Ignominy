@@ -1,0 +1,29 @@
+/* Item Grid */
+#inventoryMenu > div#itemGrid {
+    width: 90%;
+    height: 100px;
+    border: solid 1px gray;
+    align-self: center;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+
+/* Gold */
+
+#inventoryMenu > p {
+    position: absolute;
+    top: 0px;
+    padding: 5px;
+    right: 0px;
+    align-self: flex-start;
+    width: auto;
+    color: gray;
+    transition: color 0.1s linear;
+    cursor: default;
+    font-size: 22px;
+  }
+  
+  #inventoryMenu > p:hover {
+    color: gold;
+  }
