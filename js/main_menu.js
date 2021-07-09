@@ -342,11 +342,13 @@ class SaveLoadManager {
     }
 
     static export() {
-        console.log(
-            `%c[${this.name}]%c Exporting save`,
-            `color: ${this.trackingColor}`,
-            `color: white`
-        );
+        if (this.tracking) {
+            console.log(
+                `%c[${this.name}]%c Exporting save`,
+                `color: ${this.trackingColor}`,
+                `color: white`
+            );
+        }
 
         const file = new Blob(
             [
@@ -378,11 +380,13 @@ class SaveLoadManager {
             return;
         }
 
-        console.log(
-            `%c[${this.name}]%c Importing save`,
-            `color: ${this.trackingColor}`,
-            `color: white`
-        );
+        if (this.tracking) {
+            console.log(
+                `%c[${this.name}]%c Importing save`,
+                `color: ${this.trackingColor}`,
+                `color: white`
+            );
+        }
 
         if (typeof window.FileReader !== 'function') {
             console.log(
@@ -404,7 +408,7 @@ class SaveLoadManager {
             // save imported file to local storage, record id it saved to
             const id = SaveLoadManager.browserSave();
             // then load with reference to save id and element
-            SaveLoadManager.browserLoad(id, false);
+            // SaveLoadManager.browserLoad(id, false);
         };
         reader.onerror = () => {
             console.log(
@@ -753,6 +757,7 @@ class StatsMenu extends Menu {
     static menuElement = document.getElementById('statsMenu');
     static skillsTable = document.getElementById('skillsTable');
     static abilitiesTable = document.getElementById('abilitiesTable');
+    static fatigueElement = document.getElementById('fatigue');
 
     static healthText = document.getElementById('healthText');
     static healthImage = document.getElementById('healthImage');
@@ -909,6 +914,9 @@ class StatsMenu extends Menu {
                 }
             }
         }
+
+        // update fatigue
+        this.fatigueElement.innerText = `Fatigue: ${Math.ceil(player.fatigue)}`;
     }
 }
 

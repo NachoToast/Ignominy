@@ -1,0 +1,9 @@
+#mapMenu > img {
+  width: 1000px;
+  height: auto;
+  margin-top: 45px;
+}
+
+@media screen and (min-width: 1024px) {
+  #mapMenu > img.ignoma {align-self: center}
+}

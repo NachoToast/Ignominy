@@ -38,9 +38,10 @@
   <!-- Post -->
   <script defer src="js/post_declarations.js"></script>
   <!-- New -->
-  <script defer src="js/main_menu.js"></script>
-  <script defer src="js/declarations.js"></script>
-  <script defer src="js/start.js"></script>
+  <script defer src='js/main_menu.js'></script>
+  <script defer src='js/map.js'></script>
+  <script defer src='js/declarations.js'></script>
+  <script defer src='js/start.js'></script>
   <!-- 
     Order:
     load defaults
@@ -93,11 +94,11 @@
       <div class='single'>
         <h3 class='noselect'>Scenes</h3>
         <div title='Allows pressing of number keys (1, 2, 3, etc...) to select options.'>
-          <input type='checkbox' id='hotkeys' checked oninput='ConfigManager.toggleHotkeys()'>
+          <input type='checkbox' id='hotkeys' checked oninput='ConfigManager.toggleHotkeys()' disabled>
           <label for='hotkeys'>Enable Hotkeys</label>
         </div>
         <div title='Makes options that take more than a certain amount of time display how much time they will take.'>
-          <input type='checkbox' id='timestamps' checked oninput='ConfigManager.toggleTimestamps()'>
+          <input type='checkbox' id='timestamps' checked oninput='ConfigManager.toggleTimestamps()' disabled>
           <label for='timestamps'>Show Timestamps</label>
         </div>
         <div title='Shows a list of the authors for the current scene at the bottom of the page.'>
@@ -212,12 +213,16 @@
       </div>
     </div>
     <button onclick='StatsMenu.hide()'>Close</button>
-    <p class='noselect'>Fatigue: 777</p>
+    <p class='noselect' id='fatigue'>Fatigue: 777</p>
+  </div>
+  <div id='mapMenu' class='menu specialScroll' style='display: none'>
+    <img class='ignoma' src='img/map/ignoma.png'>
+    <button onclick='Map.hide()'>Close</button>
   </div>
   <div id="header">
     <div class="header_title noselect" onclick="MainMenu.show()">Menu</div>
     <div class="header_options hidden noselect" onclick="StatsMenu.show()">Stats</div>
-    <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(1)">Map</div>
+    <div class="header_options hidden noselect" onclick="Map.show()">Map</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(2)" id='dateTimeOutput'>Date Time</div>
     <div class="header_options hidden noselect" onclick="HeaderManager.showHeader(3)">Inventory</div>
   </div>
@@ -301,12 +306,12 @@
         </div>
       </div>
       <div id="location_select">
-        <img class="map_s" src="img/map/global/base.png">
+        <!-- <img class="map_s" src="img/map/global/base.png">
         <img class="map_s" src="img/map/global/base_labelled.png">
         <img class="map_s" src="img/map/global/intraconnectives_all.png">
         <img class="map_s" src="img/map/global/interconnectives_all.png">
         <img class="map_s" src="img/map/global/labels_all.png">
-        <img class="map_s" src="img/map/global/nodes_all.png">
+        <img class="map_s" src="img/map/global/nodes_all.png"> -->
       </div>
     </div>
     <div id="header_3" class="header_pages hidden">

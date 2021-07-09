@@ -132,6 +132,7 @@
 #mainMenu > div.saves > table th {
   font-weight: lighter;
   color: gray;
+  cursor: default;
 }
 
 #mainMenu > div.saves > table tr {
