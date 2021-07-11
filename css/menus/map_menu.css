@@ -5,5 +5,5 @@
 }
 
 @media screen and (min-width: 1024px) {
-  #mapMenu > img.ignoma {align-self: center}
+  #mapMenu > img {align-self: center}
 }

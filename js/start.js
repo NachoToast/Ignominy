@@ -227,6 +227,11 @@ console.log(`%c[Ignominy]%c Starting game`, `color: gold`, `color: lightgreen`);
 const IGNOMINY_CONFIG = ConfigManager.loadConfig(); // get config set up
 ConfigManager.showConfig(); // display any config changes in main menu
 
-StoryLoader.loadDefaultModules();
+async function startGame() {
+    await StoryLoader.loadDefaultModules();
+    console.log('yoza2');
 
-MainMenu.init(); // initialise autosave and saves table, does autoload if configured
+    MainMenu.init(); // initialise autosave and saves table, does autoload if configured
+}
+
+startGame();
