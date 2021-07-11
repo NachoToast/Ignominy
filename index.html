@@ -51,7 +51,6 @@
    -->
 </head>
 <body>
-  <!-- TODO: add titles for all main menu elements -->
   <!-- TODO: make sure all titles have good punctuation (. at end, etc..) -->
   <div id='mainMenu' class='specialScroll menu' style='display: none'>
     <h1 class='noselect'>Ignominy</h1>
@@ -59,10 +58,10 @@
     <div class='single saves specialScroll'>
       <table id='mainMenuSaveTable'>
         <tr>
-          <th>ID</th>
-          <th>Date</th>
-          <th>Name</th>
-          <th>Version</th>
+          <th title='The unique ID of this save, 0 is reserved for autosave.'>ID</th>
+          <th title='Time of last save.'>Date</th>
+          <th title='Player name of the save.'>Name</th>
+          <th title='Version number of the save.'>Version</th>
         </tr>
       </table>
       <div>
@@ -219,7 +218,7 @@
     <img class='ignoma' src='img/map/ignoma.png'>
     <button onclick='Map.hide()'>Close</button>
   </div>
-  <div id='inventoryMenu' class='menu specialScroll'>
+  <div id='inventoryMenu' class='menu specialScroll' style='display: none'>
     <h1 class='noselect'>Inventory</h1>
     <!-- <div id='itemGrid'>
       <div class='item'>
