@@ -227,6 +227,6 @@ console.log(`%c[Ignominy]%c Starting game`, `color: gold`, `color: lightgreen`);
 const IGNOMINY_CONFIG = ConfigManager.loadConfig(); // get config set up
 ConfigManager.showConfig(); // display any config changes in main menu
 
-MainMenu.init(); // initialise autosave and saves table
-// Map.init();
-// Map.show();
+StoryLoader.loadDefaultModules();
+
+MainMenu.init(); // initialise autosave and saves table, does autoload if configured
